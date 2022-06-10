@@ -2,8 +2,10 @@ package com.example.android_popularmovies.presentation.movie.view_model
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
+import com.example.android_popularmovies.data.repository.MockMovies
 import com.example.android_popularmovies.data.source.remote.model.Movie
 import com.example.android_popularmovies.data.source.remote.model.MovieListModel
+import com.example.android_popularmovies.di.qualifiers.MockMovieRepoQualifier
 import com.example.android_popularmovies.domain.repository.MovieRepository
 import com.example.android_popularmovies.domain.usecase.GetMoviesUseCase
 import com.example.android_popularmovies.presentation.movie.state.ResultState
@@ -24,6 +26,7 @@ class MovieListViewModelTest {
     var instantExecutorRule: InstantTaskExecutorRule = InstantTaskExecutorRule()
 
     @Mock
+    @MockMovieRepoQualifier
     lateinit var movieRepository: MovieRepository
 
     @Mock

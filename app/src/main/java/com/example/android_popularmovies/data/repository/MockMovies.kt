@@ -1,6 +1,5 @@
-package com.example.android_popularmovies.presentation.movie.view_model
+package com.example.android_popularmovies.data.repository
 
-import RandomDataFactory
 import com.example.android_popularmovies.data.source.remote.model.*
 
 object MockMovies {
@@ -33,9 +32,9 @@ object MockMovies {
             id = RandomDataFactory.getRandomInt(),
             title = RandomDataFactory.getRandomString(),
             voteAverage = RandomDataFactory.getRandomFloat(),
-            posterPath = RandomDataFactory.getRandomString(),
+            posterPath = RandomDataFactory.getRandomImage(),
             popularity = RandomDataFactory.getRandomFloat(),
-            backdropPath = RandomDataFactory.getRandomString(),
+            backdropPath = RandomDataFactory.getRandomImage(),
             originalLanguage = RandomDataFactory.getRandomString(),
             originalTitle = RandomDataFactory.getRandomString(),
             overview = RandomDataFactory.getRandomString(),
@@ -64,7 +63,7 @@ object MockMovies {
     fun generateMovieBelongings(): MovieBelonging {
         return MovieBelonging(
             id = RandomDataFactory.getRandomLong(),
-            posterPath = RandomDataFactory.getRandomString(),
+            posterPath = RandomDataFactory.getRandomImage(),
             description = RandomDataFactory.getRandomString(),
             favoriteCount = RandomDataFactory.getRandomLong(),
             iso639_1 = ISO639_1.En,

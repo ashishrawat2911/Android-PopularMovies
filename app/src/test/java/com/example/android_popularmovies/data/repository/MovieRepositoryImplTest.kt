@@ -4,7 +4,6 @@ import com.example.android_popularmovies.data.source.remote.MovieApiService
 import com.example.android_popularmovies.data.source.remote.model.Movie
 import com.example.android_popularmovies.data.source.remote.model.MovieBelongingList
 import com.example.android_popularmovies.data.source.remote.model.MovieListModel
-import com.example.android_popularmovies.presentation.movie.view_model.MockMovies
 import io.reactivex.Single
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking

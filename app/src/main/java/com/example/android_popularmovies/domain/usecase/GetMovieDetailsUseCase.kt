@@ -2,6 +2,7 @@ package com.example.android_popularmovies.domain.usecase
 
 import com.example.android_popularmovies.data.source.remote.model.Movie
 import com.example.android_popularmovies.data.source.remote.model.MovieBelonging
+import com.example.android_popularmovies.di.qualifiers.MovieRepoQualifier
 import com.example.android_popularmovies.domain.repository.MovieRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -12,7 +13,7 @@ import retrofit2.Response
 import javax.inject.Inject
 
 class GetMovieDetailsUseCase @Inject constructor(
-    private val repository: MovieRepository
+    @MovieRepoQualifier private val repository: MovieRepository
 ) {
     suspend fun getMovieDetail(movieId: Int): Response<Movie> {
         return repository.getMovieDetails(movieId)

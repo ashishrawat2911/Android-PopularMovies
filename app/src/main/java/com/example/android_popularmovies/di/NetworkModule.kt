@@ -9,9 +9,12 @@ import androidx.annotation.RequiresApi
 import com.example.android_popularmovies.R
 import com.example.android_popularmovies.data.MovieEntityToMovieMapper
 import com.example.android_popularmovies.data.MovieToMovieEntityMapper
+import com.example.android_popularmovies.data.repository.MockMovieRepositoryImpl
 import com.example.android_popularmovies.data.repository.MovieRepositoryImpl
 import com.example.android_popularmovies.data.source.local.MovieDao
 import com.example.android_popularmovies.data.source.remote.MovieApiService
+import com.example.android_popularmovies.di.qualifiers.MockMovieRepoQualifier
+import com.example.android_popularmovies.di.qualifiers.MovieRepoQualifier
 import com.example.android_popularmovies.domain.repository.MovieRepository
 import com.example.android_popularmovies.utils.Constants
 import com.google.gson.Gson
@@ -125,12 +128,25 @@ object NetworkModule {
 
     @Singleton
     @Provides
+    @MovieRepoQualifier
     fun provideMovieRepository(
         retrofitService: MovieApiService,
         movieDao: MovieDao
     ): MovieRepository {
-        return MovieRepositoryImpl(retrofitService, movieDao, movieEntityToMovieMapper = MovieEntityToMovieMapper(), movieToMovieEntityMapper = MovieToMovieEntityMapper())
+        return MovieRepositoryImpl(
+            retrofitService,
+            movieDao,
+            movieEntityToMovieMapper = MovieEntityToMovieMapper(),
+            movieToMovieEntityMapper = MovieToMovieEntityMapper()
+        )
     }
 
+    @Singleton
+    @Provides
+    @MockMovieRepoQualifier
+    fun provideMockMovieRepository(
+    ): MovieRepository {
+        return MockMovieRepositoryImpl()
+    }
 }
 

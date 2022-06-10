@@ -1,3 +1,5 @@
+package com.example.android_popularmovies.data.repository
+
 import java.util.*
 import kotlin.random.Random
 
@@ -24,5 +26,9 @@ object RandomDataFactory {
 
     fun getRandomFloat(): Float {
         return Random.nextFloat()
+    }
+
+    fun getRandomImage(): String {
+        return "/9Ngw106BLlNJ4iVpRHlrDfaLpCV.jpg"
     }
 }

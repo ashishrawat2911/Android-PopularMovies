@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.android_popularmovies.data.source.remote.model.Movie
 import com.example.android_popularmovies.domain.usecase.GetMoviesUseCase
+import com.example.android_popularmovies.domain.usecase.MockGetMoviesUseCase
 import com.example.android_popularmovies.presentation.movie.state.ResultState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
