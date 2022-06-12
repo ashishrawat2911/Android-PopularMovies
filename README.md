@@ -3,12 +3,12 @@
 - [X] Code written with Kotlin
 - [X] Clean Architecture
 - [X] Retrofit
-Movie API Integration
+- Movie API Integration
     - [X] Retrofit
     - [X] Kotlin Coroutines
     - [X] RX Java
 - [X] Live Data and View Model
-UI with
+- UI with
     - [X] Data binding in movie screen and RecyclerView Adaptor
     - [X] Building UI with ConstraintLayout
     - [X] Jetpack Navigation
@@ -19,7 +19,7 @@ UI with
     - [X] JUnit
     - [ ] Expresso
     - [ ] Mockito
-Theming
+- Theming
     - [ ] DarkTheme
 
 
