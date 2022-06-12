@@ -131,13 +131,15 @@ object NetworkModule {
     @MovieRepoQualifier
     fun provideMovieRepository(
         retrofitService: MovieApiService,
-        movieDao: MovieDao
+        movieDao: MovieDao,
+        movieToMovieEntityMapper: MovieToMovieEntityMapper,
+        movieEntityToMovieMapper: MovieEntityToMovieMapper
     ): MovieRepository {
         return MovieRepositoryImpl(
             retrofitService,
             movieDao,
-            movieEntityToMovieMapper = MovieEntityToMovieMapper(),
-            movieToMovieEntityMapper = MovieToMovieEntityMapper()
+            movieToMovieEntityMapper,
+            movieEntityToMovieMapper,
         )
     }
 
