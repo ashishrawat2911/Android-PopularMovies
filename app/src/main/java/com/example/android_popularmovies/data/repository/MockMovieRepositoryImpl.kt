@@ -13,15 +13,15 @@ class MockMovieRepositoryImpl(
         return Single.just(MockMovies.generateMovieListModel(10))
     }
 
-    override fun cacheMovie(movies: List<Movie>) {
+    override suspend fun cacheMovie(movies: List<Movie>) {
 
     }
 
-    override fun getCacheMovies(): List<Movie> {
+    override suspend fun getCacheMovies(): List<Movie> {
         return MockMovies.generateListOfMovies(10)
     }
 
-    override fun getCacheMovie(id: Int): Movie {
+    override suspend fun getCacheMovie(id: Int): Movie {
         return MockMovies.generateMovie()
     }
 

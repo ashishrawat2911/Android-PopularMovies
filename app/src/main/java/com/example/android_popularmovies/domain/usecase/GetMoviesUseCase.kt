@@ -16,11 +16,11 @@ class GetMoviesUseCase @Inject constructor(
     }
 
 
-    fun cacheMovies(movies: List<Movie>) {
-        repository.cacheMovie(movies);
-    }
+   suspend fun cacheMovies(movies: List<Movie>) {
+       repository.cacheMovie(movies);
+   }
 
-    fun getCacheMovies(): List<Movie> {
+    suspend fun getCacheMovies(): List<Movie> {
         return repository.getCacheMovies();
     }
 }

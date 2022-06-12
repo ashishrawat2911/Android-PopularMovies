@@ -3,15 +3,17 @@ package com.example.android_popularmovies.presentation.movie.view_model
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.android_popularmovies.data.source.remote.model.Movie
 import com.example.android_popularmovies.domain.usecase.GetMoviesUseCase
-import com.example.android_popularmovies.domain.usecase.MockGetMoviesUseCase
 import com.example.android_popularmovies.presentation.movie.state.ResultState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
@@ -40,10 +42,11 @@ class MovieListViewModel @Inject constructor(
                 .subscribe({
                     it.results?.let {
                         movieState.value = ResultState.Success(it)
-                        getMoviesUseCase.cacheMovies(it)
+                        viewModelScope.launch(Dispatchers.IO) {
+                            getMoviesUseCase.cacheMovies(it)
+                        }
                     }
                 }, {
-                    movieState.value = ResultState.Error(it.localizedMessage!!)
                 })
 
             disposable?.let {
@@ -51,7 +54,9 @@ class MovieListViewModel @Inject constructor(
             }
 
         } else {
-            movieState.value = ResultState.Success(getMoviesUseCase.getCacheMovies())
+            viewModelScope.launch(Dispatchers.IO) {
+                movieState.value = ResultState.Success(getMoviesUseCase.getCacheMovies())
+            }
         }
 
     }

@@ -5,7 +5,6 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.android_popularmovies.data.source.local.model.MovieEntity
-import com.example.android_popularmovies.data.source.remote.model.Movie
 import com.example.android_popularmovies.utils.Constants
 
 @Database(entities = [MovieEntity::class], version = Migrations.DB_VERSION)
@@ -23,7 +22,7 @@ abstract class MovieDatabase : RoomDatabase() {
 
         private fun buildDatabase(context: Context) = Room.databaseBuilder(
             context.applicationContext, MovieDatabase::class.java, Constants.dbName
-        ).allowMainThreadQueries().build()
+        ).build()
     }
 }
 

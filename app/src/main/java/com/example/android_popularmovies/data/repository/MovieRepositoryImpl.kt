@@ -30,15 +30,15 @@ class MovieRepositoryImpl(
         return service.movieBelongings(movieId);
     }
 
-    override fun cacheMovie(movies: List<Movie>) {
+    override suspend fun cacheMovie(movies: List<Movie>) {
         movieDao.addMovies(movies.map { movieToMovieEntityMapper.mapFromModel(model = it) })
     }
 
-    override fun getCacheMovies(): List<Movie> {
+    override suspend fun getCacheMovies(): List<Movie> {
         return movieDao.getMovies().map { movieEntityToMovieMapper.mapFromModel(it) };
     }
 
-    override fun getCacheMovie(id: Int): Movie {
+    override suspend fun getCacheMovie(id: Int): Movie {
         return movieEntityToMovieMapper.mapFromModel(movieDao.getMovie(id))
     }
 }

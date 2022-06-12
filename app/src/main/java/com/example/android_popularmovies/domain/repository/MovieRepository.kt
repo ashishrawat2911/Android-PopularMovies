@@ -9,9 +9,9 @@ import retrofit2.Response
 
 interface MovieRepository {
     fun loadMovies(): Single<MovieListModel>
-    fun cacheMovie(movies: List<Movie>)
-    fun getCacheMovies(): List<Movie>
-    fun getCacheMovie(id:Int): Movie
+    suspend fun cacheMovie(movies: List<Movie>)
+    suspend fun getCacheMovies(): List<Movie>
+    suspend fun getCacheMovie(id:Int): Movie
     suspend fun getMovieDetails(movieId: Int): Response<Movie>
     suspend fun getMovieBelongings(movieId: Int): Response<MovieBelongingList>
 }

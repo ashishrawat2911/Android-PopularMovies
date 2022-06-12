@@ -8,10 +8,12 @@ import com.example.android_popularmovies.data.source.remote.model.Movie
 import com.example.android_popularmovies.domain.usecase.GetMovieDetailsUseCase
 import com.example.android_popularmovies.presentation.movie.state.ResultState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -39,8 +41,10 @@ class MovieDetailViewModel @Inject constructor(
                     }
                 }
             } else {
-                movieDetailsState.value =
-                    ResultState.Success(getMoviesUseCase.getCacheMovie(movieId))
+                launch(Dispatchers.IO) {
+                    movieDetailsState.value =
+                        ResultState.Success(getMoviesUseCase.getCacheMovie(movieId))
+                }
             }
         }
         job?.invokeOnCompletion {
@@ -57,7 +61,7 @@ class MovieDetailViewModel @Inject constructor(
             getMoviesUseCase.getMovieBelongings(movieId)
                 .onStart { }
                 .catch {
-
+                    Timber.e(this.toString())
                 }
                 .collect {
 

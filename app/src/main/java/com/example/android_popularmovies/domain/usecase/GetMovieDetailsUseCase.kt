@@ -19,9 +19,9 @@ class GetMovieDetailsUseCase @Inject constructor(
         return repository.getMovieDetails(movieId)
     }
 
-    fun getCacheMovie(id: Int): Movie {
-        return repository.getCacheMovie(id)
-    }
+   suspend fun getCacheMovie(id: Int): Movie {
+       return repository.getCacheMovie(id)
+   }
 
 
     fun getMovieBelongings(movieId: Int): Flow<List<MovieBelonging>?> {
