@@ -17,7 +17,7 @@ class GetMovieBelongingsUseCase @Inject constructor(
         return flow {
             val movieBelongingList = repository.getMovieBelongings(movieId)
             emit(movieBelongingList)
-        }.flowOn(Dispatchers.IO).map {
+        }.map {
             it.body()?.results
         }
     }
