@@ -18,9 +18,9 @@
 - [X] Tests
     - [X] JUnit
     - [ ] Expresso
-    - [ ] Mockito
+    - [X] Mockito
 - Theming
-    - [ ] DarkTheme
+    - [X] DarkTheme
 
 
 

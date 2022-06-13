@@ -49,6 +49,7 @@
                     android:layout_marginTop="4dp"
                     android:text="@{@string/title+` : ` + movie.title}"
                     android:textSize="15sp"
+                    style="@style/MovieTitle"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.035"
                     app:layout_constraintStart_toStartOf="@+id/movie_photo"
