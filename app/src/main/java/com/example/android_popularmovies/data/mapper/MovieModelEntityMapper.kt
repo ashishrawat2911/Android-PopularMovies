@@ -1,34 +1,41 @@
-package com.example.android_popularmovies.data
+package com.example.android_popularmovies.data.mapper
 
-import com.example.android_popularmovies.data.source.local.model.MovieEntity
-import com.example.android_popularmovies.data.source.remote.model.Movie
-import com.example.android_popularmovies.utils.EntityMapper
-import javax.inject.Inject
+import com.example.android_popularmovies.data.source.local.model.MovieDbModel
+import com.example.android_popularmovies.data.source.remote.model.MovieApiModel
+import com.example.android_popularmovies.data.source.remote.model.MovieListApiModel
+import com.example.android_popularmovies.domain.entity.MovieEntity
+import com.example.android_popularmovies.domain.entity.MovieListEntity
 
-class MovieToMovieEntityMapper @Inject constructor() :
-    EntityMapper<Movie, MovieEntity> {
-    override fun mapFromModel(model: Movie): MovieEntity {
-        return MovieEntity(
-            model.id!!,
-            model.posterPath!!,
-            model.backdropPath!!,
-            model.title!!,
-            model.voteAverage!!,
-            model.overview!!,
-        )
-    }
-}
+fun MovieListApiModel.toEntity() = MovieListEntity(
+    page = page,
+    totalResults = totalResults,
+    totalPages = totalPages,
+    results = results?.map { it.toEntity() },
+)
 
-class MovieEntityToMovieMapper @Inject constructor() :
-    EntityMapper<MovieEntity, Movie> {
-    override fun mapFromModel(model: MovieEntity): Movie {
-        return Movie(
-            id = model.id,
-            posterPath = model.posterPath,
-            backdropPath = model.backdropPath,
-            title = model.title,
-            voteAverage = model.voteAverage,
-            overview = model.overview,
-        )
-    }
-}
+fun MovieApiModel.toEntity() = MovieEntity(
+    id = id!!,
+    title = title!!,
+    backdropPath = backdropPath!!,
+    posterPath = posterPath!!,
+    overview = overview!!,
+    voteAverage = voteAverage!!,
+)
+
+fun MovieDbModel.toEntity() = MovieEntity(
+    id = id,
+    title = title,
+    backdropPath = backdropPath,
+    posterPath = posterPath,
+    overview = overview,
+    voteAverage = voteAverage,
+)
+fun MovieEntity.toDBModel() = MovieDbModel(
+    id = id,
+    title = title,
+    backdropPath = backdropPath,
+    posterPath = posterPath,
+    overview = overview,
+    voteAverage = voteAverage,
+)
+

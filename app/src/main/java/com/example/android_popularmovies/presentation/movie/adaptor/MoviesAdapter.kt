@@ -5,13 +5,14 @@ import android.view.ViewGroup
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.android_popularmovies.data.source.remote.model.Movie
 import com.example.android_popularmovies.databinding.MovieViewBinding
+import com.example.android_popularmovies.domain.entity.MovieEntity
 import com.example.android_popularmovies.presentation.movie.view.MovieListFragmentDirections
 import com.example.android_popularmovies.utils.Constants
 
 
-class MoviesAdapter(private val movies: List<Movie>) : RecyclerView.Adapter<MoviesViewHolder>() {
+class MoviesAdapter(private val movies: List<MovieEntity>) :
+    RecyclerView.Adapter<MoviesViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MoviesViewHolder {
 
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -32,7 +33,7 @@ class MoviesAdapter(private val movies: List<Movie>) : RecyclerView.Adapter<Movi
 class MoviesViewHolder(private val binding: MovieViewBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(movie: Movie) {
+    fun bind(movie: MovieEntity) {
         binding.movie = movie
         Glide.with(itemView.context).load("${Constants.movieImagePath}${movie.posterPath}")
             .into(binding.moviePhoto)
@@ -40,7 +41,7 @@ class MoviesViewHolder(private val binding: MovieViewBinding) :
 
             it.findNavController().navigate(
                 MovieListFragmentDirections.actionMovieListFragmentToMovieDetailFragment(
-                    movie.id!!
+                    movie.id
                 )
             )
 

@@ -2,10 +2,11 @@ package com.example.android_popularmovies.presentation.movie.view_model
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
-import com.example.android_popularmovies.data.repository.MockMovies
-import com.example.android_popularmovies.data.source.remote.model.Movie
-import com.example.android_popularmovies.data.source.remote.model.MovieListModel
+import com.example.android_popularmovies.data.mapper.toEntity
+import com.example.android_popularmovies.data.repository.mock.MockMovies
+import com.example.android_popularmovies.data.source.remote.model.MovieApiModel
 import com.example.android_popularmovies.di.qualifiers.MockMovieRepoQualifier
+import com.example.android_popularmovies.domain.entity.MovieEntity
 import com.example.android_popularmovies.domain.repository.MovieRepository
 import com.example.android_popularmovies.domain.usecase.GetMoviesUseCase
 import com.example.android_popularmovies.presentation.movie.state.ResultState
@@ -30,7 +31,7 @@ class MovieListViewModelTest {
     lateinit var movieRepository: MovieRepository
 
     @Mock
-    private lateinit var moviesObserver: Observer<ResultState<List<Movie>>>
+    private lateinit var moviesObserver: Observer<ResultState<List<MovieEntity>>>
 
 
     private lateinit var getMoviesUseCase: GetMoviesUseCase
@@ -54,7 +55,6 @@ class MovieListViewModelTest {
     private fun setUpViewModel() {
         movieListViewModel = MovieListViewModel(
             getMoviesUseCase,
-            isNetworkAvailable,
         )
 
         movieListViewModel.state.observeForever(moviesObserver)
@@ -62,8 +62,7 @@ class MovieListViewModelTest {
 
     @Test
     fun fetchMoviesList_returnsEmpty() {
-        val movies = MovieListModel()
-        movies.results = listOf();
+        val movies: List<MovieEntity> = listOf();
         // Arrange
         stubFetchMovies(Single.just(movies))
 
@@ -77,12 +76,9 @@ class MovieListViewModelTest {
     @Test
     fun fetchMoviesList_returnsData() {
 
-        val listOfMovies = MockMovies.generateListOfMovies(10)
+        val listOfMovies = MockMovies.generateListOfMovies(10).map { it.toEntity() }
 
-        val movies = MovieListModel()
-        movies.results = listOfMovies;
-
-        stubFetchMovies(Single.just(movies))
+        stubFetchMovies(Single.just(listOfMovies))
 
         movieListViewModel.loadMovies()
         moviesObserver.onChanged(ResultState.Success(listOfMovies))
@@ -90,8 +86,8 @@ class MovieListViewModelTest {
     }
 
 
-    private fun stubFetchMovies(single: Single<MovieListModel>) {
-        `when`(getMoviesUseCase.getPopularMovies())
+    private fun stubFetchMovies(single: Single<List<MovieEntity>>) {
+        `when`(getMoviesUseCase())
             .thenReturn(single)
     }
 }

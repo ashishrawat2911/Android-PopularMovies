@@ -7,7 +7,7 @@
 
         <variable
             name="movie"
-            type="com.example.android_popularmovies.data.source.remote.model.Movie" />
+            type="com.example.android_popularmovies.domain.entity.MovieEntity" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -75,7 +75,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/movie_overview"
                     android:layout_marginTop="8dp"
-                    android:text="@{@string/rating+` : `+movie.voteAverage.toString()}"
+                    android:text="@{@string/rating+` : `+movie.voteAverage}"
                     android:textSize="15sp"
                     app:layout_constraintEnd_toEndOf="@+id/movie_overview"
                     app:layout_constraintHorizontal_bias="0.0"

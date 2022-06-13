@@ -1,4 +1,4 @@
-package com.example.android_popularmovies.data.repository
+package com.example.android_popularmovies.utils
 
 import java.util.*
 import kotlin.random.Random

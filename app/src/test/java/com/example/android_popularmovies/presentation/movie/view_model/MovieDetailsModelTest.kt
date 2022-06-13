@@ -2,16 +2,17 @@ package com.example.android_popularmovies.presentation.movie.view_model
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
-import com.example.android_popularmovies.data.repository.MockMovies
-import com.example.android_popularmovies.data.source.remote.model.Movie
+import com.example.android_popularmovies.data.mapper.toEntity
+import com.example.android_popularmovies.data.repository.mock.MockMovies
 import com.example.android_popularmovies.di.qualifiers.MockMovieRepoQualifier
+import com.example.android_popularmovies.domain.entity.MovieEntity
 import com.example.android_popularmovies.domain.repository.MovieRepository
+import com.example.android_popularmovies.domain.usecase.GetMovieBelongingsUseCase
 import com.example.android_popularmovies.domain.usecase.GetMovieDetailsUseCase
 import com.example.android_popularmovies.presentation.movie.state.ResultState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -21,7 +22,6 @@ import org.mockito.Mock
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.verify
 import org.mockito.MockitoAnnotations
-import retrofit2.Response
 
 @RunWith(JUnit4::class)
 class MovieDetailsModelTest {
@@ -34,10 +34,12 @@ class MovieDetailsModelTest {
     lateinit var movieRepository: MovieRepository
 
     @Mock
-    private lateinit var moviesObserver: Observer<ResultState<Movie>>
+    private lateinit var moviesObserver: Observer<ResultState<MovieEntity>>
 
 
     private lateinit var getMovieDetailsUseCase: GetMovieDetailsUseCase
+    private lateinit var getMovieBelongingsUseCase: GetMovieBelongingsUseCase
+
     private lateinit var movieDetailViewModel: MovieDetailViewModel
 
     private var isNetworkAvailable: Boolean = false
@@ -53,12 +55,13 @@ class MovieDetailsModelTest {
 
     private fun setUpUseCases() {
         getMovieDetailsUseCase = GetMovieDetailsUseCase(movieRepository)
+        getMovieBelongingsUseCase = GetMovieBelongingsUseCase(movieRepository)
     }
 
     private fun setUpViewModel() {
         movieDetailViewModel = MovieDetailViewModel(
             getMovieDetailsUseCase,
-            isNetworkAvailable,
+            getMovieBelongingsUseCase
         )
 
         movieDetailViewModel.state.observeForever(moviesObserver)
@@ -69,17 +72,17 @@ class MovieDetailsModelTest {
     fun fetchMoviesDetails_returnsData() {
         val movieDetail = MockMovies.generateMovie()
         CoroutineScope(Dispatchers.IO).launch {
-            stubFetchMovies(Response.success(movieDetail))
+            stubFetchMovies(movieDetail.toEntity())
             movieDetailViewModel.getMovieDetails(0)
         }
 
-        moviesObserver.onChanged(ResultState.Success(movieDetail))
-        verify(moviesObserver).onChanged(ResultState.Success(movieDetail))
+        moviesObserver.onChanged(ResultState.Success(movieDetail.toEntity()))
+        verify(moviesObserver).onChanged(ResultState.Success(movieDetail.toEntity()))
     }
 
 
-    private suspend fun stubFetchMovies(movie: Response<Movie>) {
-        `when`(getMovieDetailsUseCase.getMovieDetail(0))
+    private suspend fun stubFetchMovies(movie: MovieEntity) {
+        `when`(getMovieDetailsUseCase(0))
             .thenReturn(movie)
     }
 }

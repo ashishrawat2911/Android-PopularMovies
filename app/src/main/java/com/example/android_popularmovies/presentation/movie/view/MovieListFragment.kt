@@ -10,8 +10,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.android_popularmovies.R
-import com.example.android_popularmovies.data.source.remote.model.Movie
+import com.example.android_popularmovies.data.source.remote.model.MovieApiModel
 import com.example.android_popularmovies.databinding.MovieListFragmentBinding
+import com.example.android_popularmovies.domain.entity.MovieEntity
 import com.example.android_popularmovies.presentation.movie.adaptor.MoviesAdapter
 import com.example.android_popularmovies.presentation.movie.state.ResultState
 import com.example.android_popularmovies.presentation.movie.view_model.MovieListViewModel
@@ -54,7 +55,7 @@ class MovieListFragment : Fragment() {
         }
     }
 
-    private fun setRecyclerView(list: List<Movie>) {
+    private fun setRecyclerView(list: List<MovieEntity>) {
         binding.progressBar.visibility = View.GONE
         binding.recyclerView.apply {
             setHasFixedSize(true)

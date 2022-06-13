@@ -1,44 +1,60 @@
 package com.example.android_popularmovies.data.repository
 
-import com.example.android_popularmovies.data.MovieEntityToMovieMapper
-import com.example.android_popularmovies.data.MovieToMovieEntityMapper
+import com.example.android_popularmovies.data.mapper.toDBModel
+import com.example.android_popularmovies.data.mapper.toEntity
 import com.example.android_popularmovies.data.source.local.MovieDao
 import com.example.android_popularmovies.data.source.remote.MovieApiService
-import com.example.android_popularmovies.data.source.remote.model.Movie
 import com.example.android_popularmovies.data.source.remote.model.MovieBelongingList
-import com.example.android_popularmovies.data.source.remote.model.MovieListModel
+import com.example.android_popularmovies.domain.entity.MovieEntity
 import com.example.android_popularmovies.domain.repository.MovieRepository
 import io.reactivex.Single
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import retrofit2.Response
 
 class MovieRepositoryImpl(
     private val service: MovieApiService,
     private val movieDao: MovieDao,
-    private val movieToMovieEntityMapper: MovieToMovieEntityMapper,
-    private val movieEntityToMovieMapper: MovieEntityToMovieMapper
+    private val isNetworkAvailable: Boolean
 ) : MovieRepository {
 
-    override fun loadMovies(): Single<MovieListModel> {
-        return service.popularMovies()
+    override fun getMovies(): Single<List<MovieEntity>> {
+        return if (isNetworkAvailable) {
+            val movies =
+                service.popularMovies().map { it.toEntity() }.flatMap { Single.just(it.results!!) }
+            addMovieToCache(movies)
+            movies
+        } else {
+            movieDao.getMovies().map { it -> it.map { it.toEntity() } }
+        }
     }
 
-    override suspend fun getMovieDetails(movieId: Int): Response<Movie> {
-        return service.movieDetails(movieId);
+    private fun addMovieToCache(movies: Single<List<MovieEntity>>) {
+        movies
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { it ->
+                CoroutineScope(Dispatchers.IO).launch {
+                    movieDao.addMovies(it.map { it.toDBModel() })
+                }
+            }.dispose()
+    }
+
+
+    override suspend fun getMovieDetails(movieId: Int): MovieEntity {
+        return if (isNetworkAvailable) {
+            val movie = service.movieDetails(movieId).toEntity()
+            movie
+        } else {
+            movieDao.getMovie(movieId).toEntity()
+        }
     }
 
     override suspend fun getMovieBelongings(movieId: Int): Response<MovieBelongingList> {
         return service.movieBelongings(movieId);
     }
 
-    override suspend fun cacheMovie(movies: List<Movie>) {
-        movieDao.addMovies(movies.map { movieToMovieEntityMapper.mapFromModel(model = it) })
-    }
-
-    override suspend fun getCacheMovies(): List<Movie> {
-        return movieDao.getMovies().map { movieEntityToMovieMapper.mapFromModel(it) };
-    }
-
-    override suspend fun getCacheMovie(id: Int): Movie {
-        return movieEntityToMovieMapper.mapFromModel(movieDao.getMovie(id))
-    }
 }

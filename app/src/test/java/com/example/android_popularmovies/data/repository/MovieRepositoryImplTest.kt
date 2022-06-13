@@ -1,9 +1,10 @@
 package com.example.android_popularmovies.data.repository
 
+import com.example.android_popularmovies.data.repository.mock.MockMovies
 import com.example.android_popularmovies.data.source.remote.MovieApiService
-import com.example.android_popularmovies.data.source.remote.model.Movie
+import com.example.android_popularmovies.data.source.remote.model.MovieApiModel
 import com.example.android_popularmovies.data.source.remote.model.MovieBelongingList
-import com.example.android_popularmovies.data.source.remote.model.MovieListModel
+import com.example.android_popularmovies.data.source.remote.model.MovieListApiModel
 import io.reactivex.Single
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
@@ -43,10 +44,10 @@ class MovieRepositoryImplTest {
     fun testGetMovieDetails_returnData() {
         val mockMovieDetails = MockMovies.generateMovie()
         val response = runBlocking {
-            stubMoviesDetails(Response.success(mockMovieDetails))
+            stubMoviesDetails(mockMovieDetails)
             movieApiService.movieDetails(0)
         }
-        assert(response.body()!!.title == mockMovieDetails.title)
+        assert(response.title == mockMovieDetails.title)
     }
 
     @Test
@@ -59,15 +60,15 @@ class MovieRepositoryImplTest {
         assert(response.body()!!.results.size == mockMovieBelongings.results.size)
     }
 
-    private fun stubPopularMovies(single: Single<MovieListModel>) {
+    private fun stubPopularMovies(single: Single<MovieListApiModel>) {
         Mockito.`when`(movieApiService.popularMovies()).thenReturn(
             single
         )
     }
 
-    private suspend fun stubMoviesDetails(single: Response<Movie>) {
+    private suspend fun stubMoviesDetails(model: MovieApiModel) {
         Mockito.`when`(movieApiService.movieDetails(0)).thenReturn(
-            single
+            model
         )
     }
 

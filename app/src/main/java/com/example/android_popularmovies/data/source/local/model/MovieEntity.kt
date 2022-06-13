@@ -4,7 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "movies")
-data class MovieEntity(
+data class MovieDbModel(
     @PrimaryKey(autoGenerate = true)
     var id: Int,
     var posterPath: String,

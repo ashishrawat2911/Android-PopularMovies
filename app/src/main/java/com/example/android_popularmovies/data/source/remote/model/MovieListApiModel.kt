@@ -6,7 +6,7 @@ import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
 
-data class MovieListModel(
+data class MovieListApiModel(
     @SerializedName("page")
     @Expose
     var page: Int? = null,
@@ -18,11 +18,11 @@ data class MovieListModel(
     var totalPages: Int? = null,
     @SerializedName("results")
     @Expose
-    var results: List<Movie>? = null,
+    var results: List<MovieApiModel>? = null,
 )
 
 @Entity(tableName = "movies")
-data class Movie(
+data class MovieApiModel(
     @PrimaryKey(autoGenerate = true)
     @SerializedName("id")
     @Expose

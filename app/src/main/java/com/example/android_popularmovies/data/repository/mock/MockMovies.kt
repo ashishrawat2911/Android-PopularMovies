@@ -1,24 +1,25 @@
-package com.example.android_popularmovies.data.repository
+package com.example.android_popularmovies.data.repository.mock
 
 import com.example.android_popularmovies.data.source.remote.model.*
+import com.example.android_popularmovies.utils.RandomDataFactory
 
 object MockMovies {
 
-    fun generateListOfMovies(size: Int): List<Movie> {
-        val listOfMovies = mutableListOf<Movie>()
+    fun generateListOfMovies(size: Int): List<MovieApiModel> {
+        val listOfMovies = mutableListOf<MovieApiModel>()
         repeat(size) {
             listOfMovies.add(generateMovie())
         }
         return listOfMovies
     }
 
-    fun generateMovieListModel(size: Int): MovieListModel {
-        val listOfMovies = mutableListOf<Movie>()
+    fun generateMovieListModel(size: Int): MovieListApiModel {
+        val listOfMovies = mutableListOf<MovieApiModel>()
         repeat(size) {
             listOfMovies.add(generateMovie())
         }
 
-        val model = MovieListModel();
+        val model = MovieListApiModel();
         model.results = listOfMovies;
         model.page = RandomDataFactory.getRandomInt()
         model.totalResults = RandomDataFactory.getRandomInt()
@@ -26,8 +27,8 @@ object MockMovies {
     }
 
 
-    fun generateMovie(): Movie {
-        return Movie(
+    fun generateMovie(): MovieApiModel {
+        return MovieApiModel(
             adult = RandomDataFactory.getRandomBoolean(),
             id = RandomDataFactory.getRandomInt(),
             title = RandomDataFactory.getRandomString(),
