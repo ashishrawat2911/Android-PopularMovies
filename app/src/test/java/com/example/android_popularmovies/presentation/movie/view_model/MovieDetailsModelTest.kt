@@ -13,6 +13,10 @@ import com.example.android_popularmovies.presentation.movie.state.ResultState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.setMain
+import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -28,6 +32,7 @@ class MovieDetailsModelTest {
 
     @get:Rule
     var instantExecutorRule: InstantTaskExecutorRule = InstantTaskExecutorRule()
+    private val dispatcher = StandardTestDispatcher()
 
     @Mock
     @MockMovieRepoQualifier
@@ -50,8 +55,14 @@ class MovieDetailsModelTest {
         MockitoAnnotations.openMocks(this)
         setUpUseCases()
         setUpViewModel()
+        Dispatchers.setMain(dispatcher)
+
     }
 
+    @After
+    fun tearDown() {
+        Dispatchers.resetMain()
+    }
 
     private fun setUpUseCases() {
         getMovieDetailsUseCase = GetMovieDetailsUseCase(movieRepository)

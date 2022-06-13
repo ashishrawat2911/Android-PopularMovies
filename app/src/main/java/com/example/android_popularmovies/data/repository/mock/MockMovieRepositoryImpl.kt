@@ -13,7 +13,6 @@ class MockMovieRepositoryImpl(
         return Single.just(MockMovies.generateMovieListModel(10).results!!.map { it.toEntity() })
     }
 
-
     override suspend fun getMovieDetails(movieId: Int): MovieEntity {
         return MockMovies.generateMovie().toEntity()
     }

@@ -61,7 +61,7 @@ object MockMovies {
         return model;
     }
 
-    fun generateMovieBelongings(): MovieBelonging {
+    private fun generateMovieBelongings(): MovieBelonging {
         return MovieBelonging(
             id = RandomDataFactory.getRandomLong(),
             posterPath = RandomDataFactory.getRandomImage(),
