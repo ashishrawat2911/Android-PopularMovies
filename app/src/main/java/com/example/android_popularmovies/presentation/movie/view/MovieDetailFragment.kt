@@ -53,7 +53,7 @@ class MovieDetailFragment : Fragment() {
                     }
                 }
                 is ResultState.Error -> {
-                    Timber.e(it.message,)
+                    Timber.e(it.message)
                     Toast.makeText(activity, it.message, Toast.LENGTH_LONG).show()
                 }
             }

@@ -39,6 +39,7 @@ class MovieRepositoryImplTest {
             it.isNotEmpty()
         }
     }
+
     @After
     fun tearDown() {
         movieDatabase.close()

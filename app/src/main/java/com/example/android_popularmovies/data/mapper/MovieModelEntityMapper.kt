@@ -30,6 +30,7 @@ fun MovieDbModel.toEntity() = MovieEntity(
     overview = overview,
     voteAverage = voteAverage,
 )
+
 fun MovieEntity.toDBModel() = MovieDbModel(
     id = id,
     title = title,

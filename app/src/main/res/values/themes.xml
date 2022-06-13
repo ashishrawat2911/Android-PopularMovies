@@ -13,7 +13,8 @@
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
-    <style name="MovieTitle"
-        parent="@android:style/TextAppearance">
-        <item name="android:textColor">#9C27B0</item></style>
+
+    <style name="MovieTitle" parent="@android:style/TextAppearance">
+        <item name="android:textColor">#9C27B0</item>
+    </style>
 </resources>

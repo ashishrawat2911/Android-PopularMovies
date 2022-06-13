@@ -1,6 +1,6 @@
 package com.example.android_popularmovies.utils
 
-import java.util.UUID
+import java.util.*
 import kotlin.random.Random
 
 object RandomDataFactory {
