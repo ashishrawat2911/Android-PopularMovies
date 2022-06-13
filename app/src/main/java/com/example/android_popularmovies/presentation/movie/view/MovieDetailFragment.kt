@@ -18,6 +18,7 @@ import com.example.android_popularmovies.presentation.movie.state.ResultState
 import com.example.android_popularmovies.presentation.movie.view_model.MovieDetailViewModel
 import com.example.android_popularmovies.utils.Constants
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 @AndroidEntryPoint
 class MovieDetailFragment : Fragment() {
@@ -54,8 +55,7 @@ class MovieDetailFragment : Fragment() {
                     }
                 }
                 is ResultState.Error -> {
-                    Log.e(TAG, "setUpViewModel: " +
-                            ""+it.message, )
+                    Timber.e(it.message, )
                     Toast.makeText(activity, it.message, Toast.LENGTH_LONG).show()
                 }
             }
