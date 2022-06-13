@@ -1,6 +1,5 @@
 package com.example.android_popularmovies.presentation.movie.state
 
-
 sealed class ResultState<T> {
     class Init<T> : ResultState<T>()
     class Loading<T> : ResultState<T>()

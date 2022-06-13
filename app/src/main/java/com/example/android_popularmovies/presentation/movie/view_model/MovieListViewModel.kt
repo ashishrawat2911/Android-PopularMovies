@@ -13,7 +13,6 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
-
 @HiltViewModel
 class MovieListViewModel @Inject constructor(
     private val getMoviesUseCase: GetMoviesUseCase,
@@ -22,7 +21,6 @@ class MovieListViewModel @Inject constructor(
     private val movieState = MutableLiveData<ResultState<List<MovieEntity>>>()
     private var disposable: Disposable? = null
     private val compositeDisposable = CompositeDisposable()
-
 
     init {
         movieState.value = ResultState.Init()
@@ -41,10 +39,9 @@ class MovieListViewModel @Inject constructor(
             }, {
             })
 
-            disposable?.let {
-                compositeDisposable.add(it)
-            }
-
+        disposable?.let {
+            compositeDisposable.add(it)
+        }
     }
 
     override fun onCleared() {

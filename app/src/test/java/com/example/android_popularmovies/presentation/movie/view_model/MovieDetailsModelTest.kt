@@ -23,8 +23,8 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 import org.mockito.Mock
-import org.mockito.Mockito.`when`
 import org.mockito.Mockito.verify
+import org.mockito.Mockito.`when`
 import org.mockito.MockitoAnnotations
 
 @RunWith(JUnit4::class)
@@ -41,7 +41,6 @@ class MovieDetailsModelTest {
     @Mock
     private lateinit var moviesObserver: Observer<ResultState<MovieEntity>>
 
-
     private lateinit var getMovieDetailsUseCase: GetMovieDetailsUseCase
     private lateinit var getMovieBelongingsUseCase: GetMovieBelongingsUseCase
 
@@ -49,14 +48,12 @@ class MovieDetailsModelTest {
 
     private var isNetworkAvailable: Boolean = false
 
-
     @Before
     fun setUp() {
         MockitoAnnotations.openMocks(this)
         setUpUseCases()
         setUpViewModel()
         Dispatchers.setMain(dispatcher)
-
     }
 
     @After
@@ -78,7 +75,6 @@ class MovieDetailsModelTest {
         movieDetailViewModel.state.observeForever(moviesObserver)
     }
 
-
     @Test
     fun fetchMoviesDetails_returnsData() {
         val movieDetail = MockMovies.generateMovie()
@@ -90,7 +86,6 @@ class MovieDetailsModelTest {
         moviesObserver.onChanged(ResultState.Success(movieDetail.toEntity()))
         verify(moviesObserver).onChanged(ResultState.Success(movieDetail.toEntity()))
     }
-
 
     private suspend fun stubFetchMovies(movie: MovieEntity) {
         `when`(getMovieDetailsUseCase(0))

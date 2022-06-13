@@ -54,7 +54,6 @@ class MovieDetailViewModel @Inject constructor(
                     Timber.e(this.toString())
                 }
                 .collect {
-
                 }
         }
     }

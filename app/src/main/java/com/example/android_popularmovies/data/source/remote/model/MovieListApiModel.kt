@@ -5,7 +5,6 @@ import androidx.room.PrimaryKey
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-
 data class MovieListApiModel(
     @SerializedName("page")
     @Expose
@@ -109,7 +108,6 @@ data class ProductionCompany(
     @SerializedName("origin_country")
     val originCountry: String
 )
-
 
 data class ProductionCountry(
     @SerializedName("iso_3166_1")

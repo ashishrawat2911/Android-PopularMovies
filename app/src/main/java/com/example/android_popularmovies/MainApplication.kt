@@ -8,7 +8,6 @@ import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 import timber.log.Timber.Forest.plant
 
-
 @HiltAndroidApp
 class MainApplication : Application() {
 
@@ -43,7 +42,6 @@ class MainApplication : Application() {
                 .build()
         )
     }
-
 
     override fun attachBaseContext(base: Context) {
         super.attachBaseContext(base)

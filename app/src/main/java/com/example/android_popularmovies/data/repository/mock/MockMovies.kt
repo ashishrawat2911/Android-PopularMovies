@@ -1,6 +1,11 @@
 package com.example.android_popularmovies.data.repository.mock
 
-import com.example.android_popularmovies.data.source.remote.model.*
+import com.example.android_popularmovies.data.source.remote.model.ISO639_1
+import com.example.android_popularmovies.data.source.remote.model.ListType
+import com.example.android_popularmovies.data.source.remote.model.MovieApiModel
+import com.example.android_popularmovies.data.source.remote.model.MovieBelonging
+import com.example.android_popularmovies.data.source.remote.model.MovieBelongingList
+import com.example.android_popularmovies.data.source.remote.model.MovieListApiModel
 import com.example.android_popularmovies.utils.RandomDataFactory
 
 object MockMovies {
@@ -19,13 +24,12 @@ object MockMovies {
             listOfMovies.add(generateMovie())
         }
 
-        val model = MovieListApiModel();
-        model.results = listOfMovies;
+        val model = MovieListApiModel()
+        model.results = listOfMovies
         model.page = RandomDataFactory.getRandomInt()
         model.totalResults = RandomDataFactory.getRandomInt()
-        return model;
+        return model
     }
-
 
     fun generateMovie(): MovieApiModel {
         return MovieApiModel(
@@ -57,8 +61,8 @@ object MockMovies {
             totalResults = RandomDataFactory.getRandomLong(),
             results = listOfMovies,
             totalPages = RandomDataFactory.getRandomLong(),
-        );
-        return model;
+        )
+        return model
     }
 
     private fun generateMovieBelongings(): MovieBelonging {

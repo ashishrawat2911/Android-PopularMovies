@@ -1,8 +1,6 @@
 package com.example.android_popularmovies.presentation.movie.view
 
-import android.content.ContentValues.TAG
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,11 +23,11 @@ class MovieDetailFragment : Fragment() {
 
     private lateinit var binding: MovieDetailFragmentBinding
 
-
     private val viewModel: MovieDetailViewModel by viewModels()
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate<MovieDetailFragmentBinding>(
@@ -55,12 +53,10 @@ class MovieDetailFragment : Fragment() {
                     }
                 }
                 is ResultState.Error -> {
-                    Timber.e(it.message, )
+                    Timber.e(it.message,)
                     Toast.makeText(activity, it.message, Toast.LENGTH_LONG).show()
                 }
             }
         }
     }
-
-
 }

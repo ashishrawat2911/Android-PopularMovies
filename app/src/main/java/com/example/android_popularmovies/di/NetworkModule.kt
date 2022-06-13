@@ -6,8 +6,8 @@ import android.net.NetworkCapabilities
 import android.os.Build
 import androidx.annotation.RequiresApi
 import com.example.android_popularmovies.R
-import com.example.android_popularmovies.data.repository.mock.MockMovieRepositoryImpl
 import com.example.android_popularmovies.data.repository.MovieRepositoryImpl
+import com.example.android_popularmovies.data.repository.mock.MockMovieRepositoryImpl
 import com.example.android_popularmovies.data.source.local.MovieDao
 import com.example.android_popularmovies.data.source.remote.MovieApiService
 import com.example.android_popularmovies.di.qualifiers.MockMovieRepoQualifier
@@ -60,7 +60,8 @@ object NetworkModule {
         val interceptor = Interceptor { chain ->
             val url =
                 chain.request().url.newBuilder().addQueryParameter(
-                    "api_key", context.resources.getString(
+                    "api_key",
+                    context.resources.getString(
                         R.string.api_key
                     )
                 )
@@ -68,7 +69,6 @@ object NetworkModule {
             val request = chain.request().newBuilder().url(url).build()
 
             return@Interceptor chain.proceed(request)
-
         }
         return OkHttpClient.Builder().addInterceptor(interceptor).addInterceptor(logging)
             .connectTimeout(60, TimeUnit.SECONDS)
@@ -92,7 +92,6 @@ object NetworkModule {
     fun providesRxJavaCallAdapterFactory(): RxJava2CallAdapterFactory {
         return RxJava2CallAdapterFactory.create()
     }
-
 
     @Singleton
     @Provides
@@ -146,9 +145,7 @@ object NetworkModule {
     @Singleton
     @Provides
     @MockMovieRepoQualifier
-    fun provideMockMovieRepository(
-    ): MovieRepository {
+    fun provideMockMovieRepository(): MovieRepository {
         return MockMovieRepositoryImpl()
     }
 }
-

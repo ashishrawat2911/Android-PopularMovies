@@ -7,8 +7,7 @@ import com.example.android_popularmovies.domain.repository.MovieRepository
 import io.reactivex.Single
 import retrofit2.Response
 
-class MockMovieRepositoryImpl(
-) : MovieRepository {
+class MockMovieRepositoryImpl() : MovieRepository {
     override fun getMovies(): Single<List<MovieEntity>> {
         return Single.just(MockMovies.generateMovieListModel(10).results!!.map { it.toEntity() })
     }

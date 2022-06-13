@@ -10,7 +10,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.android_popularmovies.R
-import com.example.android_popularmovies.data.source.remote.model.MovieApiModel
 import com.example.android_popularmovies.databinding.MovieListFragmentBinding
 import com.example.android_popularmovies.domain.entity.MovieEntity
 import com.example.android_popularmovies.presentation.movie.adaptor.MoviesAdapter
@@ -26,9 +25,9 @@ class MovieListFragment : Fragment() {
     companion object {
     }
 
-
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(
@@ -63,5 +62,4 @@ class MovieListFragment : Fragment() {
             adapter = MoviesAdapter(list)
         }
     }
-
 }

@@ -10,7 +10,6 @@ import com.example.android_popularmovies.domain.entity.MovieEntity
 import com.example.android_popularmovies.presentation.movie.view.MovieListFragmentDirections
 import com.example.android_popularmovies.utils.Constants
 
-
 class MoviesAdapter(private val movies: List<MovieEntity>) :
     RecyclerView.Adapter<MoviesViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MoviesViewHolder {
@@ -44,7 +43,6 @@ class MoviesViewHolder(private val binding: MovieViewBinding) :
                     movie.id
                 )
             )
-
         }
     }
 }

@@ -43,7 +43,6 @@ class MovieRepositoryImpl(
             }.dispose()
     }
 
-
     override suspend fun getMovieDetails(movieId: Int): MovieEntity {
         return if (isNetworkAvailable) {
             val movie = service.movieDetails(movieId).toEntity()
@@ -54,7 +53,6 @@ class MovieRepositoryImpl(
     }
 
     override suspend fun getMovieBelongings(movieId: Int): Response<MovieBelongingList> {
-        return service.movieBelongings(movieId);
+        return service.movieBelongings(movieId)
     }
-
 }
