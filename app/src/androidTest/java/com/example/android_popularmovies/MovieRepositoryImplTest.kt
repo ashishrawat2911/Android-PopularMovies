@@ -2,7 +2,9 @@ package com.example.android_popularmovies
 
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
-import com.example.android_popularmovies.data.MovieToMovieEntityMapper
+import com.example.android_popularmovies.data.mapper.toDBModel
+import com.example.android_popularmovies.data.mapper.toEntity
+import com.example.android_popularmovies.data.repository.mock.MockMovies
 import com.example.android_popularmovies.data.source.local.MovieDatabase
 import org.junit.After
 import org.junit.Before
@@ -30,11 +32,12 @@ class MovieRepositoryImplTest {
         val movies = MockMovies.generateListOfMovies(10)
         movieDatabase.movieDao().addMovies(
             movies.map {
-                MovieToMovieEntityMapper().mapFromModel(model = it)
+                it.toEntity().toDBModel()
             }
         )
-        val moviesFromDb = movieDatabase.movieDao().getMovies()
-        assert(moviesFromDb.isNotEmpty())
+        movieDatabase.movieDao().getMovies().test().assertValue {
+            it.isNotEmpty()
+        }
     }
     @After
     fun tearDown() {
