@@ -7,6 +7,7 @@
     - [X] Retrofit
     - [X] Kotlin Coroutines
     - [X] RX Java
+    - [X] Exception Handling
 - [X] Live Data and View Model
 - UI with
     - [X] Data binding in movie screen and RecyclerView Adaptor

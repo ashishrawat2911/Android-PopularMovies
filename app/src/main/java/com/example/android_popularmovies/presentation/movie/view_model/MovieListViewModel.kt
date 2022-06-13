@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.example.android_popularmovies.domain.entity.MovieEntity
 import com.example.android_popularmovies.domain.usecase.GetMoviesUseCase
 import com.example.android_popularmovies.presentation.movie.state.ResultState
+import com.example.android_popularmovies.utils.getMovieErrorMessage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -37,6 +38,7 @@ class MovieListViewModel @Inject constructor(
                     movieState.value = ResultState.Success(it)
                 }
             }, {
+                movieState.value = ResultState.Error(it.getMovieErrorMessage())
             })
 
         disposable?.let {

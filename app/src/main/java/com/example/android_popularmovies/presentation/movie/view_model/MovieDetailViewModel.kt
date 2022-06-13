@@ -8,8 +8,11 @@ import com.example.android_popularmovies.domain.entity.MovieEntity
 import com.example.android_popularmovies.domain.usecase.GetMovieBelongingsUseCase
 import com.example.android_popularmovies.domain.usecase.GetMovieDetailsUseCase
 import com.example.android_popularmovies.presentation.movie.state.ResultState
+import com.example.android_popularmovies.utils.getMovieErrorMessage
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
@@ -28,21 +31,22 @@ class MovieDetailViewModel @Inject constructor(
         movieDetailsState.value = ResultState.Init()
     }
 
-    private var job: Job? = null
+    private val exceptionHandler = CoroutineExceptionHandler { context, exception ->
+        viewModelScope.launch(Dispatchers.Main) {
+            movieDetailsState.value =
+                ResultState.Error(exception.fillInStackTrace().getMovieErrorMessage())
+        }
+    }
+
     fun getMovieDetails(movieId: Int) {
         movieDetailsState.value = ResultState.Loading()
-        job = viewModelScope.launch() {
-            val response = getMoviesUseCase(movieId)
-            launch {
-                movieDetailsState.value = response.let { ResultState.Success(it) }
+        viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
+            val response = async { getMoviesUseCase(movieId) }
+            launch(Dispatchers.Main) {
+                movieDetailsState.value = response.let { ResultState.Success(it.await()) }
             }
         }
-        job?.invokeOnCompletion {
-            viewModelScope.launch {
-                movieDetailsState.value =
-                    it?.toString()?.let { it1 -> ResultState.Error(it1) }
-            }
-        }
+
         getMovieBelongings(movieId)
     }
 
@@ -58,8 +62,4 @@ class MovieDetailViewModel @Inject constructor(
         }
     }
 
-    override fun onCleared() {
-        job?.cancel()
-        super.onCleared()
-    }
 }
