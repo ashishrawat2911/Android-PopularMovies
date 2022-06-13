@@ -8,8 +8,6 @@ import com.example.android_popularmovies.data.source.remote.model.MovieBelonging
 import com.example.android_popularmovies.domain.entity.MovieEntity
 import com.example.android_popularmovies.domain.repository.MovieRepository
 import io.reactivex.Single
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -23,30 +21,26 @@ class MovieRepositoryImpl(
 
     override fun getMovies(): Single<List<MovieEntity>> {
         return if (isNetworkAvailable) {
-            val movies =
-                service.popularMovies().map { it.toEntity() }.flatMap { Single.just(it.results!!) }
-            addMovieToCache(movies)
-            movies
+            service.popularMovies()
+                .map { it.toEntity() }
+                .flatMap {
+                    addMovieToCache(it.results!!)
+                    Single.just(it.results!!)
+                }
         } else {
             movieDao.getMovies().map { it -> it.map { it.toEntity() } }
         }
     }
 
-    private fun addMovieToCache(movies: Single<List<MovieEntity>>) {
-        movies
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { it ->
-                CoroutineScope(Dispatchers.IO).launch {
-                    movieDao.addMovies(it.map { it.toDBModel() })
-                }
-            }.dispose()
+    private fun addMovieToCache(movies: List<MovieEntity>) {
+        CoroutineScope(Dispatchers.IO).launch {
+            movieDao.addMovies(movies.map { it.toDBModel() })
+        }
     }
 
     override suspend fun getMovieDetails(movieId: Int): MovieEntity {
         return if (isNetworkAvailable) {
-            val movie = service.movieDetails(movieId).toEntity()
-            movie
+            service.movieDetails(movieId).toEntity()
         } else {
             movieDao.getMovie(movieId).toEntity()
         }
