@@ -5,6 +5,7 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
 import androidx.annotation.RequiresApi
+import com.example.android_popularmovies.BuildConfig
 import com.example.android_popularmovies.R
 import com.example.android_popularmovies.data.repository.MovieRepositoryImpl
 import com.example.android_popularmovies.data.repository.mock.MockMovieRepositoryImpl
@@ -61,9 +62,7 @@ object NetworkModule {
             val url =
                 chain.request().url.newBuilder().addQueryParameter(
                     "api_key",
-                    context.resources.getString(
-                        R.string.api_key
-                    )
+                    BuildConfig.movieApiKey
                 )
                     .build()
             val request = chain.request().newBuilder().url(url).build()
