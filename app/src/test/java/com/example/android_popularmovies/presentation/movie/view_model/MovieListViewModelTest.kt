@@ -8,7 +8,7 @@ import com.example.android_popularmovies.di.qualifiers.MockMovieRepoQualifier
 import com.example.android_popularmovies.domain.entity.MovieEntity
 import com.example.android_popularmovies.domain.repository.MovieRepository
 import com.example.android_popularmovies.domain.usecase.GetMoviesUseCase
-import com.example.android_popularmovies.presentation.movie.state.ResultState
+import com.example.android_popularmovies.utils.ResultState
 import io.reactivex.Single
 import org.junit.Before
 import org.junit.Rule

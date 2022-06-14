@@ -3,9 +3,10 @@ package com.example.android_popularmovies.presentation.movie.view_model
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.android_popularmovies.domain.entity.MovieEntity
 import com.example.android_popularmovies.domain.usecase.GetMoviesUseCase
-import com.example.android_popularmovies.presentation.movie.state.ResultState
+import com.example.android_popularmovies.presentation.movie.state.MovieListState
+import com.example.android_popularmovies.presentation.movie.state.toState
+import com.example.android_popularmovies.utils.ResultState
 import com.example.android_popularmovies.utils.getMovieErrorMessage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -18,14 +19,16 @@ import javax.inject.Inject
 class MovieListViewModel @Inject constructor(
     private val getMoviesUseCase: GetMoviesUseCase,
 ) : ViewModel() {
-    val state: LiveData<ResultState<List<MovieEntity>>> get() = movieState
-    private val movieState = MutableLiveData<ResultState<List<MovieEntity>>>()
+    var movieState = MovieListState(ResultState.Init());
+    val state: LiveData<MovieListState> get() = mState
+    private val mState = MutableLiveData<MovieListState>()
     private var disposable: Disposable? = null
     private val compositeDisposable = CompositeDisposable()
 
     init {
-        movieState.value = ResultState.Init()
-        movieState.value = ResultState.Loading()
+        mState.value = movieState.copy(
+            movieResultState = ResultState.Loading()
+        )
         loadMovies()
     }
 
@@ -35,10 +38,12 @@ class MovieListViewModel @Inject constructor(
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
                 it?.let {
-                    movieState.value = ResultState.Success(it)
+                    mState.value =
+                        movieState.copy(movieResultState = ResultState.Success(it.map { it.toState() }))
                 }
             }, {
-                movieState.value = ResultState.Error(it.getMovieErrorMessage())
+                mState.value =
+                    movieState.copy(movieResultState = ResultState.Error(it.getMovieErrorMessage()))
             })
 
         disposable?.let {

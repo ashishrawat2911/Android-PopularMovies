@@ -11,10 +11,10 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.android_popularmovies.R
 import com.example.android_popularmovies.databinding.MovieListFragmentBinding
-import com.example.android_popularmovies.domain.entity.MovieEntity
 import com.example.android_popularmovies.presentation.movie.adaptor.MoviesAdapter
-import com.example.android_popularmovies.presentation.movie.state.ResultState
+import com.example.android_popularmovies.presentation.movie.state.MovieStateData
 import com.example.android_popularmovies.presentation.movie.view_model.MovieListViewModel
+import com.example.android_popularmovies.utils.ResultState
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -41,20 +41,21 @@ class MovieListFragment : Fragment() {
         viewModel.state.observe(
             viewLifecycleOwner
         ) {
+
             binding.progressBar.visibility =
-                if (it is ResultState.Loading) View.VISIBLE else View.GONE
-            when (it) {
+                if (it.movieResultState is ResultState.Loading) View.VISIBLE else View.GONE
+            when (it.movieResultState) {
                 is ResultState.Error -> {
-                    Toast.makeText(activity, it.message, Toast.LENGTH_LONG).show()
+                    Toast.makeText(activity, (it.movieResultState as ResultState.Error<List<MovieStateData>>).message, Toast.LENGTH_LONG).show()
                 }
                 is ResultState.Success -> {
-                    setRecyclerView(it.result)
+                    setRecyclerView((it.movieResultState as ResultState.Success<List<MovieStateData>>).result)
                 }
             }
         }
     }
 
-    private fun setRecyclerView(list: List<MovieEntity>) {
+    private fun setRecyclerView(list: List<MovieStateData>) {
         binding.progressBar.visibility = View.GONE
         binding.recyclerView.apply {
             setHasFixedSize(true)

@@ -1,4 +1,4 @@
-package com.example.android_popularmovies.presentation.movie.state
+package com.example.android_popularmovies.utils
 
 sealed class ResultState<T> {
     class Init<T> : ResultState<T>()

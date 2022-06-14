@@ -9,7 +9,7 @@ import com.example.android_popularmovies.domain.entity.MovieEntity
 import com.example.android_popularmovies.domain.repository.MovieRepository
 import com.example.android_popularmovies.domain.usecase.GetMovieBelongingsUseCase
 import com.example.android_popularmovies.domain.usecase.GetMovieDetailsUseCase
-import com.example.android_popularmovies.presentation.movie.state.ResultState
+import com.example.android_popularmovies.utils.ResultState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

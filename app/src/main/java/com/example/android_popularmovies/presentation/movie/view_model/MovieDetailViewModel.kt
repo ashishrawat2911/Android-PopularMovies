@@ -4,10 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.android_popularmovies.domain.entity.MovieEntity
 import com.example.android_popularmovies.domain.usecase.GetMovieBelongingsUseCase
 import com.example.android_popularmovies.domain.usecase.GetMovieDetailsUseCase
-import com.example.android_popularmovies.presentation.movie.state.ResultState
+import com.example.android_popularmovies.presentation.movie.state.MovieDetailState
+import com.example.android_popularmovies.presentation.movie.state.toState
+import com.example.android_popularmovies.utils.ResultState
 import com.example.android_popularmovies.utils.getMovieErrorMessage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -24,26 +25,33 @@ class MovieDetailViewModel @Inject constructor(
     private val getMoviesUseCase: GetMovieDetailsUseCase,
     private val getMovieBelongingsUseCase: GetMovieBelongingsUseCase
 ) : ViewModel() {
-    val state: LiveData<ResultState<MovieEntity>> get() = movieDetailsState
-    private val movieDetailsState = MutableLiveData<ResultState<MovieEntity>>()
+    var movieState = MovieDetailState(ResultState.Init());
+
+    val state: LiveData<MovieDetailState> get() = movieDetailsState
+    private val movieDetailsState = MutableLiveData<MovieDetailState>()
 
     init {
-        movieDetailsState.value = ResultState.Init()
+        movieDetailsState.value = movieState.copy(movieResultState = ResultState.Init())
     }
 
     private val exceptionHandler = CoroutineExceptionHandler { context, exception ->
         viewModelScope.launch(Dispatchers.Main) {
             movieDetailsState.value =
-                ResultState.Error(exception.fillInStackTrace().getMovieErrorMessage())
+                movieState.copy(
+                    movieResultState = ResultState.Error(
+                        exception.fillInStackTrace().getMovieErrorMessage()
+                    )
+                )
         }
     }
 
     fun getMovieDetails(movieId: Int) {
-        movieDetailsState.value = ResultState.Loading()
+        movieDetailsState.value = movieState.copy(movieResultState = ResultState.Loading())
         viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
             val response = async { getMoviesUseCase(movieId) }
             launch(Dispatchers.Main) {
-                movieDetailsState.value = response.let { ResultState.Success(it.await()) }
+                movieDetailsState.value =
+                    movieState.copy(movieResultState = ResultState.Success((response.await()).toState()) )
             }
         }
 

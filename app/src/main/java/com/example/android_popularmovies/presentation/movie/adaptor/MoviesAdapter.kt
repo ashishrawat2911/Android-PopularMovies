@@ -6,11 +6,11 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.android_popularmovies.databinding.MovieViewBinding
-import com.example.android_popularmovies.domain.entity.MovieEntity
 import com.example.android_popularmovies.presentation.movie.view.MovieListFragmentDirections
+import com.example.android_popularmovies.presentation.movie.state.MovieStateData
 import com.example.android_popularmovies.utils.Constants
 
-class MoviesAdapter(private val movies: List<MovieEntity>) :
+class MoviesAdapter(private val movies: List<MovieStateData>) :
     RecyclerView.Adapter<MoviesViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MoviesViewHolder {
 
@@ -32,7 +32,7 @@ class MoviesAdapter(private val movies: List<MovieEntity>) :
 class MoviesViewHolder(private val binding: MovieViewBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(movie: MovieEntity) {
+    fun bind(movie: MovieStateData) {
         binding.movie = movie
         Glide.with(itemView.context).load("${Constants.movieImagePath}${movie.posterPath}")
             .into(binding.moviePhoto)
