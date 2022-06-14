@@ -18,14 +18,3 @@ data class MovieStateData(
     var voteAverage: Float,
     var overview: String,
 )
-
-fun MovieEntity.toState(): MovieStateData {
-    return MovieStateData(
-        id = id,
-        posterPath = posterPath,
-        backdropPath = backdropPath,
-        title = title,
-        voteAverage = voteAverage,
-        overview=overview
-    )
-}

@@ -3,9 +3,9 @@ package com.example.android_popularmovies.presentation.movie.view_model
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.android_popularmovies.domain.mapper.toState
 import com.example.android_popularmovies.domain.usecase.GetMoviesUseCase
 import com.example.android_popularmovies.presentation.movie.state.MovieListState
-import com.example.android_popularmovies.presentation.movie.state.toState
 import com.example.android_popularmovies.utils.ResultState
 import com.example.android_popularmovies.utils.getMovieErrorMessage
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -26,9 +26,9 @@ class MovieListViewModel @Inject constructor(
     private val compositeDisposable = CompositeDisposable()
 
     init {
-        mState.value = movieState.copy(
-            movieResultState = ResultState.Loading()
-        )
+//        mState.value = movieState.copy(
+//            movieResultState = ResultState.Loading()
+//        )
         loadMovies()
     }
 

@@ -39,6 +39,9 @@ android {
     lintOptions {
         checkReleaseBuilds false
     }
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
 
 }
 

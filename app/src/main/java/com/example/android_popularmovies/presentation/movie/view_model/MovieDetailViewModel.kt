@@ -4,10 +4,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.android_popularmovies.domain.mapper.toState
 import com.example.android_popularmovies.domain.usecase.GetMovieBelongingsUseCase
 import com.example.android_popularmovies.domain.usecase.GetMovieDetailsUseCase
 import com.example.android_popularmovies.presentation.movie.state.MovieDetailState
-import com.example.android_popularmovies.presentation.movie.state.toState
 import com.example.android_popularmovies.utils.ResultState
 import com.example.android_popularmovies.utils.getMovieErrorMessage
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -26,6 +26,7 @@ class MovieDetailViewModel @Inject constructor(
     private val getMovieBelongingsUseCase: GetMovieBelongingsUseCase
 ) : ViewModel() {
     var movieState = MovieDetailState(ResultState.Init());
+    var movieBelongingState = MovieDetailState(ResultState.Init());
 
     val state: LiveData<MovieDetailState> get() = movieDetailsState
     private val movieDetailsState = MutableLiveData<MovieDetailState>()
@@ -58,7 +59,7 @@ class MovieDetailViewModel @Inject constructor(
         getMovieBelongings(movieId)
     }
 
-    private fun getMovieBelongings(movieId: Int) {
+     fun getMovieBelongings(movieId: Int) {
         viewModelScope.launch {
             getMovieBelongingsUseCase(movieId)
                 .onStart { }
