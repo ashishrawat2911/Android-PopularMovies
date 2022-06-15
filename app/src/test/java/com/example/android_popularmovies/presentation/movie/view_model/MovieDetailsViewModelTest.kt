@@ -11,6 +11,7 @@ import com.example.android_popularmovies.domain.repository.MovieRepository
 import com.example.android_popularmovies.domain.usecase.GetMovieBelongingsUseCase
 import com.example.android_popularmovies.domain.usecase.GetMovieDetailsUseCase
 import com.example.android_popularmovies.presentation.movie.state.MovieDetailState
+import com.example.android_popularmovies.analytics.MovieAnalytics
 import com.example.android_popularmovies.utils.ResultState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -48,6 +49,9 @@ class MovieDetailsViewModelTest {
     private lateinit var getMovieDetailsUseCase: GetMovieDetailsUseCase
     private lateinit var getMovieBelongingsUseCase: GetMovieBelongingsUseCase
 
+    @Mock
+    private lateinit var movieAnalytics: MovieAnalytics
+
     private lateinit var movieDetailViewModel: MovieDetailViewModel
 
 
@@ -72,7 +76,8 @@ class MovieDetailsViewModelTest {
     private fun setUpViewModel() {
         movieDetailViewModel = MovieDetailViewModel(
             getMovieDetailsUseCase,
-            getMovieBelongingsUseCase
+            getMovieBelongingsUseCase,
+            movieAnalytics,
         )
 
         movieDetailViewModel.state.observeForever(moviesObserver)

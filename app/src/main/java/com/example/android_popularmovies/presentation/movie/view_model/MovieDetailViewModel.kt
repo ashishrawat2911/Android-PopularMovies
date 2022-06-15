@@ -9,9 +9,9 @@ import com.example.android_popularmovies.domain.mapper.toState
 import com.example.android_popularmovies.domain.usecase.GetMovieBelongingsUseCase
 import com.example.android_popularmovies.domain.usecase.GetMovieDetailsUseCase
 import com.example.android_popularmovies.presentation.movie.state.MovieDetailState
+import com.example.android_popularmovies.analytics.MovieAnalytics
 import com.example.android_popularmovies.utils.ResultState
 import com.example.android_popularmovies.utils.getMovieErrorMessage
-import com.google.firebase.analytics.FirebaseAnalytics
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
@@ -26,7 +26,7 @@ import javax.inject.Inject
 class MovieDetailViewModel @Inject constructor(
     private val getMoviesUseCase: GetMovieDetailsUseCase,
     private val getMovieBelongingsUseCase: GetMovieBelongingsUseCase,
-    private val firebaseAnalytics: FirebaseAnalytics
+    private val movieAnalytics: MovieAnalytics
 
 ) : ViewModel() {
     var movieState = MovieDetailState(ResultState.Init());
@@ -50,7 +50,7 @@ class MovieDetailViewModel @Inject constructor(
 
             val bundle = Bundle()
             bundle.putString("MovieDetailFetch", "Passed")
-            firebaseAnalytics.logEvent("MovieDetailFetch", bundle)
+            movieAnalytics.logEvent("MovieDetailFetch", bundle)
         }
     }
 

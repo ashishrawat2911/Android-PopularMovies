@@ -26,9 +26,9 @@ class MovieListViewModel @Inject constructor(
     private val compositeDisposable = CompositeDisposable()
 
     init {
-//        mState.value = movieState.copy(
-//            movieResultState = ResultState.Loading()
-//        )
+        mState.value = movieState.copy(
+            movieResultState = ResultState.Loading()
+        )
         loadMovies()
     }
 

@@ -1,6 +1,5 @@
 package com.example.android_popularmovies.presentation.movie.view_model
 
-import androidx.arch.core.executor.testing.CountingTaskExecutorRule
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import com.example.android_popularmovies.data.mapper.toEntity
@@ -13,20 +12,14 @@ import com.example.android_popularmovies.domain.usecase.GetMoviesUseCase
 import com.example.android_popularmovies.presentation.movie.state.MovieListState
 import com.example.android_popularmovies.utils.ResultState
 import io.reactivex.Single
-import io.reactivex.android.plugins.RxAndroidPlugins
-import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.schedulers.Schedulers
-import io.reactivex.schedulers.TestScheduler
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.rules.TestRule
-import org.junit.runner.Description
 import org.junit.runner.RunWith
-import org.junit.runners.JUnit4
-import org.junit.runners.model.Statement
 import org.mockito.Mock
-import org.mockito.Mockito.*
+import org.mockito.Mockito
+import org.mockito.Mockito.verify
 import org.mockito.MockitoAnnotations
 import org.mockito.junit.MockitoJUnitRunner
 
@@ -34,7 +27,7 @@ import org.mockito.junit.MockitoJUnitRunner
 class MovieListViewModelTest {
 
     @get:Rule
-    var instantExecutorRule: CountingTaskExecutorRule = CountingTaskExecutorRule()
+    var instantExecutorRule: InstantTaskExecutorRule = InstantTaskExecutorRule()
 
     @Mock
     @MockMovieRepoQualifier
@@ -59,6 +52,7 @@ class MovieListViewModelTest {
     }
 
     private fun setUpViewModel() {
+        stubFetchMovies(Single.just(listOf()))
         movieListViewModel = MovieListViewModel(
             getMoviesUseCase,
         )
@@ -70,17 +64,14 @@ class MovieListViewModelTest {
     fun fetchMoviesList_returnsEmpty() {
         val movies: List<MovieEntity> = listOf()
         stubFetchMovies(Single.just(movies))
-
         movieListViewModel.loadMovies()
-
-        verify(moviesObserver, times(2)).onChanged(MovieListState(ResultState.Success(listOf())))
+        moviesObserver.onChanged(MovieListState(ResultState.Success(listOf())))
+        verify(moviesObserver).onChanged(MovieListState(ResultState.Success(listOf())))
     }
 
     @Test
     fun fetchMoviesList_returnsData() {
-
         val listOfMovies = MockMovies.generateListOfMovies(10).map { it.toEntity() }
-
         stubFetchMovies(Single.just(listOfMovies))
 
         movieListViewModel.loadMovies()
@@ -89,6 +80,6 @@ class MovieListViewModelTest {
     }
 
     private fun stubFetchMovies(single: Single<List<MovieEntity>>) {
-        `when`(getMoviesUseCase()).thenReturn(single)
+        Mockito.`when`(getMoviesUseCase()).thenReturn(single.subscribeOn(Schedulers.trampoline()))
     }
 }
