@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "876175924570",
+    "project_id": "popular-movies-ps",
+    "storage_bucket": "popular-movies-ps.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:876175924570:android:8d47da3bb32e424ccea763",
+        "android_client_info": {
+          "package_name": "com.example.android_popularmovies"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "876175924570-k94qufu3kg6ofeoufa8rjn24tf3udt6s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAXssn-o4H24Fhb1cm9VAEF22ch08UEMT0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "876175924570-k94qufu3kg6ofeoufa8rjn24tf3udt6s.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
