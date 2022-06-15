@@ -64,7 +64,7 @@ class MovieListViewModelTest {
     fun fetchMoviesList_returnsEmpty() {
         val movies: List<MovieEntity> = listOf()
         stubFetchMovies(Single.just(movies))
-        movieListViewModel.loadMovies()
+        movieListViewModel.fetchMoviesList()
         moviesObserver.onChanged(MovieListState(ResultState.Success(listOf())))
         verify(moviesObserver).onChanged(MovieListState(ResultState.Success(listOf())))
     }
@@ -74,7 +74,7 @@ class MovieListViewModelTest {
         val listOfMovies = MockMovies.generateListOfMovies(10).map { it.toEntity() }
         stubFetchMovies(Single.just(listOfMovies))
 
-        movieListViewModel.loadMovies()
+        movieListViewModel.fetchMoviesList()
         moviesObserver.onChanged(MovieListState(ResultState.Success(listOfMovies.map { it.toState() })))
         verify(moviesObserver).onChanged(MovieListState(ResultState.Success(listOfMovies.map { it.toState() })))
     }

@@ -5,11 +5,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.android_popularmovies.analytics.MovieAnalytics
 import com.example.android_popularmovies.domain.mapper.toState
 import com.example.android_popularmovies.domain.usecase.GetMovieBelongingsUseCase
 import com.example.android_popularmovies.domain.usecase.GetMovieDetailsUseCase
+import com.example.android_popularmovies.presentation.movie.state.MovieBelongingState
 import com.example.android_popularmovies.presentation.movie.state.MovieDetailState
-import com.example.android_popularmovies.analytics.MovieAnalytics
 import com.example.android_popularmovies.utils.ResultState
 import com.example.android_popularmovies.utils.getMovieErrorMessage
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -27,22 +28,24 @@ class MovieDetailViewModel @Inject constructor(
     private val getMoviesUseCase: GetMovieDetailsUseCase,
     private val getMovieBelongingsUseCase: GetMovieBelongingsUseCase,
     private val movieAnalytics: MovieAnalytics
-
 ) : ViewModel() {
-    var movieState = MovieDetailState(ResultState.Init());
-    var movieBelongingState = MovieDetailState(ResultState.Init());
+    var movieDetailState = MovieDetailState(ResultState.Init());
+    var movieBelongingState = MovieBelongingState(ResultState.Init());
 
-    val state: LiveData<MovieDetailState> get() = movieDetailsState
-    private val movieDetailsState = MutableLiveData<MovieDetailState>()
+    val detailState: LiveData<MovieDetailState> get() = _detailState
+    private val _detailState = MutableLiveData<MovieDetailState>()
+
+    val belongingState: LiveData<MovieBelongingState> get() = _belongingState
+    private val _belongingState = MutableLiveData<MovieBelongingState>()
 
     init {
-        movieDetailsState.value = movieState.copy(movieResultState = ResultState.Init())
+        _detailState.value = movieDetailState.copy(movieResultState = ResultState.Init())
     }
 
-    private val exceptionHandler = CoroutineExceptionHandler { context, exception ->
+    private val exceptionHandler = CoroutineExceptionHandler { _, exception ->
         viewModelScope.launch(Dispatchers.Main) {
-            movieDetailsState.value =
-                movieState.copy(
+            _detailState.value =
+                movieDetailState.copy(
                     movieResultState = ResultState.Error(
                         exception.fillInStackTrace().getMovieErrorMessage()
                     )
@@ -55,26 +58,33 @@ class MovieDetailViewModel @Inject constructor(
     }
 
     fun getMovieDetails(movieId: Int) {
-        movieDetailsState.value = movieState.copy(movieResultState = ResultState.Loading())
+        _detailState.value = movieDetailState.copy(movieResultState = ResultState.Loading())
         viewModelScope.launch(Dispatchers.IO + exceptionHandler) {
             val response = async { getMoviesUseCase(movieId) }
             launch(Dispatchers.Main) {
-                movieDetailsState.value =
-                    movieState.copy(movieResultState = ResultState.Success((response.await()).toState()) )
+                _detailState.value =
+                    movieDetailState.copy(movieResultState = ResultState.Success((response.await()).toState()))
             }
         }
 
         getMovieBelongings(movieId)
     }
 
-     fun getMovieBelongings(movieId: Int) {
+    private fun getMovieBelongings(movieId: Int) {
         viewModelScope.launch {
+            _belongingState.value =
+                movieBelongingState.copy(movieResultState = ResultState.Loading())
+
             getMovieBelongingsUseCase(movieId)
                 .onStart { }
                 .catch {
+                    _belongingState.value =
+                        movieBelongingState.copy(movieResultState = ResultState.Error(it.getMovieErrorMessage()))
                     Timber.e(this.toString())
                 }
                 .collect {
+                    _belongingState.value =
+                        movieBelongingState.copy(movieResultState = ResultState.Success(it.map { it.toState() }))
                 }
         }
     }

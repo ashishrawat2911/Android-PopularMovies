@@ -29,10 +29,10 @@ class MovieListViewModel @Inject constructor(
         mState.value = movieState.copy(
             movieResultState = ResultState.Loading()
         )
-        loadMovies()
+        fetchMoviesList()
     }
 
-    fun loadMovies() {
+    fun fetchMoviesList() {
         disposable = getMoviesUseCase()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())

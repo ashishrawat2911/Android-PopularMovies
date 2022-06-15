@@ -45,7 +45,7 @@ object MockMovies {
     }
 
     fun generateMovieBelongingList(size: Int): MovieBelongingList {
-        val listOfMovies = mutableListOf<MovieBelonging>()
+        val listOfMovies = mutableListOf<MovieBelongingApiModel>()
         repeat(size) {
             listOfMovies.add(generateMovieBelongings())
         }
@@ -60,15 +60,13 @@ object MockMovies {
         return model
     }
 
-    private fun generateMovieBelongings(): MovieBelonging {
-        return MovieBelonging(
+    private fun generateMovieBelongings(): MovieBelongingApiModel {
+        return MovieBelongingApiModel(
             id = RandomDataFactory.getRandomLong(),
             posterPath = RandomDataFactory.getRandomImage(),
             description = RandomDataFactory.getRandomString(),
             favoriteCount = RandomDataFactory.getRandomLong(),
-            iso639_1 = ISO639_1.En,
             itemCount = RandomDataFactory.getRandomLong(),
-            listType = ListType.Movie,
             name = RandomDataFactory.getRandomString(),
         )
     }

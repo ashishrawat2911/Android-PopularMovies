@@ -13,7 +13,6 @@ import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.junit.MockitoJUnitRunner
-import retrofit2.Response
 
 @RunWith(MockitoJUnitRunner::class)
 class GetMovieBelongingsUseCaseTest {
@@ -37,30 +36,30 @@ class GetMovieBelongingsUseCaseTest {
     @Test
     fun testInvoke_checkSize() {
         runBlocking {
-            val movieBelongingResponse = Response.success(MockMovies.generateMovieBelongingList(10))
+            val movieBelongingResponse =
+                MockMovies.generateMovieBelongingList(10)
             stubMovieBelongingResponse(movieBelongingResponse)
-            assert(
-                movieBelongingResponse.body()!!.results.size == repository.getMovieBelongings(0)
-                    .body()!!.results.size
-            )
+            val getMovieBelongings = repository.getMovieBelongings(0)
+
+            assert(movieBelongingResponse.results.size == getMovieBelongings.size)
         }
     }
 
     @Test
     fun testInvoke_checkIndex0Desc() {
         runBlocking {
-            val movieBelongingResponse = Response.success(MockMovies.generateMovieBelongingList(10))
+            val movieBelongingResponse =
+                MockMovies.generateMovieBelongingList(10)
             stubMovieBelongingResponse(movieBelongingResponse)
             assert(
-                movieBelongingResponse.body()!!.results[0].description == repository.getMovieBelongings(
+                movieBelongingResponse.results[0].description == repository.getMovieBelongings(
                     0
-                ).body()!!.results[0].description
+                )[0].description
             )
         }
     }
 
-    private suspend fun stubMovieBelongingResponse(movieBelongingResponse: Response<MovieBelongingList>) {
-        Mockito.`when`(repository.getMovieBelongings(0)).thenReturn(movieBelongingResponse)
-
+    private suspend fun stubMovieBelongingResponse(res: MovieBelongingList) {
+        Mockito.`when`(movieApiService.movieBelongings(0)).thenReturn(res)
     }
 }

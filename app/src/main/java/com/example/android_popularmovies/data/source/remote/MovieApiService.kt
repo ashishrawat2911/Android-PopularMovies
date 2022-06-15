@@ -16,5 +16,5 @@ interface MovieApiService {
     suspend fun movieDetails(@Path("movie_id") movieId: Int): MovieApiModel
 
     @GET("movie/{movie_id}/lists")
-    suspend fun movieBelongings(@Path("movie_id") movieId: Int): Response<MovieBelongingList>
+    suspend fun movieBelongings(@Path("movie_id") movieId: Int): MovieBelongingList
 }

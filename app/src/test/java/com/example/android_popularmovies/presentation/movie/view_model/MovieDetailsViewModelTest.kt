@@ -2,20 +2,23 @@ package com.example.android_popularmovies.presentation.movie.view_model
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
+import com.example.android_popularmovies.analytics.MovieAnalytics
 import com.example.android_popularmovies.data.mapper.toEntity
 import com.example.android_popularmovies.data.repository.mock.MockMovies
 import com.example.android_popularmovies.di.qualifiers.MockMovieRepoQualifier
+import com.example.android_popularmovies.domain.entity.MovieBelongingsEntity
 import com.example.android_popularmovies.domain.entity.MovieEntity
 import com.example.android_popularmovies.domain.mapper.toState
 import com.example.android_popularmovies.domain.repository.MovieRepository
 import com.example.android_popularmovies.domain.usecase.GetMovieBelongingsUseCase
 import com.example.android_popularmovies.domain.usecase.GetMovieDetailsUseCase
+import com.example.android_popularmovies.presentation.movie.state.MovieBelongingState
 import com.example.android_popularmovies.presentation.movie.state.MovieDetailState
-import com.example.android_popularmovies.analytics.MovieAnalytics
 import com.example.android_popularmovies.utils.ResultState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.resetMain
@@ -45,6 +48,8 @@ class MovieDetailsViewModelTest {
 
     @Mock
     private lateinit var moviesObserver: Observer<MovieDetailState>
+    @Mock
+    private lateinit var moviesBelongingsObserver: Observer<MovieBelongingState>
 
     private lateinit var getMovieDetailsUseCase: GetMovieDetailsUseCase
     private lateinit var getMovieBelongingsUseCase: GetMovieBelongingsUseCase
@@ -80,7 +85,8 @@ class MovieDetailsViewModelTest {
             movieAnalytics,
         )
 
-        movieDetailViewModel.state.observeForever(moviesObserver)
+        movieDetailViewModel.detailState.observeForever(moviesObserver)
+        movieDetailViewModel.belongingState.observeForever(moviesBelongingsObserver)
     }
 
     @Test
@@ -107,10 +113,39 @@ class MovieDetailsViewModelTest {
         )
     }
 
+    @Test
+    fun fetchMovieBelongings_returnsData() {
+        val movieBelongings =
+            MockMovies.generateMovieBelongingList(10).results.map { it.toEntity() }
+        CoroutineScope(Dispatchers.IO).launch {
+            stubMovieBelongings(movieBelongings)
+        }
+        movieDetailViewModel.getMovieDetails(0)
+
+        moviesBelongingsObserver.onChanged(
+            MovieBelongingState(
+                ResultState.Success(
+                    movieBelongings.map { it.toState() }
+                )
+            )
+        )
+        verify(moviesBelongingsObserver).onChanged(
+            MovieBelongingState(
+                ResultState.Success(
+                    movieBelongings.map { it.toState() }
+                )
+            )
+        )
+    }
+
 
     private suspend fun stubFetchMovies(movie: MovieEntity) {
         Mockito.`when`(getMovieDetailsUseCase(0))
             .thenReturn(movie)
+    }
+    private suspend fun stubMovieBelongings(movieBelongings: List<MovieBelongingsEntity>) {
+        Mockito.`when`(getMovieBelongingsUseCase(0)).thenReturn(flowOf(movieBelongings))
+
     }
 
 }

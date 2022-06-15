@@ -2,16 +2,10 @@ package com.example.android_popularmovies.data.mapper
 
 import com.example.android_popularmovies.data.source.local.model.MovieDbModel
 import com.example.android_popularmovies.data.source.remote.model.MovieApiModel
-import com.example.android_popularmovies.data.source.remote.model.MovieListApiModel
+import com.example.android_popularmovies.data.source.remote.model.MovieBelongingApiModel
+import com.example.android_popularmovies.domain.entity.MovieBelongingsEntity
 import com.example.android_popularmovies.domain.entity.MovieEntity
-import com.example.android_popularmovies.domain.entity.MovieListEntity
 
-fun MovieListApiModel.toEntity() = MovieListEntity(
-    page = page,
-    totalResults = totalResults,
-    totalPages = totalPages,
-    results = results?.map { it.toEntity() },
-)
 
 fun MovieApiModel.toEntity() = MovieEntity(
     id = id!!,
@@ -38,4 +32,13 @@ fun MovieEntity.toDBModel() = MovieDbModel(
     posterPath = posterPath,
     overview = overview,
     voteAverage = voteAverage,
+)
+
+fun MovieBelongingApiModel.toEntity() = MovieBelongingsEntity(
+    id = id,
+    posterPath = posterPath,
+    name = name,
+    itemCount = itemCount,
+    favoriteCount = favoriteCount,
+    description = description,
 )

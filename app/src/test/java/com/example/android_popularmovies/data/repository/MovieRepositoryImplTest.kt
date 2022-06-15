@@ -54,10 +54,10 @@ class MovieRepositoryImplTest {
     fun testGetMovieBelongings_returnData() {
         val mockMovieBelongings = MockMovies.generateMovieBelongingList(10)
         val response = runBlocking {
-            stubMoviesBelongings(Response.success(mockMovieBelongings))
+            stubMoviesBelongings(mockMovieBelongings)
             movieApiService.movieBelongings(0)
         }
-        assert(response.body()!!.results.size == mockMovieBelongings.results.size)
+        assert(response.results.size == mockMovieBelongings.results.size)
     }
 
     private fun stubPopularMovies(single: Single<MovieListApiModel>) {
@@ -72,7 +72,7 @@ class MovieRepositoryImplTest {
         )
     }
 
-    private suspend fun stubMoviesBelongings(movieBelonging: Response<MovieBelongingList>) {
+    private suspend fun stubMoviesBelongings(movieBelonging: MovieBelongingList) {
         Mockito.`when`(movieApiService.movieBelongings(0)).thenReturn(
             movieBelonging
         )
