@@ -22,6 +22,9 @@
     - [X] Mockito
 - Theming
     - [X] DarkTheme
+- Firebase
+    - [X] Crashlytics
+    - [X] Analytics
 
 
 
