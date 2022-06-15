@@ -1,5 +1,6 @@
 package com.example.android_popularmovies.presentation.movie.view_model
 
+import android.os.Bundle
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -10,6 +11,7 @@ import com.example.android_popularmovies.domain.usecase.GetMovieDetailsUseCase
 import com.example.android_popularmovies.presentation.movie.state.MovieDetailState
 import com.example.android_popularmovies.utils.ResultState
 import com.example.android_popularmovies.utils.getMovieErrorMessage
+import com.google.firebase.analytics.FirebaseAnalytics
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
@@ -23,7 +25,9 @@ import javax.inject.Inject
 @HiltViewModel
 class MovieDetailViewModel @Inject constructor(
     private val getMoviesUseCase: GetMovieDetailsUseCase,
-    private val getMovieBelongingsUseCase: GetMovieBelongingsUseCase
+    private val getMovieBelongingsUseCase: GetMovieBelongingsUseCase,
+    private val firebaseAnalytics: FirebaseAnalytics
+
 ) : ViewModel() {
     var movieState = MovieDetailState(ResultState.Init());
     var movieBelongingState = MovieDetailState(ResultState.Init());
@@ -43,6 +47,10 @@ class MovieDetailViewModel @Inject constructor(
                         exception.fillInStackTrace().getMovieErrorMessage()
                     )
                 )
+
+            val bundle = Bundle()
+            bundle.putString("MovieDetailFetch", "Passed")
+            firebaseAnalytics.logEvent("MovieDetailFetch", bundle)
         }
     }
 
