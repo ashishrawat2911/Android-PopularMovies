@@ -15,11 +15,7 @@ import com.example.android_popularmovies.domain.usecase.GetMovieDetailsUseCase
 import com.example.android_popularmovies.presentation.movie.state.MovieBelongingState
 import com.example.android_popularmovies.presentation.movie.state.MovieDetailState
 import com.example.android_popularmovies.utils.ResultState
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
@@ -30,7 +26,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 import org.mockito.Mock
-import org.mockito.Mockito
+import org.mockito.Mockito.`when`
 import org.mockito.Mockito.verify
 import org.mockito.MockitoAnnotations
 
@@ -92,7 +88,7 @@ class MovieDetailsViewModelTest {
     @Test
     fun fetchMoviesDetails_returnsData() {
         val movieDetail = MockMovies.generateMovie()
-        CoroutineScope(Dispatchers.IO).launch {
+        runBlocking {
             stubFetchMovies(movieDetail.toEntity())
         }
         movieDetailViewModel.getMovieDetails(0)
@@ -140,12 +136,10 @@ class MovieDetailsViewModelTest {
 
 
     private suspend fun stubFetchMovies(movie: MovieEntity) {
-        Mockito.`when`(getMovieDetailsUseCase(0))
+        `when`(movieRepository.getMovieDetails(0))
             .thenReturn(movie)
     }
     private suspend fun stubMovieBelongings(movieBelongings: List<MovieBelongingsEntity>) {
-        Mockito.`when`(getMovieBelongingsUseCase(0)).thenReturn(flowOf(movieBelongings))
-
+        `when`(movieRepository.getMovieBelongings(0)).thenReturn(movieBelongings)
     }
-
 }
