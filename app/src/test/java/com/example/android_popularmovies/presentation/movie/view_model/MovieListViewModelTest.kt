@@ -79,6 +79,15 @@ class MovieListViewModelTest {
         verify(moviesObserver).onChanged(MovieListState(ResultState.Success(listOfMovies.map { it.toState() })))
     }
 
+    @Test
+    fun fetchMoviesList_throwException() {
+        stubFetchMovies(Single.just(listOf()))
+
+        movieListViewModel.fetchMoviesList()
+        moviesObserver.onChanged(MovieListState(ResultState.Error("Error")))
+        verify(moviesObserver).onChanged(MovieListState(ResultState.Error("Error")))
+    }
+
     private fun stubFetchMovies(single: Single<List<MovieEntity>>) {
         Mockito.`when`(getMoviesUseCase()).thenReturn(single.subscribeOn(Schedulers.trampoline()))
     }
