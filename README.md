@@ -20,6 +20,7 @@
     - [X] JUnit
     - [ ] Expresso
     - [X] Mockito
+    - [X] Robolectric
 - Theming
     - [X] DarkTheme
 - Firebase
