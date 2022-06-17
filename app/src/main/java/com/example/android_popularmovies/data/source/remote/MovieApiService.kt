@@ -10,7 +10,7 @@ import retrofit2.http.Path
 
 interface MovieApiService {
     @GET("movie/popular")
-    fun popularMovies(): MovieListApiModel
+    suspend fun popularMovies(): MovieListApiModel
 
     @GET("movie/{movie_id}")
     suspend fun movieDetails(@Path("movie_id") movieId: Int): MovieApiModel

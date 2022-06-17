@@ -15,9 +15,12 @@ import com.example.android_popularmovies.presentation.movie.state.MovieDetailSta
 import com.example.android_popularmovies.utils.ResultState
 import com.example.android_popularmovies.utils.getMovieErrorMessage
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -38,50 +41,57 @@ class MovieDetailViewModel @Inject constructor(
     private val _belongingState = MutableLiveData<MovieBelongingState>()
 
     init {
-        _detailState.value = MovieDetailState(movieResultState = ResultState.Init())
+        _detailState.postValue(MovieDetailState(movieResultState = ResultState.Init()))
+        _belongingState.postValue(MovieBelongingState(movieResultState = ResultState.Init()))
     }
 
     private val exceptionHandler = CoroutineExceptionHandler { _, exception ->
-        viewModelScope.launch(Dispatchers.Main) {
-            _detailState.value =
-                MovieDetailState(
-                    movieResultState = ResultState.Error(
-                        exception.fillInStackTrace().getMovieErrorMessage()
-                    )
+        _detailState.postValue(
+            MovieDetailState(
+                movieResultState = ResultState.Error(
+                    exception.fillInStackTrace().getMovieErrorMessage()
                 )
-
-            val bundle = Bundle()
-            bundle.putString("MovieDetailFetch", "Passed")
-            movieAnalytics.logEvent("MovieDetailFetch", bundle)
-        }
+            )
+        )
+        val bundle = Bundle()
+        bundle.putString("MovieDetailFetch", "Passed")
+        movieAnalytics.logEvent("MovieDetailFetch", bundle)
     }
 
     fun getMovieDetails(movieId: Int) =
         viewModelScope.launch(appDispatchers.IO + exceptionHandler) {
-            _detailState.value = MovieDetailState(movieResultState = ResultState.Loading())
+            _detailState.postValue(MovieDetailState(movieResultState = ResultState.Loading()))
             val response = async { getMoviesUseCase(movieId) }
             val value =
                 MovieDetailState(movieResultState = ResultState.Success((response.await()).toState()))
             withContext(appDispatchers.Main) {
-                _detailState.value = value
+                _detailState.postValue(value)
             }
             getMovieBelongings(movieId)
         }
 
     fun getMovieBelongings(movieId: Int) = viewModelScope.launch {
-        _belongingState.value =
-            MovieBelongingState(movieResultState = ResultState.Loading())
+        _belongingState.postValue(MovieBelongingState(movieResultState = ResultState.Loading()))
 
         getMovieBelongingsUseCase(movieId)
             .onStart { }
             .catch {
-                _belongingState.value =
-                    MovieBelongingState(movieResultState = ResultState.Error(it.getMovieErrorMessage()))
+                _belongingState.postValue(
+                    MovieBelongingState(
+                        movieResultState = ResultState.Error(
+                            it.getMovieErrorMessage()
+                        )
+                    )
+                )
                 Timber.e(this.toString())
             }
             .collect {
-                _belongingState.value =
-                    MovieBelongingState(movieResultState = ResultState.Success(it.map { it.toState() }))
+                _belongingState.postValue(
+                    MovieBelongingState(
+                        movieResultState = ResultState.Success(
+                            it.map { it.toState() })
+                    )
+                )
             }
     }
 

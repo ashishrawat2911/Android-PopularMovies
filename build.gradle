@@ -16,13 +16,11 @@ buildscript {
     ext.activity_ktx='1.4.0'
     ext.fragment_ktx='1.4.1'
     ext.navigation_version='1.0.1'
-    ext.jacocoVersion = '0.8.4'
 
     dependencies {
         classpath 'androidx.navigation:navigation-safe-args-gradle-plugin:2.4.2'
         classpath 'com.google.gms:google-services:4.3.3'
         classpath 'com.google.firebase:firebase-crashlytics-gradle:2.9.0'
-        classpath "org.jacoco:org.jacoco.core:$jacocoVersion"
 
     }
 }

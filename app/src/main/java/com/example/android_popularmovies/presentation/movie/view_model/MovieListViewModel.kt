@@ -14,6 +14,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -25,23 +26,27 @@ class MovieListViewModel @Inject constructor(
     private val _movieState = MutableLiveData<MovieListState>()
 
     private val exceptionHandler = CoroutineExceptionHandler { _, exception ->
-        viewModelScope.launch(appDispatchers.Main) {
-            _movieState.value =
-                MovieListState(movieResultState = ResultState.Error(exception.getMovieErrorMessage()))
-        }
+        Timber.e(exception)
+        _movieState.postValue(MovieListState(movieResultState = ResultState.Error(exception.getMovieErrorMessage())))
     }
 
     init {
-        _movieState.value = MovieListState(
-            movieResultState = ResultState.Loading()
+        _movieState.postValue(
+            MovieListState(
+                movieResultState = ResultState.Loading()
+            )
         )
         fetchMoviesList()
     }
 
     fun fetchMoviesList() = viewModelScope.launch(appDispatchers.IO + exceptionHandler) {
-        val movies = async{ getMoviesUseCase() }
-        _movieState.value =
-            MovieListState(movieResultState = ResultState.Success(movies.await().map { it.toState() }))
+        val movies = async { getMoviesUseCase() }
+        _movieState.postValue(
+            MovieListState(
+                movieResultState = ResultState.Success(
+                    movies.await().map { it.toState() })
+            )
+        )
 
     }
 }

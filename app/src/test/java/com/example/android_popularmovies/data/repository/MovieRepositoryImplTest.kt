@@ -11,6 +11,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.Mockito
+import org.mockito.Mockito.verify
 import org.mockito.junit.MockitoJUnitRunner
 
 @ExperimentalCoroutinesApi
@@ -21,12 +22,10 @@ class MovieRepositoryImplTest {
     private lateinit var movieApiService: MovieApiService
 
     @Test
-    fun getPopularMovies_Completes() {
+    fun getPopularMovies_Completes(): Unit = runBlocking {
         stubPopularMovies(MockMovies.generateMovieListModel(6))
-
-        val response = runBlocking {
-            movieApiService.popularMovies()
-        }
+        movieApiService.popularMovies()
+        verify(movieApiService).popularMovies()
     }
 
     @Test
