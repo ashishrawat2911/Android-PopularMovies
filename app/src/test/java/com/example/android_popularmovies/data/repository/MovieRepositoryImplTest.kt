@@ -29,12 +29,11 @@ class MovieRepositoryImplTest {
     }
 
     @Test
-    fun testLoadMovies_returnData() {
+    fun testLoadMovies_returnData() = runBlocking {
         stubPopularMovies(MockMovies.generateMovieListModel(6))
 
-        val response = runBlocking {
-            movieApiService.popularMovies()
-        }
+        val response = movieApiService.popularMovies()
+
 
         assert(response.results!!.size == 6)
     }
@@ -59,7 +58,7 @@ class MovieRepositoryImplTest {
         assert(response.results.size == mockMovieBelongings.results.size)
     }
 
-    private fun stubPopularMovies(model: MovieListApiModel) {
+    private suspend fun stubPopularMovies(model: MovieListApiModel) {
         Mockito.`when`(movieApiService.popularMovies()).thenReturn(
             model
         )

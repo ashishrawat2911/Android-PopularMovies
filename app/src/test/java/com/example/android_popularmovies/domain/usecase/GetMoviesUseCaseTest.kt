@@ -46,7 +46,7 @@ class GetMoviesUseCaseTest {
     }
 
 
-    private fun stubMoviesResponse(model: MovieListApiModel) {
+    private suspend fun stubMoviesResponse(model: MovieListApiModel) {
         Mockito.`when`(movieApiService.popularMovies()).thenReturn(model)
     }
 }
