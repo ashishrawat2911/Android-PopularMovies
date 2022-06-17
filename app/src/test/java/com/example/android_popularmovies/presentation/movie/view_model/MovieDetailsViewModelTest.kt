@@ -86,7 +86,7 @@ class MovieDetailsViewModelTest {
             movieAnalytics,
             testDispatcher
         )
-        movieDetailViewModel.detailState().observeForever(moviesObserver)
+        movieDetailViewModel.detailState.observeForever(moviesObserver)
         movieDetailViewModel.belongingState.observeForever(moviesBelongingsObserver)
     }
 
@@ -104,7 +104,7 @@ class MovieDetailsViewModelTest {
         verify(moviesObserver).onChanged(
             data
         )
-        Assert.assertEquals(movieDetailViewModel.detailState().value, data)
+        Assert.assertEquals(movieDetailViewModel.detailState.value, data)
     }
 
     @Test
@@ -118,7 +118,7 @@ class MovieDetailsViewModelTest {
             ResultState.Error("org.mockito.exceptions.base.MockitoException: Error")
         )
         verify(moviesObserver).onChanged(error)
-        Assert.assertEquals(movieDetailViewModel.detailState().value, error)
+        Assert.assertEquals(movieDetailViewModel.detailState.value, error)
     }
 
     @Test

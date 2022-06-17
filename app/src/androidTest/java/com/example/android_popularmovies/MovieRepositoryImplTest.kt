@@ -6,6 +6,7 @@ import com.example.android_popularmovies.data.mapper.toDBModel
 import com.example.android_popularmovies.data.mapper.toEntity
 import com.example.android_popularmovies.data.repository.mock.MockMovies
 import com.example.android_popularmovies.data.source.local.MovieDatabase
+import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -28,16 +29,14 @@ class MovieRepositoryImplTest {
     }
 
     @Test
-    fun addMovieToDB() {
+    fun addMovieToDB() = runBlocking {
         val movies = MockMovies.generateListOfMovies(10)
         movieDatabase.movieDao().addMovies(
             movies.map {
                 it.toEntity().toDBModel()
             }
         )
-        movieDatabase.movieDao().getMovies().test().assertValue {
-            it.isNotEmpty()
-        }
+        assert(movieDatabase.movieDao().getMovies().isNotEmpty())
     }
 
     @After

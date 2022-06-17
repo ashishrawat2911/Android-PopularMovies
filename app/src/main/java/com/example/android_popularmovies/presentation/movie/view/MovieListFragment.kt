@@ -38,7 +38,7 @@ class MovieListFragment : Fragment() {
     }
 
     private fun setUpViewModel() {
-        viewModel.state.observe(
+        viewModel.movieState.observe(
             viewLifecycleOwner
         ) {
 

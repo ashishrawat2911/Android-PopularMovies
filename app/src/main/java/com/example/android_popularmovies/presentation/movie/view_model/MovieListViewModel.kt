@@ -3,56 +3,45 @@ package com.example.android_popularmovies.presentation.movie.view_model
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.android_popularmovies.AppDispatchers
 import com.example.android_popularmovies.domain.mapper.toState
 import com.example.android_popularmovies.domain.usecase.GetMoviesUseCase
 import com.example.android_popularmovies.presentation.movie.state.MovieListState
 import com.example.android_popularmovies.utils.ResultState
 import com.example.android_popularmovies.utils.getMovieErrorMessage
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class MovieListViewModel @Inject constructor(
     private val getMoviesUseCase: GetMoviesUseCase,
+    private val appDispatchers: AppDispatchers
 ) : ViewModel() {
-    var movieState = MovieListState(ResultState.Init());
-    val state: LiveData<MovieListState> get() = mState
-    private val mState = MutableLiveData<MovieListState>()
-    private var disposable: Disposable? = null
-    private val compositeDisposable = CompositeDisposable()
+    val movieState: LiveData<MovieListState> get() = _movieState
+    private val _movieState = MutableLiveData<MovieListState>()
+
+    private val exceptionHandler = CoroutineExceptionHandler { _, exception ->
+        viewModelScope.launch(appDispatchers.Main) {
+            _movieState.value =
+                MovieListState(movieResultState = ResultState.Error(exception.getMovieErrorMessage()))
+        }
+    }
 
     init {
-        mState.value = movieState.copy(
+        _movieState.value = MovieListState(
             movieResultState = ResultState.Loading()
         )
         fetchMoviesList()
     }
 
-    fun fetchMoviesList() {
-        disposable = getMoviesUseCase()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({
-                it?.let {
-                    mState.value =
-                        movieState.copy(movieResultState = ResultState.Success(it.map { it.toState() }))
-                }
-            }, {
-                mState.value =
-                    movieState.copy(movieResultState = ResultState.Error(it.getMovieErrorMessage()))
-            })
+    fun fetchMoviesList() = viewModelScope.launch(appDispatchers.IO + exceptionHandler) {
+        val movies = async{ getMoviesUseCase() }
+        _movieState.value =
+            MovieListState(movieResultState = ResultState.Success(movies.await().map { it.toState() }))
 
-        disposable?.let {
-            compositeDisposable.add(it)
-        }
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        compositeDisposable.clear()
     }
 }

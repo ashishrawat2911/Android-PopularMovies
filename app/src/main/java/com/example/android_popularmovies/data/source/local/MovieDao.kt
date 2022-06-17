@@ -11,7 +11,7 @@ import io.reactivex.Single
 interface MovieDao {
 
     @Query("SELECT * FROM movies")
-    fun getMovies(): Single<List<MovieDbModel>>
+    fun getMovies(): List<MovieDbModel>
 
     @Query("SELECT * FROM movies where id==:movieId")
     fun getMovie(movieId: Int): MovieDbModel

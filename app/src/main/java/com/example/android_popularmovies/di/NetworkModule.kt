@@ -52,9 +52,7 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun providesOkHttpClient(
-        @ApplicationContext context: Context
-    ): OkHttpClient {
+    fun providesOkHttpClient(): OkHttpClient {
         logging.setLevel(HttpLoggingInterceptor.Level.BODY)
 
         val interceptor = Interceptor { chain ->

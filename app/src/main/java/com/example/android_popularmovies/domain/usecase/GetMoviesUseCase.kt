@@ -9,7 +9,7 @@ import javax.inject.Inject
 class GetMoviesUseCase @Inject constructor(
     @MovieRepoQualifier private val repository: MovieRepository
 ) {
-    operator fun invoke(): Single<List<MovieEntity>> {
+    suspend operator fun invoke(): List<MovieEntity> {
         return repository.getMovies()
     }
 }

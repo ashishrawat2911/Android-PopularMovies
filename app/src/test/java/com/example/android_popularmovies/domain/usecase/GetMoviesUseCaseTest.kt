@@ -6,7 +6,6 @@ import com.example.android_popularmovies.data.source.local.MovieDao
 import com.example.android_popularmovies.data.source.remote.MovieApiService
 import com.example.android_popularmovies.data.source.remote.model.MovieListApiModel
 import com.example.android_popularmovies.domain.repository.MovieRepository
-import io.reactivex.Single
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
@@ -38,15 +37,16 @@ class GetMoviesUseCaseTest {
     fun testInvoke_checkSize() {
         runBlocking {
             val movies = MockMovies.generateMovieListModel(10)
-            stubMoviesResponse(Single.just(movies))
-           movieApiService.popularMovies().test().assertValue{
-               it.results!!.size==movies.results!!.size
-           }
+            stubMoviesResponse(movies)
+            val response = runBlocking {
+                movieApiService.popularMovies()
+            }
+            assert(response.results!!.size == movies.results!!.size)
         }
     }
 
 
-    private  fun stubMoviesResponse(singleMovies: Single<MovieListApiModel>) {
-        Mockito.`when`(movieApiService.popularMovies()).thenReturn(singleMovies)
+    private fun stubMoviesResponse(model: MovieListApiModel) {
+        Mockito.`when`(movieApiService.popularMovies()).thenReturn(model)
     }
 }

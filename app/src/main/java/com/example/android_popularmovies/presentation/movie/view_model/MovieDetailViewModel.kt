@@ -5,8 +5,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.android_popularmovies.analytics.MovieAnalytics
 import com.example.android_popularmovies.AppDispatchers
+import com.example.android_popularmovies.analytics.MovieAnalytics
 import com.example.android_popularmovies.domain.mapper.toState
 import com.example.android_popularmovies.domain.usecase.GetMovieBelongingsUseCase
 import com.example.android_popularmovies.domain.usecase.GetMovieDetailsUseCase
@@ -30,23 +30,21 @@ class MovieDetailViewModel @Inject constructor(
     private val appDispatchers: AppDispatchers
 
 ) : ViewModel() {
-    var movieDetailState = MovieDetailState(ResultState.Init());
-    var movieBelongingState = MovieBelongingState(ResultState.Init());
 
-    fun detailState(): LiveData<MovieDetailState> = _detailState
+    val detailState: LiveData<MovieDetailState> get() = _detailState
     private val _detailState = MutableLiveData<MovieDetailState>()
 
     val belongingState: LiveData<MovieBelongingState> get() = _belongingState
     private val _belongingState = MutableLiveData<MovieBelongingState>()
 
     init {
-        _detailState.value = movieDetailState.copy(movieResultState = ResultState.Init())
+        _detailState.value = MovieDetailState(movieResultState = ResultState.Init())
     }
 
     private val exceptionHandler = CoroutineExceptionHandler { _, exception ->
         viewModelScope.launch(Dispatchers.Main) {
             _detailState.value =
-                movieDetailState.copy(
+                MovieDetailState(
                     movieResultState = ResultState.Error(
                         exception.fillInStackTrace().getMovieErrorMessage()
                     )
@@ -60,10 +58,10 @@ class MovieDetailViewModel @Inject constructor(
 
     fun getMovieDetails(movieId: Int) =
         viewModelScope.launch(appDispatchers.IO + exceptionHandler) {
-            _detailState.value = movieDetailState.copy(movieResultState = ResultState.Loading())
+            _detailState.value = MovieDetailState(movieResultState = ResultState.Loading())
             val response = async { getMoviesUseCase(movieId) }
             val value =
-                movieDetailState.copy(movieResultState = ResultState.Success((response.await()).toState()))
+                MovieDetailState(movieResultState = ResultState.Success((response.await()).toState()))
             withContext(appDispatchers.Main) {
                 _detailState.value = value
             }
@@ -72,18 +70,18 @@ class MovieDetailViewModel @Inject constructor(
 
     fun getMovieBelongings(movieId: Int) = viewModelScope.launch {
         _belongingState.value =
-            movieBelongingState.copy(movieResultState = ResultState.Loading())
+            MovieBelongingState(movieResultState = ResultState.Loading())
 
         getMovieBelongingsUseCase(movieId)
             .onStart { }
             .catch {
                 _belongingState.value =
-                    movieBelongingState.copy(movieResultState = ResultState.Error(it.getMovieErrorMessage()))
+                    MovieBelongingState(movieResultState = ResultState.Error(it.getMovieErrorMessage()))
                 Timber.e(this.toString())
             }
             .collect {
                 _belongingState.value =
-                    movieBelongingState.copy(movieResultState = ResultState.Success(it.map { it.toState() }))
+                    MovieBelongingState(movieResultState = ResultState.Success(it.map { it.toState() }))
             }
     }
 

@@ -7,7 +7,6 @@ import com.example.android_popularmovies.data.source.remote.MovieApiService
 import com.example.android_popularmovies.domain.entity.MovieBelongingsEntity
 import com.example.android_popularmovies.domain.entity.MovieEntity
 import com.example.android_popularmovies.domain.repository.MovieRepository
-import io.reactivex.Single
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -18,16 +17,14 @@ class MovieRepositoryImpl(
     private val isNetworkAvailable: Boolean
 ) : MovieRepository {
 
-    override fun getMovies(): Single<List<MovieEntity>> {
+    override suspend fun getMovies(): List<MovieEntity> {
         return if (isNetworkAvailable) {
             service.popularMovies()
-                .flatMap { it ->
-                    addMovieToCache(it.results!!.map { it.toEntity() })
-                    Single.just(it.results!!)
-                }.map { it -> it.map { it.toEntity() } }
-
+                .results!!.map { it.toEntity() }.apply {
+                    addMovieToCache(this)
+                }
         } else {
-            movieDao.getMovies().map { it -> it.map { it.toEntity() } }
+            movieDao.getMovies().map { it.toEntity() }
         }
     }
 

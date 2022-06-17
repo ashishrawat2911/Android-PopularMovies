@@ -5,7 +5,6 @@ import com.example.android_popularmovies.data.source.remote.MovieApiService
 import com.example.android_popularmovies.data.source.remote.model.MovieApiModel
 import com.example.android_popularmovies.data.source.remote.model.MovieBelongingList
 import com.example.android_popularmovies.data.source.remote.model.MovieListApiModel
-import io.reactivex.Single
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
@@ -13,7 +12,6 @@ import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.junit.MockitoJUnitRunner
-import retrofit2.Response
 
 @ExperimentalCoroutinesApi
 @RunWith(MockitoJUnitRunner::class)
@@ -24,20 +22,22 @@ class MovieRepositoryImplTest {
 
     @Test
     fun getPopularMovies_Completes() {
-        stubPopularMovies(Single.just(MockMovies.generateMovieListModel(6)))
+        stubPopularMovies(MockMovies.generateMovieListModel(6))
 
-        val testObserver = movieApiService.popularMovies().test()
-
-        testObserver.assertComplete()
+        val response = runBlocking {
+            movieApiService.popularMovies()
+        }
     }
 
     @Test
     fun testLoadMovies_returnData() {
-        stubPopularMovies(Single.just(MockMovies.generateMovieListModel(6)))
+        stubPopularMovies(MockMovies.generateMovieListModel(6))
 
-        val testObserver = movieApiService.popularMovies().test()
+        val response = runBlocking {
+            movieApiService.popularMovies()
+        }
 
-        assert(testObserver.values()[0].results!!.size == 6)
+        assert(response.results!!.size == 6)
     }
 
     @Test
@@ -60,9 +60,9 @@ class MovieRepositoryImplTest {
         assert(response.results.size == mockMovieBelongings.results.size)
     }
 
-    private fun stubPopularMovies(single: Single<MovieListApiModel>) {
+    private fun stubPopularMovies(model: MovieListApiModel) {
         Mockito.`when`(movieApiService.popularMovies()).thenReturn(
-            single
+            model
         )
     }
 

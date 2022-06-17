@@ -41,7 +41,7 @@ class MovieDetailFragment : Fragment() {
     private fun setUpViewModel() {
         val args: MovieDetailFragmentArgs by navArgs()
         viewModel.getMovieDetails(args.movieId)
-        viewModel.detailState().observe(viewLifecycleOwner) {
+        viewModel.detailState.observe(viewLifecycleOwner) {
             binding.progressBar.visibility =
                 if (it.movieResultState is ResultState.Loading) View.VISIBLE else View.GONE
             when (it.movieResultState) {
