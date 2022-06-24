@@ -5,7 +5,6 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.example.android_popularmovies.data.source.local.model.MovieDbModel
-import io.reactivex.Single
 
 @Dao
 interface MovieDao {

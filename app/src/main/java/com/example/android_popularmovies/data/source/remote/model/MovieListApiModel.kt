@@ -1,7 +1,5 @@
 package com.example.android_popularmovies.data.source.remote.model
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
@@ -20,9 +18,7 @@ data class MovieListApiModel(
     var results: List<MovieApiModel>? = null,
 )
 
-@Entity(tableName = "movies")
 data class MovieApiModel(
-    @PrimaryKey(autoGenerate = true)
     @SerializedName("id")
     @Expose
     var id: Int? = null,
@@ -62,66 +58,10 @@ data class MovieApiModel(
     @SerializedName("release_date")
     @Expose
     var releaseDate: String? = null,
-//    @SerializedName("belongs_to_collection")
-//    val belongsToCollection: BelongsToCollection,
     val budget: Long? = null,
-//    val genres: List<Genre>,
-//    val homepage: String,
-//    @SerializedName("imdb_id")
-//    val imdbID: String,
-//    @SerializedName("production_companies")
-//    val productionCompanies: List<ProductionCompany>,
-//    @SerializedName("production_countries")
-//    val productionCountries: List<ProductionCountry>,
     val revenue: Long? = null,
     val runtime: Long? = null,
-//    @SerializedName("spoken_languages")
-//    val spokenLanguages: List<SpokenLanguage>,
     val status: String? = null,
     val tagline: String? = null,
 )
 
-data class BelongsToCollection(
-    val id: Long,
-    val name: String,
-
-    @SerializedName("poster_path")
-    val posterPath: String,
-
-    @SerializedName("backdrop_path")
-    val backdropPath: String
-)
-
-data class Genre(
-    val id: Long,
-    val name: String
-)
-
-data class ProductionCompany(
-    val id: Long,
-
-    @SerializedName("logo_path")
-    val logoPath: String,
-
-    val name: String,
-
-    @SerializedName("origin_country")
-    val originCountry: String
-)
-
-data class ProductionCountry(
-    @SerializedName("iso_3166_1")
-    val iso3166_1: String,
-
-    val name: String
-)
-
-data class SpokenLanguage(
-    @SerializedName("english_name")
-    val englishName: String,
-
-    @SerializedName("iso_639_1")
-    val iso639_1: String,
-
-    val name: String
-)

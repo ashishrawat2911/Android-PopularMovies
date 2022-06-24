@@ -100,7 +100,7 @@ class MovieDetailsViewModelTest {
             ResultState.Success(
                 movieDetail.toEntity().toState()
             )
-        );
+        )
         verify(moviesObserver).onChanged(
             data
         )
@@ -140,7 +140,7 @@ class MovieDetailsViewModelTest {
 
     @Test
     @Throws(Exception::class)
-    fun fetchMovieBelongings_returnsError() = runTest() {
+    fun fetchMovieBelongings_returnsError() = runTest {
         `when`(movieRepository.getMovieBelongings(0)).thenThrow(MockitoException("Error"))
         movieDetailViewModel.getMovieBelongings(0)
         advanceUntilIdle()

@@ -50,14 +50,13 @@ object MockMovies {
             listOfMovies.add(generateMovieBelongings())
         }
 
-        val model = MovieBelongingList(
+        return MovieBelongingList(
             id = RandomDataFactory.getRandomLong(),
             page = RandomDataFactory.getRandomLong(),
             totalResults = RandomDataFactory.getRandomLong(),
             results = listOfMovies,
             totalPages = RandomDataFactory.getRandomLong(),
         )
-        return model
     }
 
     private fun generateMovieBelongings(): MovieBelongingApiModel {

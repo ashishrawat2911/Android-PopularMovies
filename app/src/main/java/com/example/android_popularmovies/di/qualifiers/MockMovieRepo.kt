@@ -5,9 +5,9 @@ import javax.inject.Qualifier
 @Qualifier
 @MustBeDocumented
 @kotlin.annotation.Retention(AnnotationRetention.RUNTIME)
-annotation class MockMovieRepoQualifier()
+annotation class MockMovieRepoQualifier
 
 @Qualifier
 @MustBeDocumented
 @kotlin.annotation.Retention(AnnotationRetention.RUNTIME)
-annotation class MovieRepoQualifier()
+annotation class MovieRepoQualifier

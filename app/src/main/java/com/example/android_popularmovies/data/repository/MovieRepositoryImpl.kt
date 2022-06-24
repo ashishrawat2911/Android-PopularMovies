@@ -7,9 +7,6 @@ import com.example.android_popularmovies.data.source.remote.MovieApiService
 import com.example.android_popularmovies.domain.entity.MovieBelongingsEntity
 import com.example.android_popularmovies.domain.entity.MovieEntity
 import com.example.android_popularmovies.domain.repository.MovieRepository
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class MovieRepositoryImpl(
     private val service: MovieApiService,
@@ -29,9 +26,7 @@ class MovieRepositoryImpl(
     }
 
     private fun addMovieToCache(movies: List<MovieEntity>) {
-        CoroutineScope(Dispatchers.IO).launch {
             movieDao.addMovies(movies.map { it.toDBModel() })
-        }
     }
 
     override suspend fun getMovieDetails(movieId: Int): MovieEntity {

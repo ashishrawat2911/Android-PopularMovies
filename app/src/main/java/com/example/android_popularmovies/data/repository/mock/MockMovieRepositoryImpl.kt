@@ -1,15 +1,12 @@
 package com.example.android_popularmovies.data.repository.mock
 
 import com.example.android_popularmovies.data.mapper.toEntity
-import com.example.android_popularmovies.data.source.remote.model.MovieBelongingList
 import com.example.android_popularmovies.domain.entity.MovieBelongingsEntity
 import com.example.android_popularmovies.domain.entity.MovieEntity
 import com.example.android_popularmovies.domain.repository.MovieRepository
-import io.reactivex.Single
-import retrofit2.Response
 
-class MockMovieRepositoryImpl() : MovieRepository {
-    override suspend fun  getMovies(): List<MovieEntity> {
+class MockMovieRepositoryImpl : MovieRepository {
+    override suspend fun getMovies(): List<MovieEntity> {
         return MockMovies.generateMovieListModel(10).results!!.map { it.toEntity() }
     }
 
@@ -17,7 +14,7 @@ class MockMovieRepositoryImpl() : MovieRepository {
         return MockMovies.generateMovie().toEntity()
     }
 
-    override suspend fun getMovieBelongings(movieId: Int):  List<MovieBelongingsEntity> {
+    override suspend fun getMovieBelongings(movieId: Int): List<MovieBelongingsEntity> {
         return MockMovies.generateMovieBelongingList(10).results.map { it.toEntity() }
     }
 }

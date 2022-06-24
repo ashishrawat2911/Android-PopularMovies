@@ -22,8 +22,6 @@ class MovieListFragment : Fragment() {
     private val viewModel: MovieListViewModel by viewModels()
     private lateinit var binding: MovieListFragmentBinding
 
-    companion object {
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,

@@ -13,6 +13,7 @@ import com.example.android_popularmovies.utils.getMovieErrorMessage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.async
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -48,5 +49,9 @@ class MovieListViewModel @Inject constructor(
             )
         )
 
+    }
+    override fun onCleared() {
+        super.onCleared()
+        viewModelScope.cancel()
     }
 }
