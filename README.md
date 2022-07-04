@@ -18,7 +18,7 @@
 - [X] Sealed Classes Kotlin
 - [X] Tests
     - [X] JUnit
-    - [ ] Expresso
+    - [ ] Espresso
     - [X] Mockito
     - [X] Robolectric
 - Theming
