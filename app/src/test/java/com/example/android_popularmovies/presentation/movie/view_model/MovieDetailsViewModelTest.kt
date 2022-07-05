@@ -1,11 +1,10 @@
 package com.example.android_popularmovies.presentation.movie.view_model
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.Observer
+import com.example.android_popularmovies.AppDispatchers
 import com.example.android_popularmovies.analytics.MovieAnalytics
 import com.example.android_popularmovies.data.mapper.toEntity
 import com.example.android_popularmovies.data.repository.mock.MockMovies
-import com.example.android_popularmovies.AppDispatchers
 import com.example.android_popularmovies.di.qualifiers.MockMovieRepoQualifier
 import com.example.android_popularmovies.domain.entity.MovieBelongingsEntity
 import com.example.android_popularmovies.domain.entity.MovieEntity
@@ -46,12 +45,6 @@ class MovieDetailsViewModelTest {
     @MockMovieRepoQualifier
     lateinit var movieRepository: MovieRepository
 
-    @Mock
-    private lateinit var moviesObserver: Observer<MovieDetailState>
-
-    @Mock
-    private lateinit var moviesBelongingsObserver: Observer<MovieBelongingState>
-
     private lateinit var getMovieDetailsUseCase: GetMovieDetailsUseCase
     private lateinit var getMovieBelongingsUseCase: GetMovieBelongingsUseCase
 
@@ -86,8 +79,6 @@ class MovieDetailsViewModelTest {
             movieAnalytics,
             testDispatcher
         )
-        movieDetailViewModel.detailState.observeForever(moviesObserver)
-        movieDetailViewModel.belongingState.observeForever(moviesBelongingsObserver)
     }
 
     @Test
@@ -100,9 +91,6 @@ class MovieDetailsViewModelTest {
             ResultState.Success(
                 movieDetail.toEntity().toState()
             )
-        )
-        verify(moviesObserver).onChanged(
-            data
         )
         Assert.assertEquals(movieDetailViewModel.detailState.value, data)
     }
@@ -117,7 +105,6 @@ class MovieDetailsViewModelTest {
         val error = MovieDetailState(
             ResultState.Error("org.mockito.exceptions.base.MockitoException: Error")
         )
-        verify(moviesObserver).onChanged(error)
         Assert.assertEquals(movieDetailViewModel.detailState.value, error)
     }
 
@@ -132,9 +119,7 @@ class MovieDetailsViewModelTest {
         val data = MovieBelongingState(
             ResultState.Success(movieBelongings.map { it.toState() })
         )
-        verify(moviesBelongingsObserver).onChanged(
-            data
-        )
+
         Assert.assertEquals(movieDetailViewModel.belongingState.value, data)
     }
 
@@ -147,9 +132,6 @@ class MovieDetailsViewModelTest {
         verify(movieRepository).getMovieBelongings(0)
         val error = MovieBelongingState(
             ResultState.Error("org.mockito.exceptions.base.MockitoException: Error")
-        )
-        verify(moviesBelongingsObserver).onChanged(
-            error
         )
         Assert.assertEquals(movieDetailViewModel.belongingState.value, error)
     }

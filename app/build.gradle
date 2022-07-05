@@ -21,7 +21,16 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField("String", "movieApiKey", movieApiKey)
     }
-
+    testOptions {
+        animationsDisabled true
+        unitTests {
+            includeAndroidResources = true
+        }
+        unitTests.all {
+            systemProperty 'robolectric.enabledSdks', '28'
+            jvmArgs '-noverify'
+        }
+    }
     buildTypes {
         release {
             minifyEnabled false
