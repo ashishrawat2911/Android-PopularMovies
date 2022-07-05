@@ -63,8 +63,8 @@ class MovieListViewModelTest {
     @After
     fun tearDown() {
         Dispatchers.resetMain()
+        movieListViewModel.onCleared()
     }
-
     private fun setUpUseCases() {
         getMoviesUseCase = GetMoviesUseCase(movieRepository)
     }

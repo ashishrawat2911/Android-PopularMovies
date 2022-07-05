@@ -90,7 +90,7 @@ class MovieDetailViewModel @Inject constructor(
             }
     }
 
-    override fun onCleared() {
+    public override fun onCleared() {
         super.onCleared()
         viewModelScope.cancel()
     }

@@ -65,6 +65,7 @@ class MovieDetailsViewModelTest {
     @After
     fun tearDown() {
         Dispatchers.resetMain()
+        movieDetailViewModel.onCleared()
     }
 
     private fun setUpUseCases() {
