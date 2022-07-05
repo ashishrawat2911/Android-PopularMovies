@@ -1,6 +1,6 @@
 package com.example.android_popularmovies.di
 
-import com.example.android_popularmovies.AppDispatchers
+import com.example.android_popularmovies.utils.AppDispatchers
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

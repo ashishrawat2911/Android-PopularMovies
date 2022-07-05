@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.android_popularmovies.AppDispatchers
+import com.example.android_popularmovies.utils.AppDispatchers
 import com.example.android_popularmovies.domain.mapper.toState
 import com.example.android_popularmovies.domain.usecase.GetMoviesUseCase
 import com.example.android_popularmovies.presentation.movie.state.MovieListState

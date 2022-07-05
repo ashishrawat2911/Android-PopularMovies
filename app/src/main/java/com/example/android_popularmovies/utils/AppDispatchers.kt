@@ -1,4 +1,4 @@
-package com.example.android_popularmovies
+package com.example.android_popularmovies.utils
 
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers

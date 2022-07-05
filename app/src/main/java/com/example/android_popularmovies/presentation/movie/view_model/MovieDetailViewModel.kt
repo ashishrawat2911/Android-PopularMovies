@@ -3,7 +3,7 @@ package com.example.android_popularmovies.presentation.movie.view_model
 import android.os.Bundle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.android_popularmovies.AppDispatchers
+import com.example.android_popularmovies.utils.AppDispatchers
 import com.example.android_popularmovies.analytics.MovieAnalytics
 import com.example.android_popularmovies.domain.mapper.toState
 import com.example.android_popularmovies.domain.usecase.GetMovieBelongingsUseCase

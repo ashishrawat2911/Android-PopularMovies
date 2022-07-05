@@ -39,7 +39,6 @@ class MovieListFragment : Fragment() {
         viewModel.movieState.observe(
             viewLifecycleOwner
         ) {
-
             binding.progressBar.visibility =
                 if (it.movieResultState is ResultState.Loading) View.VISIBLE else View.GONE
             when (it.movieResultState) {

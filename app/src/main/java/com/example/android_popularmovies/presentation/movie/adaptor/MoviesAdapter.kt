@@ -37,7 +37,6 @@ class MoviesViewHolder(private val binding: MovieViewBinding) :
         Glide.with(itemView.context).load("${Constants.movieImagePath}${movie.posterPath}")
             .into(binding.moviePhoto)
         binding.movieCard.setOnClickListener {
-
             it.findNavController().navigate(
                 MovieListFragmentDirections.actionMovieListFragmentToMovieDetailFragment(
                     movie.id

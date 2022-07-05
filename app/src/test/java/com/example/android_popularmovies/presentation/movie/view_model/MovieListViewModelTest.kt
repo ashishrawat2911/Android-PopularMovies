@@ -2,7 +2,7 @@ package com.example.android_popularmovies.presentation.movie.view_model
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
-import com.example.android_popularmovies.AppDispatchers
+import com.example.android_popularmovies.utils.AppDispatchers
 import com.example.android_popularmovies.data.mapper.toEntity
 import com.example.android_popularmovies.data.repository.mock.MockMovies
 import com.example.android_popularmovies.di.qualifiers.MockMovieRepoQualifier

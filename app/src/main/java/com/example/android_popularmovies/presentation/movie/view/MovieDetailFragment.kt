@@ -44,7 +44,27 @@ class MovieDetailFragment : Fragment() {
     }
 
     private fun setUpViewModel() {
+        updateUi();
+        showToast()
+    }
+
+    private fun showToast() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.detailErrorState.collectLatest {
+                    Toast.makeText(
+                        activity,
+                        it,
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
+        }
+    }
+
+    private fun updateUi() {
         val args: MovieDetailFragmentArgs by navArgs()
+
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.getMovieDetails(args.movieId)
@@ -68,17 +88,6 @@ class MovieDetailFragment : Fragment() {
                     }
                 }
 
-            }
-        }
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.detailErrorState.collectLatest {
-                    Toast.makeText(
-                        activity,
-                        it,
-                        Toast.LENGTH_LONG
-                    ).show()
-                }
             }
         }
     }
