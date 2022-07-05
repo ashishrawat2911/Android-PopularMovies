@@ -10,7 +10,7 @@ interface MovieApiService {
     @GET("movie/popular")
     suspend fun popularMovies(): MovieListApiModel
 
-    @GET("movisase/{movie_id}")
+    @GET("movie/{movie_id}")
     suspend fun movieDetails(@Path("movie_id") movieId: Int): MovieApiModel
 
     @GET("movie/{movie_id}/lists")
