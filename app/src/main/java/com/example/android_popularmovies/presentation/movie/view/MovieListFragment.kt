@@ -48,6 +48,7 @@ class MovieListFragment : Fragment() {
                 is ResultState.Success -> {
                     setRecyclerView((it.movieResultState as ResultState.Success<List<MovieStateData>>).result)
                 }
+                else -> Unit
             }
         }
     }

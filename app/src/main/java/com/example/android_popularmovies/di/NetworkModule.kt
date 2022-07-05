@@ -67,7 +67,7 @@ object NetworkModule {
             return@Interceptor chain.proceed(request)
         }
         return OkHttpClient.Builder().addInterceptor(interceptor).addInterceptor(logging)
-            .connectTimeout(60, TimeUnit.SECONDS)
+            .connectTimeout(Constants.timeOut, TimeUnit.SECONDS)
             .build()
     }
 
