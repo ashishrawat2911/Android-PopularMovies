@@ -6,12 +6,14 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.android_popularmovies.databinding.MovieViewBinding
-import com.example.android_popularmovies.presentation.movie.view.MovieListFragmentDirections
 import com.example.android_popularmovies.presentation.movie.state.MovieStateData
+import com.example.android_popularmovies.presentation.movie.view.MovieListFragmentDirections
 import com.example.android_popularmovies.utils.Constants
+import timber.log.Timber
 
-class MoviesAdapter(private val movies: List<MovieStateData>) :
+class MoviesAdapter(private var movies: List<MovieStateData>) :
     RecyclerView.Adapter<MoviesViewHolder>() {
+    private var filterMovies: List<MovieStateData> = movies;
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MoviesViewHolder {
 
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -21,11 +23,29 @@ class MoviesAdapter(private val movies: List<MovieStateData>) :
     }
 
     override fun getItemCount(): Int {
-        return movies.size
+        return filterMovies.size
     }
 
     override fun onBindViewHolder(holder: MoviesViewHolder, position: Int) {
-        return holder.bind(movies[position])
+        return holder.bind(filterMovies[position])
+    }
+
+    private fun updateList(list: List<MovieStateData>) {
+        filterMovies = list
+        notifyDataSetChanged()
+    }
+
+    fun filter(text: String?) {
+        Timber.e(text);
+        if (text != null) {
+            val temp: MutableList<MovieStateData> = ArrayList()
+            for (d in movies) {
+                if (d.title.lowercase().contains(text.lowercase())) {
+                    temp.add(d)
+                }
+            }
+            updateList(temp)
+        }
     }
 }
 
