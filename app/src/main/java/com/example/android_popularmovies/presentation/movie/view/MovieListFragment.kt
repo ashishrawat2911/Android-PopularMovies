@@ -41,7 +41,6 @@ class MovieListFragment : Fragment() {
     }
 
     private fun setUpSearch() {
-        binding.searchBar.addTextChangedListener {}
 
         binding.searchBar.addTextChangedListener(object : TextWatcher {
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
