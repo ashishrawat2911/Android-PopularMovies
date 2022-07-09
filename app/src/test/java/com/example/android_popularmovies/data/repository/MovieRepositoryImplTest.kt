@@ -35,7 +35,7 @@ class MovieRepositoryImplTest {
         val response = movieApiService.popularMovies()
 
 
-        assert(response.results!!.size == 6)
+        assert(response.results.size == 6)
     }
 
     @Test

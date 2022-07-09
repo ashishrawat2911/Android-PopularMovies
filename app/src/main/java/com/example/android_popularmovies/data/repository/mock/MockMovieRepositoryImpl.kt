@@ -7,7 +7,7 @@ import com.example.android_popularmovies.domain.repository.MovieRepository
 
 class MockMovieRepositoryImpl : MovieRepository {
     override suspend fun getMovies(): List<MovieEntity> {
-        return MockMovies.generateMovieListModel(10).results!!.map { it.toEntity() }
+        return MockMovies.generateMovieListModel(10).results.map { it.toEntity() }
     }
 
     override suspend fun getMovieDetails(movieId: Int): MovieEntity {

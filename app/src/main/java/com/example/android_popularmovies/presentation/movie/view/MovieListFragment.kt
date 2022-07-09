@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -25,7 +24,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class MovieListFragment : Fragment() {
     private val viewModel: MovieListViewModel by viewModels()
     private lateinit var binding: MovieListFragmentBinding
-    lateinit var moviesAdapter: MoviesAdapter;
+    lateinit var moviesAdapter: MoviesAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,

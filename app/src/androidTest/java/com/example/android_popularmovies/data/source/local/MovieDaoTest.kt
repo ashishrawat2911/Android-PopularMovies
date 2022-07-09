@@ -46,7 +46,7 @@ class MovieDaoTest {
 
     @Test
     fun getMovie() {
-        assert(mDatabase.movieDao().getMovie(movies[0].id!!).title == movies[0].title)
+        assert(mDatabase.movieDao().getMovie(movies[0].id).title == movies[0].title)
     }
 
     @Test

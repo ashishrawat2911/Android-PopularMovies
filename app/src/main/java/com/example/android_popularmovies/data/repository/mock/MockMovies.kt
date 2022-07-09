@@ -1,6 +1,9 @@
 package com.example.android_popularmovies.data.repository.mock
 
-import com.example.android_popularmovies.data.source.remote.model.*
+import com.example.android_popularmovies.data.source.remote.model.MovieApiModel
+import com.example.android_popularmovies.data.source.remote.model.MovieBelongingApiModel
+import com.example.android_popularmovies.data.source.remote.model.MovieBelongingList
+import com.example.android_popularmovies.data.source.remote.model.MovieListApiModel
 import com.example.android_popularmovies.utils.RandomDataFactory
 
 object MockMovies {
@@ -19,28 +22,23 @@ object MockMovies {
             listOfMovies.add(generateMovie())
         }
 
-        val model = MovieListApiModel()
-        model.results = listOfMovies
-        model.page = RandomDataFactory.getRandomInt()
-        model.totalResults = RandomDataFactory.getRandomInt()
-        return model
+        return MovieListApiModel(
+            results = listOfMovies,
+            page = RandomDataFactory.getRandomInt(),
+            totalResults = RandomDataFactory.getRandomInt(),
+            totalPages = RandomDataFactory.getRandomInt(),
+        )
     }
 
     fun generateMovie(): MovieApiModel {
         return MovieApiModel(
-            adult = RandomDataFactory.getRandomBoolean(),
             id = RandomDataFactory.getRandomInt(),
             title = RandomDataFactory.getRandomString(),
             voteAverage = RandomDataFactory.getRandomFloat(),
             posterPath = RandomDataFactory.getRandomImage(),
-            popularity = RandomDataFactory.getRandomFloat(),
             backdropPath = RandomDataFactory.getRandomImage(),
             originalLanguage = RandomDataFactory.getRandomString(),
-            originalTitle = RandomDataFactory.getRandomString(),
             overview = RandomDataFactory.getRandomString(),
-            releaseDate = RandomDataFactory.getRandomString(),
-            video = RandomDataFactory.getRandomBoolean(),
-            voteCount = RandomDataFactory.getRandomInt()
         )
     }
 

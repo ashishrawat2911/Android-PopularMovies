@@ -1,67 +1,44 @@
 package com.example.android_popularmovies.data.source.remote.model
 
-import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
 data class MovieListApiModel(
     @SerializedName("page")
-    @Expose
-    var page: Int? = null,
+    var page: Int,
+
     @SerializedName("total_results")
-    @Expose
-    var totalResults: Int? = null,
+    var totalResults: Int,
+
     @SerializedName("total_pages")
-    @Expose
-    var totalPages: Int? = null,
+    var totalPages: Int,
+
     @SerializedName("results")
-    @Expose
-    var results: List<MovieApiModel>? = null,
+    var results: List<MovieApiModel>,
 )
 
 data class MovieApiModel(
     @SerializedName("id")
-    @Expose
-    var id: Int? = null,
-    @SerializedName("popularity")
-    @Expose
-    var popularity: Float? = null,
-    @SerializedName("vote_count")
-    @Expose
-    var voteCount: Int? = null,
-    @SerializedName("video")
-    @Expose
-    var video: Boolean? = null,
+    var id: Int,
+
+
+
     @SerializedName("poster_path")
-    @Expose
-    var posterPath: String? = null,
-    @SerializedName("adult")
-    @Expose
-    var adult: Boolean? = null,
+    var posterPath: String,
+
     @SerializedName("backdrop_path")
-    @Expose
-    var backdropPath: String? = null,
+
+    var backdropPath: String,
     @SerializedName("original_language")
-    @Expose
+
     var originalLanguage: String? = null,
-    @SerializedName("original_title")
-    @Expose
-    var originalTitle: String? = null,
+
     @SerializedName("title")
-    @Expose
-    var title: String? = null,
+    var title: String,
+
     @SerializedName("vote_average")
-    @Expose
-    var voteAverage: Float? = null,
+    var voteAverage: Float,
+
     @SerializedName("overview")
-    @Expose
-    var overview: String? = null,
-    @SerializedName("release_date")
-    @Expose
-    var releaseDate: String? = null,
-    val budget: Long? = null,
-    val revenue: Long? = null,
-    val runtime: Long? = null,
-    val status: String? = null,
-    val tagline: String? = null,
+    var overview: String,
 )
 

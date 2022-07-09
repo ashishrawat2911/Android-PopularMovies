@@ -13,7 +13,7 @@ import timber.log.Timber
 
 class MoviesAdapter(private var movies: List<MovieStateData>) :
     RecyclerView.Adapter<MoviesViewHolder>() {
-    private var filterMovies: List<MovieStateData> = movies;
+    private var filterMovies: List<MovieStateData> = movies
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MoviesViewHolder {
 
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -36,7 +36,7 @@ class MoviesAdapter(private var movies: List<MovieStateData>) :
     }
 
     fun filter(text: String?) {
-        Timber.e(text);
+        Timber.e(text)
         if (text != null) {
             val temp: MutableList<MovieStateData> = ArrayList()
             for (d in movies) {

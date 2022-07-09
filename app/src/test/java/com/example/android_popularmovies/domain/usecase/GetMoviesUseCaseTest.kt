@@ -41,7 +41,7 @@ class GetMoviesUseCaseTest {
             val response = runBlocking {
                 movieApiService.popularMovies()
             }
-            assert(response.results!!.size == movies.results!!.size)
+            assert(response.results.size == movies.results.size)
         }
     }
 

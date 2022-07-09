@@ -8,12 +8,12 @@ import com.example.android_popularmovies.domain.entity.MovieEntity
 
 
 fun MovieApiModel.toEntity() = MovieEntity(
-    id = id!!,
-    title = title!!,
-    backdropPath = backdropPath!!,
-    posterPath = posterPath!!,
-    overview = overview!!,
-    voteAverage = voteAverage!!,
+    id = id,
+    title = title,
+    backdropPath = backdropPath,
+    posterPath = posterPath,
+    overview = overview,
+    voteAverage = voteAverage,
 )
 
 fun MovieDbModel.toEntity() = MovieEntity(

@@ -44,7 +44,7 @@ class MovieDetailFragment : Fragment() {
     }
 
     private fun setUpViewModel() {
-        updateUi();
+        updateUi()
         showToast()
     }
 
