@@ -1,14 +1,10 @@
 package com.example.android_popularmovies.domain.usecase
 
-import com.example.android_popularmovies.di.qualifiers.MovieRepoQualifier
 import com.example.android_popularmovies.domain.entity.MovieEntity
-import com.example.android_popularmovies.domain.repository.MovieRepository
-import javax.inject.Inject
+import kotlinx.coroutines.flow.Flow
 
-class GetMoviesUseCase @Inject constructor(
-    @MovieRepoQualifier private val repository: MovieRepository
-) {
-    suspend operator fun invoke(): List<MovieEntity> {
-        return repository.getMovies()
-    }
+interface GetMoviesUseCase {
+    suspend operator fun invoke(): Flow<List<MovieEntity>>
 }
+
+

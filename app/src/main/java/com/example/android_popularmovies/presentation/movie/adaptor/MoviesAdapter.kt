@@ -2,7 +2,10 @@ package com.example.android_popularmovies.presentation.movie.adaptor
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Filter
+import android.widget.Filterable
 import androidx.navigation.findNavController
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.android_popularmovies.databinding.MovieViewBinding
@@ -12,7 +15,7 @@ import com.example.android_popularmovies.utils.Constants
 import timber.log.Timber
 
 class MoviesAdapter(private var movies: List<MovieStateData>) :
-    RecyclerView.Adapter<MoviesViewHolder>() {
+    RecyclerView.Adapter<MoviesAdapter.MoviesViewHolder>(), Filterable {
     private var filterMovies: List<MovieStateData> = movies
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MoviesViewHolder {
 
@@ -26,17 +29,21 @@ class MoviesAdapter(private var movies: List<MovieStateData>) :
         return filterMovies.size
     }
 
+
     override fun onBindViewHolder(holder: MoviesViewHolder, position: Int) {
         return holder.bind(filterMovies[position])
     }
 
-    private fun updateList(list: List<MovieStateData>) {
-        filterMovies = list
-        notifyDataSetChanged()
+    private fun updateList(movies: List<MovieStateData>) {
+        val diffCallback = MovieDiffCallback(this.movies, movies)
+        val diffResult = DiffUtil.calculateDiff(diffCallback)
+        diffResult.dispatchUpdatesTo(this)
+        this.filterMovies = movies
     }
 
+
     fun filter(text: String?) {
-        Timber.e(text)
+        Timber.i(text)
         if (text != null) {
             val temp: MutableList<MovieStateData> = ArrayList()
             for (d in movies) {
@@ -47,21 +54,22 @@ class MoviesAdapter(private var movies: List<MovieStateData>) :
             updateList(temp)
         }
     }
-}
 
-class MoviesViewHolder(private val binding: MovieViewBinding) :
-    RecyclerView.ViewHolder(binding.root) {
+    class MoviesViewHolder(private val binding: MovieViewBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(movie: MovieStateData) {
-        binding.movie = movie
-        Glide.with(itemView.context).load("${Constants.movieImagePath}${movie.posterPath}")
-            .into(binding.moviePhoto)
-        binding.movieCard.setOnClickListener {
-            it.findNavController().navigate(
-                MovieListFragmentDirections.actionMovieListFragmentToMovieDetailFragment(
-                    movie.id
+        fun bind(movie: MovieStateData) {
+            binding.movie = movie
+            Glide.with(itemView.context).load("${Constants.movieImagePath}${movie.posterPath}")
+                .into(binding.moviePhoto)
+            binding.movieCard.setOnClickListener {
+                it.findNavController().navigate(
+                    MovieListFragmentDirections.actionMovieListFragmentToMovieDetailFragment(
+                        movie.id
+                    )
                 )
-            )
+            }
         }
     }
 }
+

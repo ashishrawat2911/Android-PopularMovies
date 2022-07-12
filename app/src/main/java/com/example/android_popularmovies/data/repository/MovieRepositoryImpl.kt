@@ -1,7 +1,6 @@
 package com.example.android_popularmovies.data.repository
 
 import com.example.android_popularmovies.data.store.MovieDataStore
-import com.example.android_popularmovies.domain.entity.MovieBelongingsEntity
 import com.example.android_popularmovies.domain.entity.MovieEntity
 import com.example.android_popularmovies.domain.repository.MovieRepository
 
@@ -15,9 +14,5 @@ class MovieRepositoryImpl(
 
     override suspend fun getMovieDetails(movieId: Int): MovieEntity {
         return  movieDataStore.getMovieDetails(movieId)
-    }
-
-    override suspend fun getMovieBelongings(movieId: Int): List<MovieBelongingsEntity> {
-        return movieDataStore.getMovieBelongings(movieId)
     }
 }

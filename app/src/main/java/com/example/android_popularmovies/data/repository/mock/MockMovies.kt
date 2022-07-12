@@ -1,9 +1,9 @@
 package com.example.android_popularmovies.data.repository.mock
 
+import com.example.android_popularmovies.data.mapper.MovieApiToEntityMapper
 import com.example.android_popularmovies.data.source.remote.model.MovieApiModel
-import com.example.android_popularmovies.data.source.remote.model.MovieBelongingApiModel
-import com.example.android_popularmovies.data.source.remote.model.MovieBelongingList
 import com.example.android_popularmovies.data.source.remote.model.MovieListApiModel
+import com.example.android_popularmovies.domain.entity.MovieEntity
 import com.example.android_popularmovies.utils.RandomDataFactory
 
 object MockMovies {
@@ -11,7 +11,7 @@ object MockMovies {
     fun generateListOfMovies(size: Int): List<MovieApiModel> {
         val listOfMovies = mutableListOf<MovieApiModel>()
         repeat(size) {
-            listOfMovies.add(generateMovie())
+            listOfMovies.add(generateMovieApiModel())
         }
         return listOfMovies
     }
@@ -19,7 +19,7 @@ object MockMovies {
     fun generateMovieListModel(size: Int): MovieListApiModel {
         val listOfMovies = mutableListOf<MovieApiModel>()
         repeat(size) {
-            listOfMovies.add(generateMovie())
+            listOfMovies.add(generateMovieApiModel())
         }
 
         return MovieListApiModel(
@@ -30,7 +30,7 @@ object MockMovies {
         )
     }
 
-    fun generateMovie(): MovieApiModel {
+    fun generateMovieApiModel(): MovieApiModel {
         return MovieApiModel(
             id = RandomDataFactory.getRandomInt(),
             title = RandomDataFactory.getRandomString(),
@@ -42,29 +42,13 @@ object MockMovies {
         )
     }
 
-    fun generateMovieBelongingList(size: Int): MovieBelongingList {
-        val listOfMovies = mutableListOf<MovieBelongingApiModel>()
-        repeat(size) {
-            listOfMovies.add(generateMovieBelongings())
-        }
-
-        return MovieBelongingList(
-            id = RandomDataFactory.getRandomLong(),
-            page = RandomDataFactory.getRandomLong(),
-            totalResults = RandomDataFactory.getRandomLong(),
-            results = listOfMovies,
-            totalPages = RandomDataFactory.getRandomLong(),
-        )
+    fun generateMovieEntity(): MovieEntity {
+        return MovieApiToEntityMapper().map(generateMovieApiModel())
     }
 
-    private fun generateMovieBelongings(): MovieBelongingApiModel {
-        return MovieBelongingApiModel(
-            id = RandomDataFactory.getRandomLong(),
-            posterPath = RandomDataFactory.getRandomImage(),
-            description = RandomDataFactory.getRandomString(),
-            favoriteCount = RandomDataFactory.getRandomLong(),
-            itemCount = RandomDataFactory.getRandomLong(),
-            name = RandomDataFactory.getRandomString(),
-        )
+    fun generateListOfMovieEntity(size: Int): List<MovieEntity> {
+        return generateListOfMovies(size).map { MovieApiToEntityMapper().map(it) }
+
+
     }
 }

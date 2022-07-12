@@ -2,9 +2,9 @@ package com.example.android_popularmovies.domain.usecase
 
 import com.example.android_popularmovies.data.repository.MovieRepositoryImpl
 import com.example.android_popularmovies.data.repository.mock.MockMovies
-import com.example.android_popularmovies.data.source.local.MovieDao
 import com.example.android_popularmovies.data.source.remote.MovieApiService
 import com.example.android_popularmovies.data.source.remote.model.MovieListApiModel
+import com.example.android_popularmovies.data.store.MovieDataStore
 import com.example.android_popularmovies.domain.repository.MovieRepository
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
@@ -22,14 +22,13 @@ class GetMoviesUseCaseTest {
     private lateinit var movieApiService: MovieApiService
 
     @Mock
-    private lateinit var movieDao: MovieDao
+    private lateinit var movieDataStore: MovieDataStore;
 
-    private val isNetworkAvailable: Boolean = true
 
     @Before
     fun setUp() {
         repository = MovieRepositoryImpl(
-            movieApiService, movieDao, isNetworkAvailable
+            movieDataStore
         )
     }
 

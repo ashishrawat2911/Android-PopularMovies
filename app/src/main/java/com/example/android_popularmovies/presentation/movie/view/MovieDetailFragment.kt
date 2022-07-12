@@ -17,6 +17,7 @@ import com.example.android_popularmovies.R
 import com.example.android_popularmovies.databinding.MovieDetailFragmentBinding
 import com.example.android_popularmovies.presentation.movie.state.MovieStateData
 import com.example.android_popularmovies.presentation.movie.view_model.MovieDetailViewModel
+import com.example.android_popularmovies.presentation.movie.view_model.impl.MovieDetailViewModelImpl
 import com.example.android_popularmovies.utils.Constants
 import com.example.android_popularmovies.utils.ResultState
 import dagger.hilt.android.AndroidEntryPoint
@@ -29,7 +30,7 @@ class MovieDetailFragment : Fragment() {
 
     private lateinit var binding: MovieDetailFragmentBinding
 
-    private val viewModel: MovieDetailViewModel by viewModels()
+    private val viewModel: MovieDetailViewModel by viewModels<MovieDetailViewModelImpl>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,16 +40,35 @@ class MovieDetailFragment : Fragment() {
         binding = DataBindingUtil.inflate(
             inflater, R.layout.movie_detail_fragment, container, false
         )
-        setUpViewModel()
+        initialize()
         return binding.root
     }
 
-    private fun setUpViewModel() {
-        updateUi()
-        showToast()
+
+    private fun initialize() {
+        setUpViewModel()
+        handleProgress()
+        handleUIResult()
+        handleErrorToast()
     }
 
-    private fun showToast() {
+    private fun handleProgress() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.loadingState.collectLatest {
+                    binding.progressBar.visibility = it
+                }
+            }
+        }
+
+    }
+
+    private fun setUpViewModel() {
+        val args: MovieDetailFragmentArgs by navArgs()
+        viewModel.getMovieDetails(args.movieId)
+    }
+
+    private fun handleErrorToast() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.detailErrorState.collectLatest {
@@ -62,15 +82,10 @@ class MovieDetailFragment : Fragment() {
         }
     }
 
-    private fun updateUi() {
-        val args: MovieDetailFragmentArgs by navArgs()
-
+    private fun handleUIResult() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.getMovieDetails(args.movieId)
                 viewModel.detailState.collectLatest {
-                    binding.progressBar.visibility =
-                        if (it.movieResultState is ResultState.Loading) View.VISIBLE else View.GONE
                     when (it.movieResultState) {
                         is ResultState.Success -> {
                             binding.movie =

@@ -1,18 +1,12 @@
 package com.example.android_popularmovies.data.store
 
-import com.example.android_popularmovies.data.source.local.MovieDao
 import com.example.android_popularmovies.data.source.local.model.MovieDbModel
 
-class MovieLocalDataStore(private val movieDao: MovieDao) {
-    fun getMovies(): List<MovieDbModel> {
-        return movieDao.getMovies()
-    }
+interface MovieLocalDataStore {
+    fun getMovies(): List<MovieDbModel>
 
-     fun addMovieToCache(movies: List<MovieDbModel>) {
-        movieDao.addMovies(movies)
-    }
+    fun addMovieToCache(movies: List<MovieDbModel>)
 
-    fun getMovie(movieId: Int): MovieDbModel {
-        return movieDao.getMovie(movieId)
-    }
+    fun getMovie(movieId: Int): MovieDbModel
 }
+

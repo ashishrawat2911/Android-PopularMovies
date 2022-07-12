@@ -3,7 +3,6 @@ package com.example.android_popularmovies.data.repository
 import com.example.android_popularmovies.data.repository.mock.MockMovies
 import com.example.android_popularmovies.data.source.remote.MovieApiService
 import com.example.android_popularmovies.data.source.remote.model.MovieApiModel
-import com.example.android_popularmovies.data.source.remote.model.MovieBelongingList
 import com.example.android_popularmovies.data.source.remote.model.MovieListApiModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
@@ -40,22 +39,12 @@ class MovieRepositoryImplTest {
 
     @Test
     fun testGetMovieDetails_returnData() {
-        val mockMovieDetails = MockMovies.generateMovie()
+        val mockMovieDetails = MockMovies.generateMovieApiModel()
         val response = runBlocking {
             stubMoviesDetails(mockMovieDetails)
             movieApiService.movieDetails(0)
         }
         assert(response.title == mockMovieDetails.title)
-    }
-
-    @Test
-    fun testGetMovieBelongings_returnData() {
-        val mockMovieBelongings = MockMovies.generateMovieBelongingList(10)
-        val response = runBlocking {
-            stubMoviesBelongings(mockMovieBelongings)
-            movieApiService.movieBelongings(0)
-        }
-        assert(response.results.size == mockMovieBelongings.results.size)
     }
 
     private suspend fun stubPopularMovies(model: MovieListApiModel) {
@@ -70,9 +59,5 @@ class MovieRepositoryImplTest {
         )
     }
 
-    private suspend fun stubMoviesBelongings(movieBelonging: MovieBelongingList) {
-        Mockito.`when`(movieApiService.movieBelongings(0)).thenReturn(
-            movieBelonging
-        )
-    }
+
 }
