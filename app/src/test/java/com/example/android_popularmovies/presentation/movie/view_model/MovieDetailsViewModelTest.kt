@@ -4,8 +4,6 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.example.android_popularmovies.data.repository.mock.MockMovies
 import com.example.android_popularmovies.domain.entity.MovieEntity
 import com.example.android_popularmovies.domain.mapper.MovieEntityToStateMapper
-import com.example.android_popularmovies.domain.repository.MovieRepository
-import com.example.android_popularmovies.domain.usecase.GetMovieDetailsUseCase
 import com.example.android_popularmovies.presentation.movie.state.MovieDetailState
 import com.example.android_popularmovies.utils.AppDispatchers
 import com.example.android_popularmovies.utils.ResultState
@@ -31,16 +29,10 @@ class MovieDetailsViewModelTest {
 
 
     private val dispatcher = StandardTestDispatcher()
-    private val testDispatcher = AppDispatchers(
-        IO = dispatcher,
-        Main = Dispatchers.Unconfined
-    )
-
-
-    @Mock
-    lateinit var movieRepository: MovieRepository
-    @Mock
-    private lateinit var getMovieDetailsUseCase: GetMovieDetailsUseCase
+//    private val testDispatcher = AppDispatchers(
+//        IO = dispatcher,
+//        Main = Dispatchers.Unconfined
+//    )
 
     @Mock
     private lateinit var movieDetailViewModel: MovieDetailViewModel

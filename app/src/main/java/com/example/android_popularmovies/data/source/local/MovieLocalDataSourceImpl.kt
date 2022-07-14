@@ -1,10 +1,10 @@
-package com.example.android_popularmovies.data.store.impl
+package com.example.android_popularmovies.data.source.local
 
 import com.example.android_popularmovies.data.source.local.MovieDao
 import com.example.android_popularmovies.data.source.local.model.MovieDbModel
-import com.example.android_popularmovies.data.store.MovieLocalDataStore
+import com.example.android_popularmovies.data.source.MovieLocalDataSource
 
-class MovieLocalDataStoreImpl(private val movieDao: MovieDao) : MovieLocalDataStore {
+class MovieLocalDataSourceImpl(private val movieDao: MovieDao) : MovieLocalDataSource {
     override fun getMovies(): List<MovieDbModel> {
         return movieDao.getMovies()
     }

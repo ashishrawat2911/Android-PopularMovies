@@ -5,15 +5,15 @@ import com.example.android_popularmovies.data.mapper.MovieApiToEntityMapper
 import com.example.android_popularmovies.data.mapper.MovieDbToEntityMapper
 import com.example.android_popularmovies.data.mapper.MovieEntityToDbMapper
 import com.example.android_popularmovies.data.repository.MovieRepositoryImpl
+import com.example.android_popularmovies.data.source.MovieLocalDataSource
+import com.example.android_popularmovies.data.source.MovieRemoteDataSource
 import com.example.android_popularmovies.data.source.local.MovieDao
+import com.example.android_popularmovies.data.source.local.MovieLocalDataSourceImpl
 import com.example.android_popularmovies.data.source.remote.MovieApiService
+import com.example.android_popularmovies.data.source.remote.MovieRemoteDataSourceImpl
 import com.example.android_popularmovies.data.source.remote.NetworkClient
 import com.example.android_popularmovies.data.store.MovieDataStore
-import com.example.android_popularmovies.data.store.MovieLocalDataStore
-import com.example.android_popularmovies.data.store.MovieRemoteDataStore
 import com.example.android_popularmovies.data.store.impl.MovieDataStoreImpl
-import com.example.android_popularmovies.data.store.impl.MovieLocalDataStoreImpl
-import com.example.android_popularmovies.data.store.impl.MovieRemoteDataStoreImpl
 import com.example.android_popularmovies.domain.repository.MovieRepository
 import dagger.Module
 import dagger.Provides
@@ -44,7 +44,7 @@ object NetworkModule {
     @Provides
     fun provideMovieRemoteDataStore(
         retrofitService: MovieApiService,
-    ): MovieRemoteDataStore = MovieRemoteDataStoreImpl(
+    ): MovieRemoteDataSource = MovieRemoteDataSourceImpl(
         retrofitService
     )
 
@@ -52,20 +52,20 @@ object NetworkModule {
     @Provides
     fun provideMovieLocalDataStore(
         movieDao: MovieDao
-    ): MovieLocalDataStore = MovieLocalDataStoreImpl(
+    ): MovieLocalDataSource = MovieLocalDataSourceImpl(
         movieDao,
     )
 
     @Singleton
     @Provides
     fun provideMovieDataStore(
-        movieLocalDataStore: MovieLocalDataStore,
-        movieRemoteDataStore: MovieRemoteDataStore,
+        movieLocalDataSource: MovieLocalDataSource,
+        movieRemoteDataSource: MovieRemoteDataSource,
         isNetworkAvailable: Boolean
     ): MovieDataStore {
         return MovieDataStoreImpl(
-            movieLocalDataStore = movieLocalDataStore,
-            movieRemoteDataStore = movieRemoteDataStore,
+            movieLocalDataSource = movieLocalDataSource,
+            movieRemoteDataSource = movieRemoteDataSource,
             isNetworkAvailable = isNetworkAvailable,
             movieApiToEntityMapper = MovieApiToEntityMapper(),
             movieDbToEntityMapper = MovieDbToEntityMapper(),

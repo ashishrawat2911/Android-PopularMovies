@@ -1,12 +1,12 @@
-package com.example.android_popularmovies.data.store.impl
+package com.example.android_popularmovies.data.source.remote
 
 import com.example.android_popularmovies.data.source.remote.MovieApiService
 import com.example.android_popularmovies.data.source.remote.model.MovieApiModel
-import com.example.android_popularmovies.data.store.MovieRemoteDataStore
+import com.example.android_popularmovies.data.source.MovieRemoteDataSource
 
-class MovieRemoteDataStoreImpl(
+class MovieRemoteDataSourceImpl(
     private val service: MovieApiService,
-) : MovieRemoteDataStore {
+) : MovieRemoteDataSource {
     override suspend fun getMovies(): List<MovieApiModel> {
         return service.popularMovies().results
     }

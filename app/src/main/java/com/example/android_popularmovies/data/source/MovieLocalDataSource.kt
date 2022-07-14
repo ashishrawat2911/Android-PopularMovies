@@ -1,8 +1,8 @@
-package com.example.android_popularmovies.data.store
+package com.example.android_popularmovies.data.source
 
 import com.example.android_popularmovies.data.source.local.model.MovieDbModel
 
-interface MovieLocalDataStore {
+interface MovieLocalDataSource {
     fun getMovies(): List<MovieDbModel>
 
     fun addMovieToCache(movies: List<MovieDbModel>)

@@ -1,13 +1,9 @@
 package com.example.android_popularmovies.domain.usecase
 
-import com.example.android_popularmovies.data.repository.MovieRepositoryImpl
 import com.example.android_popularmovies.data.repository.mock.MockMovies
-import com.example.android_popularmovies.data.source.remote.MovieApiService
-import com.example.android_popularmovies.data.source.remote.model.MovieListApiModel
-import com.example.android_popularmovies.data.store.MovieDataStore
+import com.example.android_popularmovies.domain.entity.MovieEntity
 import com.example.android_popularmovies.domain.repository.MovieRepository
 import kotlinx.coroutines.runBlocking
-import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
@@ -16,36 +12,19 @@ import org.mockito.junit.MockitoJUnitRunner
 
 @RunWith(MockitoJUnitRunner::class)
 class GetMoviesUseCaseTest {
+    @Mock
     private lateinit var repository: MovieRepository
 
-    @Mock
-    private lateinit var movieApiService: MovieApiService
-
-    @Mock
-    private lateinit var movieDataStore: MovieDataStore;
-
-
-    @Before
-    fun setUp() {
-        repository = MovieRepositoryImpl(
-            movieDataStore
-        )
-    }
 
     @Test
-    fun testInvoke_checkSize() {
-        runBlocking {
-            val movies = MockMovies.generateMovieListModel(10)
-            stubMoviesResponse(movies)
-            val response = runBlocking {
-                movieApiService.popularMovies()
-            }
-            assert(response.results.size == movies.results.size)
-        }
+    fun testInvoke_checkSize() = runBlocking {
+        val movies = MockMovies.generateListOfMovieEntity(10)
+        stubMoviesResponse(movies)
+        val response = repository.getMovies()
+        assert(response.size == movies.size)
     }
 
-
-    private suspend fun stubMoviesResponse(model: MovieListApiModel) {
-        Mockito.`when`(movieApiService.popularMovies()).thenReturn(model)
+    private suspend fun stubMoviesResponse(movies: List<MovieEntity>) {
+        Mockito.`when`(repository.getMovies()).thenReturn(movies)
     }
 }

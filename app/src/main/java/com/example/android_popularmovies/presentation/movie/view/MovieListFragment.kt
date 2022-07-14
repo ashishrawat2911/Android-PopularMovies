@@ -12,18 +12,18 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.android_popularmovies.R
 import com.example.android_popularmovies.databinding.MovieListFragmentBinding
-import com.example.android_popularmovies.presentation.movie.adaptor.MovieDiffCallback
 import com.example.android_popularmovies.presentation.movie.adaptor.MoviesAdapter
 import com.example.android_popularmovies.presentation.movie.state.MovieStateData
 import com.example.android_popularmovies.presentation.movie.view_model.MovieListViewModel
 import com.example.android_popularmovies.presentation.movie.view_model.impl.MovieListViewModelImpl
 import com.example.android_popularmovies.utils.ResultState
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 
 @AndroidEntryPoint
@@ -40,34 +40,34 @@ class MovieListFragment : Fragment() {
             inflater, R.layout.movie_list_fragment, container, false
         )
         initialize()
-
         return binding.root
     }
 
-    private fun setUpSearch() {
+    private fun setUpSearch(adapter: MoviesAdapter) {
         binding.searchBar.addTextChangedListener {
-            viewModel.filterMovies(it.toString())
+            it?.let {
+                viewModel.filterMovies(it.toString())
+            }
         }
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.filterState.collectLatest {
+                    Timber.e("filter ${it.size}")
+                    adapter.updateMovies(it);
+                }
+            }
+        }
+
     }
 
 
     private fun initialize() {
-        setUpViewModel()
+        viewModel.fetchMoviesList()
         handleLoading()
+        handleResult()
     }
 
-    private fun handleLoading() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.loadingState.collect {
-                    binding.progressBar.visibility = it
-                }
-
-            }
-        }
-    }
-
-    private fun setUpViewModel() {
+    private fun handleResult() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.movieState.collect {
@@ -89,17 +89,25 @@ class MovieListFragment : Fragment() {
         }
     }
 
+    private fun handleLoading() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.loadingState.collect {
+                    binding.progressBar.visibility = it
+                }
+            }
+        }
+    }
+
+
     private fun setRecyclerView(list: List<MovieStateData>) {
         binding.progressBar.visibility = View.GONE
         binding.recyclerView.apply {
             setHasFixedSize(true)
             layoutManager = GridLayoutManager(activity, 2)
-            adapter = MoviesAdapter(list)
-
-            val diffCallback = MovieDiffCallback(this.movies, movies)
-            val diffResult = DiffUtil.calculateDiff(diffCallback)
-            diffResult.dispatchUpdatesTo(this)
-            setUpSearch()
+            val moviesAdapter = MoviesAdapter(list)
+            adapter = moviesAdapter
+            setUpSearch(moviesAdapter)
         }
     }
 }
