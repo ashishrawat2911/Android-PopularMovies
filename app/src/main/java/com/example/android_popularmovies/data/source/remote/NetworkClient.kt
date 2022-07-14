@@ -45,7 +45,7 @@ class NetworkClient {
         }
         return OkHttpClient.Builder().addInterceptor(interceptor)
             .addInterceptor(logging)
-            .connectTimeout(Constants.timeOut, TimeUnit.SECONDS)
+            .connectTimeout(Constants.connectTimeout, TimeUnit.SECONDS)
             .build()
     }
 

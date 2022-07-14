@@ -19,6 +19,7 @@ import com.example.android_popularmovies.presentation.movie.adaptor.MoviesAdapte
 import com.example.android_popularmovies.presentation.movie.state.MovieStateData
 import com.example.android_popularmovies.presentation.movie.view_model.MovieListViewModel
 import com.example.android_popularmovies.presentation.movie.view_model.impl.MovieListViewModelImpl
+import com.example.android_popularmovies.utils.Constants
 import com.example.android_popularmovies.utils.ResultState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -63,7 +64,6 @@ class MovieListFragment : Fragment() {
 
     private fun initialize() {
         viewModel.fetchMoviesList()
-        handleLoading()
         handleResult()
     }
 
@@ -72,7 +72,11 @@ class MovieListFragment : Fragment() {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.movieState.collect {
                     when (it.movieResultState) {
+                        is ResultState.Loading -> {
+                            binding.progressBar.visibility = View.VISIBLE
+                        }
                         is ResultState.Error -> {
+                            binding.progressBar.visibility = View.GONE
                             Toast.makeText(
                                 activity,
                                 (it.movieResultState as ResultState.Error<List<MovieStateData>>).message,
@@ -80,6 +84,7 @@ class MovieListFragment : Fragment() {
                             ).show()
                         }
                         is ResultState.Success -> {
+                            binding.progressBar.visibility = View.GONE
                             setRecyclerView((it.movieResultState as ResultState.Success<List<MovieStateData>>).result)
                         }
                         else -> Unit
@@ -89,22 +94,11 @@ class MovieListFragment : Fragment() {
         }
     }
 
-    private fun handleLoading() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.loadingState.collect {
-                    binding.progressBar.visibility = it
-                }
-            }
-        }
-    }
-
 
     private fun setRecyclerView(list: List<MovieStateData>) {
-        binding.progressBar.visibility = View.GONE
         binding.recyclerView.apply {
             setHasFixedSize(true)
-            layoutManager = GridLayoutManager(activity, 2)
+            layoutManager = GridLayoutManager(activity, Constants.movieGridSpanCount)
             val moviesAdapter = MoviesAdapter(list)
             adapter = moviesAdapter
             setUpSearch(moviesAdapter)

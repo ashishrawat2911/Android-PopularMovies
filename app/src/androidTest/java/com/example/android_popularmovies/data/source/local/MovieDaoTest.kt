@@ -5,7 +5,7 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.android_popularmovies.data.mapper.toDBModel
 import com.example.android_popularmovies.data.mapper.toEntity
-import com.example.android_popularmovies.data.repository.mock.MockMovies
+import com.example.android_popularmovies.utils.MockMovies
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
@@ -51,7 +51,7 @@ class MovieDaoTest {
 
     @Test
     @Throws(Exception::class)
-    fun clearMovies() = runBlocking{
+    fun clearMovies() = runBlocking {
         mDatabase.movieDao().clearMovies()
         assert(mDatabase.movieDao().getMovies().isEmpty())
     }

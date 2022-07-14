@@ -1,6 +1,5 @@
 package com.example.android_popularmovies.presentation.movie.view_model.impl
 
-import android.view.View
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.android_popularmovies.domain.mapper.MovieEntityToStateMapper
@@ -23,10 +22,6 @@ class MovieDetailViewModelImpl @Inject constructor(
     private val appDispatchers: AppDispatchers,
     private val movieEntityToStateMapper: MovieEntityToStateMapper
 ) : ViewModel(), MovieDetailViewModel {
-    override val loadingState: StateFlow<Int>
-        get() = _loadingState
-    private val _loadingState =
-        MutableStateFlow(View.GONE)
     override val detailState: StateFlow<MovieDetailState> get() = _detailState
     private val _detailState =
         MutableStateFlow(MovieDetailState(movieResultState = ResultState.Init()))
@@ -42,9 +37,7 @@ class MovieDetailViewModelImpl @Inject constructor(
                 _detailState.value = MovieDetailState(
                     movieResultState = ResultState.Loading()
                 )
-                _loadingState.value = View.VISIBLE
             }.catch { exception ->
-                _loadingState.value = View.GONE
                 _detailState.value =
                     MovieDetailState(
                         movieResultState = ResultState.Error(
@@ -61,7 +54,6 @@ class MovieDetailViewModelImpl @Inject constructor(
                             movieEntityToStateMapper.map(it)
                         )
                     )
-                    _loadingState.value = View.GONE
                 }
             }
         }

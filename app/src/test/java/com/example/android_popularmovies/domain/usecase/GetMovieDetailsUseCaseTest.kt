@@ -1,6 +1,6 @@
 package com.example.android_popularmovies.domain.usecase
 
-import com.example.android_popularmovies.data.repository.mock.MockMovies
+import com.example.android_popularmovies.utils.MockMovies
 import com.example.android_popularmovies.domain.entity.MovieEntity
 import com.example.android_popularmovies.domain.repository.MovieRepository
 import kotlinx.coroutines.runBlocking

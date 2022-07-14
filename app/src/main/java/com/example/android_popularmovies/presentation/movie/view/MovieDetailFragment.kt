@@ -47,21 +47,10 @@ class MovieDetailFragment : Fragment() {
 
     private fun initialize() {
         setUpViewModel()
-        handleProgress()
         handleUIResult()
         handleErrorToast()
     }
 
-    private fun handleProgress() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.loadingState.collectLatest {
-                    binding.progressBar.visibility = it
-                }
-            }
-        }
-
-    }
 
     private fun setUpViewModel() {
         val args: MovieDetailFragmentArgs by navArgs()
@@ -87,7 +76,11 @@ class MovieDetailFragment : Fragment() {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.detailState.collectLatest {
                     when (it.movieResultState) {
+                        is ResultState.Loading->{
+                            binding.progressBar.visibility = View.VISIBLE
+                        }
                         is ResultState.Success -> {
+                            binding.progressBar.visibility = View.GONE
                             binding.movie =
                                 (it.movieResultState as ResultState.Success<MovieStateData>).result
                             activity?.let { it1 ->
@@ -97,6 +90,7 @@ class MovieDetailFragment : Fragment() {
                             }
                         }
                         is ResultState.Error -> {
+                            binding.progressBar.visibility = View.GONE
                             Timber.e((it.movieResultState as ResultState.Error<MovieStateData>).message)
                         }
                         else -> {}

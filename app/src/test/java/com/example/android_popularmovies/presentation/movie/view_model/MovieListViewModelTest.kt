@@ -1,14 +1,15 @@
 package com.example.android_popularmovies.presentation.movie.view_model
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.example.android_popularmovies.data.repository.mock.MockMovies
 import com.example.android_popularmovies.domain.entity.MovieEntity
 import com.example.android_popularmovies.domain.mapper.MovieEntityToStateMapper
 import com.example.android_popularmovies.domain.repository.MovieRepository
 import com.example.android_popularmovies.domain.usecase.GetMoviesUseCase
 import com.example.android_popularmovies.presentation.movie.state.MovieListState
 import com.example.android_popularmovies.presentation.movie.state.MovieStateData
+import com.example.android_popularmovies.presentation.movie.view_model.impl.MovieListViewModelImpl
 import com.example.android_popularmovies.utils.AppDispatchers
+import com.example.android_popularmovies.utils.MockMovies
 import com.example.android_popularmovies.utils.ResultState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -42,8 +43,7 @@ class MovieListViewModelTest {
     @Mock
     private lateinit var getMoviesUseCase: GetMoviesUseCase
 
-    @Mock
-    private lateinit var movieListViewModel: MovieListViewModel
+    private lateinit var movieListViewModel: MovieListViewModelImpl
 
     private val movieEntityToStateMapper: MovieEntityToStateMapper = MovieEntityToStateMapper()
 
@@ -51,7 +51,8 @@ class MovieListViewModelTest {
     fun setUp() {
         MockitoAnnotations.openMocks(this)
         Dispatchers.setMain(dispatcher)
-
+        movieListViewModel=
+            MovieListViewModelImpl(getMoviesUseCase,testDispatcher,movieEntityToStateMapper)
     }
 
     @After
@@ -62,6 +63,7 @@ class MovieListViewModelTest {
     @Test
     fun fetchMoviesList_returnsEmpty() = runTest {
         stubFetchMovies(listOf())
+        movieListViewModel.fetchMoviesList()
         advanceUntilIdle()
         Assert.assertEquals(
             movieListViewModel.movieState.value.movieResultState,

@@ -1,10 +1,9 @@
-package com.example.android_popularmovies.data.repository.mock
+package com.example.android_popularmovies.utils
 
 import com.example.android_popularmovies.data.mapper.MovieApiToEntityMapper
 import com.example.android_popularmovies.data.source.remote.model.MovieApiModel
 import com.example.android_popularmovies.data.source.remote.model.MovieListApiModel
 import com.example.android_popularmovies.domain.entity.MovieEntity
-import com.example.android_popularmovies.utils.RandomDataFactory
 
 object MockMovies {
 

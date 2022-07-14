@@ -6,7 +6,6 @@ import kotlinx.coroutines.flow.StateFlow
 
 
 interface MovieDetailViewModel {
-    val loadingState: StateFlow<Int>
     val detailState: StateFlow<MovieDetailState>
     val detailErrorState: SharedFlow<String>
     fun getMovieDetails(movieId: Int)

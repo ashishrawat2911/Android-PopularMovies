@@ -1,9 +1,9 @@
 package com.example.android_popularmovies.data.repository
 
-import com.example.android_popularmovies.data.repository.mock.MockMovies
 import com.example.android_popularmovies.data.source.remote.MovieApiService
 import com.example.android_popularmovies.data.source.remote.model.MovieApiModel
 import com.example.android_popularmovies.data.source.remote.model.MovieListApiModel
+import com.example.android_popularmovies.utils.MockMovies
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import org.junit.Test

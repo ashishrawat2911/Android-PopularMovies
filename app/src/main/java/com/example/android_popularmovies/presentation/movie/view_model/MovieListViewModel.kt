@@ -6,7 +6,6 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 
 interface MovieListViewModel {
-    val loadingState: StateFlow<Int>
     val filterState: SharedFlow<List<MovieStateData>>
     val movieState: StateFlow<MovieListState>
     fun fetchMoviesList()
