@@ -39,7 +39,6 @@ class MovieListViewModelTest {
 
     @Mock
     lateinit var movieRepository: MovieRepository
-
     @Mock
     private lateinit var getMoviesUseCase: GetMoviesUseCase
 
@@ -51,8 +50,8 @@ class MovieListViewModelTest {
     fun setUp() {
         MockitoAnnotations.openMocks(this)
         Dispatchers.setMain(dispatcher)
-        movieListViewModel=
-            MovieListViewModelImpl(getMoviesUseCase,testDispatcher,movieEntityToStateMapper)
+        movieListViewModel =
+            MovieListViewModelImpl(getMoviesUseCase, testDispatcher, movieEntityToStateMapper)
     }
 
     @After
@@ -93,7 +92,6 @@ class MovieListViewModelTest {
             ResultState.Error("org.mockito.exceptions.base.MockitoException: Error")
         )
         Assert.assertEquals(movieListViewModel.movieState.value, error)
-
     }
 
     private suspend fun stubFetchMovies(movies: List<MovieEntity>) {

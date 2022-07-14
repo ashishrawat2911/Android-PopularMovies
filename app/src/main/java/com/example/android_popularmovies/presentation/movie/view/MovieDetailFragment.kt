@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -13,7 +12,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
-import com.example.android_popularmovies.R
 import com.example.android_popularmovies.databinding.MovieDetailFragmentBinding
 import com.example.android_popularmovies.presentation.movie.state.MovieStateData
 import com.example.android_popularmovies.presentation.movie.view_model.MovieDetailViewModel
@@ -37,9 +35,7 @@ class MovieDetailFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = DataBindingUtil.inflate(
-            inflater, R.layout.movie_detail_fragment, container, false
-        )
+        binding = MovieDetailFragmentBinding.inflate(inflater, container, false)
         initialize()
         return binding.root
     }
@@ -75,19 +71,14 @@ class MovieDetailFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.detailState.collectLatest {
-                    when (it.movieResultState) {
-                        is ResultState.Loading->{
+                    val movieState = it.movieResultState
+                    when (movieState) {
+                        is ResultState.Loading -> {
                             binding.progressBar.visibility = View.VISIBLE
                         }
                         is ResultState.Success -> {
                             binding.progressBar.visibility = View.GONE
-                            binding.movie =
-                                (it.movieResultState as ResultState.Success<MovieStateData>).result
-                            activity?.let { it1 ->
-                                Glide.with(it1)
-                                    .load("${Constants.movieImagePath}${(it.movieResultState as ResultState.Success<MovieStateData>).result.posterPath}")
-                                    .into(binding.moviePhoto)
-                            }
+                            updateMovieUI(movieState.result)
                         }
                         is ResultState.Error -> {
                             binding.progressBar.visibility = View.GONE
@@ -99,5 +90,17 @@ class MovieDetailFragment : Fragment() {
 
             }
         }
+    }
+
+    private fun updateMovieUI(movie: MovieStateData) {
+        binding.movieTitle.text = movie.title
+        binding.movieOverview.text = movie.overview
+        binding.movieRating.text = movie.voteAverage.toString()
+        activity?.let { it1 ->
+            Glide.with(it1)
+                .load("${Constants.movieImagePath}${movie.posterPath}")
+                .into(binding.moviePhoto)
+        }
+        binding.movieOverview.text = movie.overview
     }
 }

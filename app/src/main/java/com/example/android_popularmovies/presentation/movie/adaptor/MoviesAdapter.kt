@@ -41,7 +41,10 @@ class MoviesAdapter(private var movies: List<MovieStateData>) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(movie: MovieStateData) {
-            binding.movie = movie
+            binding.movieOverview.text = movie.overview
+            binding.movieRating.text = movie.voteAverage.toString()
+            binding.movieOverview.text = movie.overview
+            binding.movieTitle.text = movie.title
             Glide.with(itemView.context).load("${Constants.movieImagePath}${movie.posterPath}")
                 .into(binding.moviePhoto)
             binding.movieCard.setOnClickListener {

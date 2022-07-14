@@ -39,7 +39,6 @@ class MovieDetailsViewModelTest {
 
     @Mock
     lateinit var movieRepository: MovieRepository
-
     @Mock
     private lateinit var getMovieDetailsUseCase: GetMovieDetailsUseCase
 
@@ -82,11 +81,10 @@ class MovieDetailsViewModelTest {
         `when`(movieRepository.getMovieDetails(0)).thenThrow(MockitoException("Error"))
         movieDetailViewModel.getMovieDetails(0)
         advanceUntilIdle()
-//        verify(movieRepository).getMovieDetails(0)
         val error = MovieDetailState(
             ResultState.Error("org.mockito.exceptions.base.MockitoException: Error")
         )
-        Assert.assertEquals(movieDetailViewModel.detailState.value, error)
+        Assert.assertEquals(error, movieDetailViewModel.detailState.value)
     }
 
 

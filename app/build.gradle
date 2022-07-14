@@ -6,6 +6,7 @@ plugins {
     id 'androidx.navigation.safeargs'
     id 'com.google.gms.google-services'
     id 'com.google.firebase.crashlytics'
+    id 'kotlin-android-extensions'
 }
 apply from: "ktlint.gradle"
 
@@ -48,7 +49,6 @@ android {
         jvmTarget = '1.8'
     }
     buildFeatures {
-        dataBinding true
         viewBinding true
     }
     lintOptions {

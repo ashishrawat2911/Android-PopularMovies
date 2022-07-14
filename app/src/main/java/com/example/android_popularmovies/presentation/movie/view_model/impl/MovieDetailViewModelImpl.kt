@@ -32,8 +32,7 @@ class MovieDetailViewModelImpl @Inject constructor(
 
     override fun getMovieDetails(movieId: Int) {
         viewModelScope.launch(appDispatchers.IO) {
-            val response = getMoviesUseCase(movieId)
-            response.onStart {
+            getMoviesUseCase(movieId).onStart {
                 _detailState.value = MovieDetailState(
                     movieResultState = ResultState.Loading()
                 )
@@ -44,9 +43,7 @@ class MovieDetailViewModelImpl @Inject constructor(
                             exception.fillInStackTrace().getMovieErrorMessage()
                         )
                     )
-                viewModelScope.launch {
                     _detailErrorState.emit(exception.fillInStackTrace().getMovieErrorMessage())
-                }
             }.collectLatest {
                 withContext(appDispatchers.Main) {
                     _detailState.value = MovieDetailState(

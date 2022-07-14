@@ -2,10 +2,10 @@ package com.example.android_popularmovies
 
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
-import com.example.android_popularmovies.data.mapper.toDBModel
-import com.example.android_popularmovies.data.mapper.toEntity
-import com.example.android_popularmovies.utils.MockMovies
+import com.example.android_popularmovies.data.mapper.MovieApiToEntityMapper
+import com.example.android_popularmovies.data.mapper.MovieEntityToDbMapper
 import com.example.android_popularmovies.data.source.local.MovieDatabase
+import com.example.android_popularmovies.utils.MockMovies
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
@@ -17,6 +17,8 @@ import org.junit.runners.JUnit4
 class MovieRepositoryImplTest {
 
     private lateinit var movieDatabase: MovieDatabase
+    private val movieApiToEntityMapper: MovieApiToEntityMapper = MovieApiToEntityMapper()
+    private val movieEntityToDbMapper: MovieEntityToDbMapper = MovieEntityToDbMapper()
 
     @Before
     fun setUp() {
@@ -33,7 +35,7 @@ class MovieRepositoryImplTest {
         val movies = MockMovies.generateListOfMovies(10)
         movieDatabase.movieDao().addMovies(
             movies.map {
-                it.toEntity().toDBModel()
+                movieEntityToDbMapper.map(movieApiToEntityMapper.map(it))
             }
         )
         assert(movieDatabase.movieDao().getMovies().isNotEmpty())

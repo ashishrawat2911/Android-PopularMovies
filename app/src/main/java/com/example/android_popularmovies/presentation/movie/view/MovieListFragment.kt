@@ -6,14 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.android_popularmovies.R
 import com.example.android_popularmovies.databinding.MovieListFragmentBinding
 import com.example.android_popularmovies.presentation.movie.adaptor.MoviesAdapter
 import com.example.android_popularmovies.presentation.movie.state.MovieStateData
@@ -37,9 +35,7 @@ class MovieListFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = DataBindingUtil.inflate(
-            inflater, R.layout.movie_list_fragment, container, false
-        )
+        binding = MovieListFragmentBinding.inflate(inflater, container, false)
         initialize()
         return binding.root
     }
