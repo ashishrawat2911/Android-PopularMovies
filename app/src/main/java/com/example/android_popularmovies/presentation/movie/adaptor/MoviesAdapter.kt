@@ -3,17 +3,16 @@ package com.example.android_popularmovies.presentation.movie.adaptor
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.navigation.findNavController
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.android_popularmovies.databinding.MovieViewBinding
 import com.example.android_popularmovies.presentation.movie.state.MovieStateData
 import com.example.android_popularmovies.presentation.movie.view.MovieListFragmentDirections
 import com.example.android_popularmovies.utils.Constants
-import timber.log.Timber
 
 class MoviesAdapter(private var movies: List<MovieStateData>) :
-    RecyclerView.Adapter<MoviesViewHolder>() {
-    private var filterMovies: List<MovieStateData> = movies
+    RecyclerView.Adapter<MoviesAdapter.MoviesViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MoviesViewHolder {
 
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -23,45 +22,39 @@ class MoviesAdapter(private var movies: List<MovieStateData>) :
     }
 
     override fun getItemCount(): Int {
-        return filterMovies.size
+        return movies.size
     }
+
 
     override fun onBindViewHolder(holder: MoviesViewHolder, position: Int) {
-        return holder.bind(filterMovies[position])
+        return holder.bind(movies[position])
     }
 
-    private fun updateList(list: List<MovieStateData>) {
-        filterMovies = list
-        notifyDataSetChanged()
+    fun updateMovies(movies: List<MovieStateData>) {
+        val diffCallback = MovieDiffCallback(this.movies, movies)
+        val diffResult = DiffUtil.calculateDiff(diffCallback)
+        diffResult.dispatchUpdatesTo(this)
+        this.movies = movies
     }
 
-    fun filter(text: String?) {
-        Timber.e(text)
-        if (text != null) {
-            val temp: MutableList<MovieStateData> = ArrayList()
-            for (d in movies) {
-                if (d.title.lowercase().contains(text.lowercase())) {
-                    temp.add(d)
-                }
-            }
-            updateList(temp)
-        }
-    }
-}
+    class MoviesViewHolder(private val binding: MovieViewBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
-class MoviesViewHolder(private val binding: MovieViewBinding) :
-    RecyclerView.ViewHolder(binding.root) {
-
-    fun bind(movie: MovieStateData) {
-        binding.movie = movie
-        Glide.with(itemView.context).load("${Constants.movieImagePath}${movie.posterPath}")
-            .into(binding.moviePhoto)
-        binding.movieCard.setOnClickListener {
-            it.findNavController().navigate(
-                MovieListFragmentDirections.actionMovieListFragmentToMovieDetailFragment(
-                    movie.id
+        fun bind(movie: MovieStateData) {
+            binding.movieOverview.text = movie.overview
+            binding.movieRating.text = movie.voteAverage.toString()
+            binding.movieOverview.text = movie.overview
+            binding.movieTitle.text = movie.title
+            Glide.with(itemView.context).load("${Constants.movieImagePath}${movie.posterPath}")
+                .into(binding.moviePhoto)
+            binding.movieCard.setOnClickListener {
+                it.findNavController().navigate(
+                    MovieListFragmentDirections.actionMovieListFragmentToMovieDetailFragment(
+                        movie.id
+                    )
                 )
-            )
+            }
         }
     }
 }
+

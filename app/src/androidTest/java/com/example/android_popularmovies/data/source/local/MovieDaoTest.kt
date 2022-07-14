@@ -3,9 +3,9 @@ package com.example.android_popularmovies.data.source.local
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.example.android_popularmovies.data.mapper.toDBModel
-import com.example.android_popularmovies.data.mapper.toEntity
-import com.example.android_popularmovies.data.repository.mock.MockMovies
+import com.example.android_popularmovies.data.mapper.MovieApiToEntityMapper
+import com.example.android_popularmovies.data.mapper.MovieEntityToDbMapper
+import com.example.android_popularmovies.utils.MockMovies
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
@@ -17,6 +17,8 @@ import java.io.IOException
 class MovieDaoTest {
     private lateinit var mDatabase: MovieDatabase
     private val movies = MockMovies.generateListOfMovies(10)
+    private val movieApiToEntityMapper: MovieApiToEntityMapper = MovieApiToEntityMapper()
+    private val movieEntityToDbMapper: MovieEntityToDbMapper = MovieEntityToDbMapper()
 
     @Before
     fun createDb() {
@@ -28,7 +30,7 @@ class MovieDaoTest {
             .build()
         mDatabase.movieDao().addMovies(
             movies.map {
-                it.toEntity().toDBModel()
+                movieEntityToDbMapper.map(movieApiToEntityMapper.map(it))
             }
         )
     }
@@ -51,7 +53,7 @@ class MovieDaoTest {
 
     @Test
     @Throws(Exception::class)
-    fun clearMovies() = runBlocking{
+    fun clearMovies() = runBlocking {
         mDatabase.movieDao().clearMovies()
         assert(mDatabase.movieDao().getMovies().isEmpty())
     }

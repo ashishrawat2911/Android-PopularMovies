@@ -6,6 +6,7 @@ plugins {
     id 'androidx.navigation.safeargs'
     id 'com.google.gms.google-services'
     id 'com.google.firebase.crashlytics'
+    id 'kotlin-android-extensions'
 }
 apply from: "ktlint.gradle"
 
@@ -48,7 +49,6 @@ android {
         jvmTarget = '1.8'
     }
     buildFeatures {
-        dataBinding true
         viewBinding true
     }
     lintOptions {
@@ -98,7 +98,6 @@ dependencies {
     //ViewModel and LifeCycle
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_ext_version"
     implementation "android.arch.lifecycle:extensions:$lifecycle_arch_ext_version"
     kapt "android.arch.lifecycle:compiler:1.1.1"
