@@ -6,11 +6,9 @@ import com.example.android_popularmovies.domain.mapper.MovieEntityToStateMapper
 import com.example.android_popularmovies.domain.repository.MovieRepository
 import com.example.android_popularmovies.domain.usecase.GetMoviesUseCase
 import com.example.android_popularmovies.presentation.movie.state.MovieListState
-import com.example.android_popularmovies.presentation.movie.state.MovieStateData
 import com.example.android_popularmovies.presentation.movie.view_model.impl.MovieListViewModelImpl
 import com.example.android_popularmovies.utils.AppDispatchers
 import com.example.android_popularmovies.utils.MockMovies
-import com.example.android_popularmovies.utils.ResultState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flow
@@ -20,7 +18,6 @@ import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.MockitoAnnotations
-import org.mockito.exceptions.base.MockitoException
 import org.mockito.junit.MockitoJUnitRunner
 
 @ExperimentalCoroutinesApi
@@ -65,8 +62,8 @@ class MovieListViewModelTest {
         movieListViewModel.fetchMoviesList()
         advanceUntilIdle()
         Assert.assertEquals(
-            movieListViewModel.movieState.value.movieResultState,
-            ResultState.Success<List<MovieStateData>>(listOf())
+            movieListViewModel.movieState.value,
+            MovieListState.Success(listOf())
         );
     }
 
@@ -77,21 +74,9 @@ class MovieListViewModelTest {
         movieListViewModel.fetchMoviesList()
         advanceUntilIdle()
         Assert.assertEquals(
-            movieListViewModel.movieState.value.movieResultState,
-            ResultState.Success(listOfMovies.map { movieEntityToStateMapper.map(it) })
+            movieListViewModel.movieState.value,
+            MovieListState.Success(listOfMovies.map { movieEntityToStateMapper.map(it) })
         );
-    }
-
-    @Test
-    @Throws(Exception::class)
-    fun fetchMoviesList_throwException() = runTest {
-        Mockito.`when`(movieRepository.getMovies()).thenThrow(MockitoException("Error"))
-        movieListViewModel.fetchMoviesList()
-        advanceUntilIdle()
-        val error = MovieListState(
-            ResultState.Error("org.mockito.exceptions.base.MockitoException: Error")
-        )
-        Assert.assertEquals(movieListViewModel.movieState.value, error)
     }
 
     private suspend fun stubFetchMovies(movies: List<MovieEntity>) {

@@ -1,7 +1,8 @@
 package com.example.android_popularmovies.presentation.movie.state
 
-import com.example.android_popularmovies.utils.ResultState
 
-data class MovieDetailState(
-    var movieResultState: ResultState<MovieStateData>
-)
+sealed class MovieDetailState {
+    object Loading : MovieDetailState()
+    data class Error(var message: String) : MovieDetailState()
+    data class Success(var movie: MovieStateData) : MovieDetailState()
+}

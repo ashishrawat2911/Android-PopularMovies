@@ -13,11 +13,11 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.android_popularmovies.databinding.MovieDetailFragmentBinding
+import com.example.android_popularmovies.presentation.movie.state.MovieDetailState
 import com.example.android_popularmovies.presentation.movie.state.MovieStateData
 import com.example.android_popularmovies.presentation.movie.view_model.MovieDetailViewModel
 import com.example.android_popularmovies.presentation.movie.view_model.impl.MovieDetailViewModelImpl
 import com.example.android_popularmovies.utils.Constants
-import com.example.android_popularmovies.utils.ResultState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -25,8 +25,8 @@ import timber.log.Timber
 
 @AndroidEntryPoint
 class MovieDetailFragment : Fragment() {
-
-    private lateinit var binding: MovieDetailFragmentBinding
+    private var _binding: MovieDetailFragmentBinding? = null
+    private val binding get() = _binding!!
 
     private val viewModel: MovieDetailViewModel by viewModels<MovieDetailViewModelImpl>()
 
@@ -35,7 +35,7 @@ class MovieDetailFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = MovieDetailFragmentBinding.inflate(inflater, container, false)
+        _binding = MovieDetailFragmentBinding.inflate(inflater, container, false)
         initialize()
         return binding.root
     }
@@ -71,20 +71,18 @@ class MovieDetailFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.detailState.collectLatest {
-                    val movieState = it.movieResultState
-                    when (movieState) {
-                        is ResultState.Loading -> {
+                    when (it) {
+                        is MovieDetailState.Loading -> {
                             binding.progressBar.visibility = View.VISIBLE
                         }
-                        is ResultState.Success -> {
+                        is MovieDetailState.Success -> {
                             binding.progressBar.visibility = View.GONE
-                            updateMovieUI(movieState.result)
+                            updateMovieUI(it.movie)
                         }
-                        is ResultState.Error -> {
+                        is MovieDetailState.Error -> {
                             binding.progressBar.visibility = View.GONE
-                            Timber.e((it.movieResultState as ResultState.Error<MovieStateData>).message)
+                            Timber.e(it.message)
                         }
-                        else -> {}
                     }
                 }
 
@@ -102,5 +100,9 @@ class MovieDetailFragment : Fragment() {
                 .into(binding.moviePhoto)
         }
         binding.movieOverview.text = movie.overview
+    }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

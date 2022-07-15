@@ -14,11 +14,11 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.android_popularmovies.databinding.MovieListFragmentBinding
 import com.example.android_popularmovies.presentation.movie.adaptor.MoviesAdapter
+import com.example.android_popularmovies.presentation.movie.state.MovieListState
 import com.example.android_popularmovies.presentation.movie.state.MovieStateData
 import com.example.android_popularmovies.presentation.movie.view_model.MovieListViewModel
 import com.example.android_popularmovies.presentation.movie.view_model.impl.MovieListViewModelImpl
 import com.example.android_popularmovies.utils.Constants
-import com.example.android_popularmovies.utils.ResultState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -28,14 +28,14 @@ import timber.log.Timber
 @AndroidEntryPoint
 class MovieListFragment : Fragment() {
     private val viewModel: MovieListViewModel by viewModels<MovieListViewModelImpl>()
-
-    private lateinit var binding: MovieListFragmentBinding
+    private var _binding: MovieListFragmentBinding? = null
+    private val binding get() = _binding!!
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = MovieListFragmentBinding.inflate(inflater, container, false)
+        _binding = MovieListFragmentBinding.inflate(inflater, container, false)
         initialize()
         return binding.root
     }
@@ -67,23 +67,22 @@ class MovieListFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.movieState.collect {
-                    when (it.movieResultState) {
-                        is ResultState.Loading -> {
-                            binding.progressBar.visibility = View.VISIBLE
-                        }
-                        is ResultState.Error -> {
+                    when (it) {
+                        is MovieListState.Error -> {
                             binding.progressBar.visibility = View.GONE
                             Toast.makeText(
                                 activity,
-                                (it.movieResultState as ResultState.Error<List<MovieStateData>>).message,
+                                it.message,
                                 Toast.LENGTH_LONG
                             ).show()
                         }
-                        is ResultState.Success -> {
-                            binding.progressBar.visibility = View.GONE
-                            setRecyclerView((it.movieResultState as ResultState.Success<List<MovieStateData>>).result)
+                        MovieListState.Loading -> {
+                            binding.progressBar.visibility = View.VISIBLE
                         }
-                        else -> Unit
+                        is MovieListState.Success -> {
+                            binding.progressBar.visibility = View.GONE
+                            setRecyclerView(it.movies)
+                        }
                     }
                 }
             }
@@ -99,5 +98,10 @@ class MovieListFragment : Fragment() {
             adapter = moviesAdapter
             setUpSearch(moviesAdapter)
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

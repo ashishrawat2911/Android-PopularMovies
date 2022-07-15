@@ -9,7 +9,6 @@ import com.example.android_popularmovies.presentation.movie.state.MovieDetailSta
 import com.example.android_popularmovies.presentation.movie.view_model.impl.MovieDetailViewModelImpl
 import com.example.android_popularmovies.utils.AppDispatchers
 import com.example.android_popularmovies.utils.MockMovies
-import com.example.android_popularmovies.utils.ResultState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flow
@@ -19,7 +18,6 @@ import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.Mockito.`when`
 import org.mockito.MockitoAnnotations
-import org.mockito.exceptions.base.MockitoException
 import org.mockito.junit.MockitoJUnitRunner
 
 @ExperimentalCoroutinesApi
@@ -67,26 +65,11 @@ class MovieDetailsViewModelTest {
         stubFetchMovies(movieDetail)
         movieDetailViewModel.getMovieDetails(0)
         advanceUntilIdle()
-        val data = MovieDetailState(
-            ResultState.Success(
-                movieEntityToStateMapper.map(movieDetail)
-            )
+        val data = MovieDetailState.Success(
+            movieEntityToStateMapper.map(movieDetail)
         )
         Assert.assertEquals(movieDetailViewModel.detailState.value, data)
     }
-
-    @Test
-    @Throws(Exception::class)
-    fun fetchMovieDetails_returnsError() = runTest {
-        `when`(movieRepository.getMovieDetails(0)).thenThrow(MockitoException("Error"))
-        movieDetailViewModel.getMovieDetails(0)
-        advanceUntilIdle()
-        val error = MovieDetailState(
-            ResultState.Error("org.mockito.exceptions.base.MockitoException: Error")
-        )
-        Assert.assertEquals(error, movieDetailViewModel.detailState.value)
-    }
-
 
 
     private suspend fun stubFetchMovies(movie: MovieEntity) {

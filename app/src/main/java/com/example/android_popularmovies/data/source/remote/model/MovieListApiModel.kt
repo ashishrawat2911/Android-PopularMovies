@@ -20,8 +20,6 @@ data class MovieApiModel(
     @SerializedName("id")
     var id: Int,
 
-
-
     @SerializedName("poster_path")
     var posterPath: String,
 
