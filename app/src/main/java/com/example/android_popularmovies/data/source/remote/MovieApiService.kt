@@ -11,5 +11,4 @@ interface MovieApiService {
 
     @GET("movie/{movie_id}")
     suspend fun movieDetails(@Path("movie_id") movieId: Int): MovieApiModel
-
 }

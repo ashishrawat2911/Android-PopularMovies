@@ -8,7 +8,6 @@ import com.example.android_popularmovies.presentation.movie.state.MovieListState
 import com.example.android_popularmovies.presentation.movie.state.MovieStateData
 import com.example.android_popularmovies.presentation.movie.view_model.MovieListViewModel
 import com.example.android_popularmovies.utils.AppDispatchers
-import com.example.android_popularmovies.utils.ResultState
 import com.example.android_popularmovies.utils.getMovieErrorMessage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.cancel
@@ -24,10 +23,8 @@ class MovieListViewModelImpl @Inject constructor(
     private val movieEntityToStateMapper: MovieEntityToStateMapper
 ) : ViewModel(), MovieListViewModel {
     override val movieState: StateFlow<MovieListState> get() = _movieState
-    private val _movieState = MutableStateFlow(
-        MovieListState(
-            movieResultState = ResultState.Loading()
-        )
+    private val _movieState = MutableStateFlow<MovieListState>(
+        MovieListState.Loading
     )
     override val filterState: SharedFlow<List<MovieStateData>> get() = _filterState
     private val _filterState = MutableSharedFlow<List<MovieStateData>>()
@@ -37,26 +34,20 @@ class MovieListViewModelImpl @Inject constructor(
             val movies = getMoviesUseCase()
             movies.catch { exception ->
                 Timber.e(exception)
-                _movieState.value =
-                    MovieListState(movieResultState = ResultState.Error(exception.getMovieErrorMessage()))
+                _movieState.value = MovieListState.Error(exception.getMovieErrorMessage())
             }.collectLatest {
                 _movieState.value =
-                    MovieListState(
-                        movieResultState = ResultState.Success(
-                            it.map { movieEntityToStateMapper.map(it) })
-                    )
+                    MovieListState.Success(it.map { movieEntityToStateMapper.map(it) })
             }
         }
     }
 
     override fun filterMovies(text: String) {
         viewModelScope.launch {
-            val moviesResult = movieState.value.movieResultState
-            if (moviesResult is ResultState.Success<List<MovieStateData>>) {
-                Timber.i(text)
-                Timber.i(moviesResult.result.size.toString())
+            val moviesResult = movieState.value
+            if (moviesResult is MovieListState.Success) {
                 val temp: MutableList<MovieStateData> = ArrayList()
-                for (d in moviesResult.result) {
+                for (d in moviesResult.movies) {
                     if (d.title.lowercase().contains(text.lowercase())) {
                         temp.add(d)
                     }

@@ -1,11 +1,5 @@
 package com.example.android_popularmovies.presentation.movie.state
 
-import com.example.android_popularmovies.utils.ResultState
-
-data class MovieListState(
-    var movieResultState: ResultState<List<MovieStateData>>
-)
-
 data class MovieStateData(
     var id: Int,
     var posterPath: String,

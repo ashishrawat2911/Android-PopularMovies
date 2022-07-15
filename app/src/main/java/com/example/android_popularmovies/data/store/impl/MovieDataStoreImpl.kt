@@ -14,29 +14,24 @@ class MovieDataStoreImpl(
     private val movieApiToEntityMapper: MovieApiToEntityMapper,
     private val movieDbToEntityMapper: MovieDbToEntityMapper,
     private val movieEntityToDbMapper: MovieEntityToDbMapper,
-    private val isNetworkAvailable: Boolean
 ) : MovieDataStore {
     override suspend fun getMovies(): List<MovieEntity> {
-        return if (isNetworkAvailable) {
-            return movieRemoteDataSource.getMovies().map {
+        val moviesFromDB = movieLocalDataSource.getMovies().map { movieDbToEntityMapper.map(it) }
+        return moviesFromDB.ifEmpty {
+            movieRemoteDataSource.getMovies().map {
                 movieApiToEntityMapper.map(it)
             }.also {
                 addMovieToCache(it)
             }
-        } else {
-            movieLocalDataSource.getMovies().map { movieDbToEntityMapper.map(it) }
         }
+
     }
 
     private fun addMovieToCache(movies: List<MovieEntity>) {
-        movieLocalDataSource.addMovieToCache(movies.map { movieEntityToDbMapper.map(it) })
+        movieLocalDataSource.setMoviesToCache(movies.map { movieEntityToDbMapper.map(it) })
     }
 
     override suspend fun getMovieDetails(movieId: Int): MovieEntity {
-        return if (isNetworkAvailable) {
-            movieApiToEntityMapper.map(movieRemoteDataSource.getMovieDetails(movieId))
-        } else {
-            movieDbToEntityMapper.map(movieLocalDataSource.getMovie(movieId))
-        }
+        return movieDbToEntityMapper.map(movieLocalDataSource.getMovie(movieId))
     }
 }
