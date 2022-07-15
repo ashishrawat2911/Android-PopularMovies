@@ -6,7 +6,6 @@ buildscript {
     ext.glide_version='4.11.0'
     ext.logging_interceptor_version='4.8.1'
     ext.coroutines_version='1.6.1'
-    ext.room_version = "2.4.2"
     ext.hilt_version = "2.40.5"
     ext.lifecycle_version='2.4.1'
     ext.lifecycle_ext_version='2.2.0'

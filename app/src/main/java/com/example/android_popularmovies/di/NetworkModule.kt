@@ -1,13 +1,8 @@
 package com.example.android_popularmovies.di
 
 import com.example.android_popularmovies.data.mapper.MovieApiToEntityMapper
-import com.example.android_popularmovies.data.mapper.MovieDbToEntityMapper
-import com.example.android_popularmovies.data.mapper.MovieEntityToDbMapper
 import com.example.android_popularmovies.data.repository.MovieRepositoryImpl
-import com.example.android_popularmovies.data.source.MovieLocalDataSource
 import com.example.android_popularmovies.data.source.MovieRemoteDataSource
-import com.example.android_popularmovies.data.source.local.MovieDao
-import com.example.android_popularmovies.data.source.local.MovieLocalDataSourceImpl
 import com.example.android_popularmovies.data.source.remote.MovieApiService
 import com.example.android_popularmovies.data.source.remote.MovieRemoteDataSourceImpl
 import com.example.android_popularmovies.data.source.remote.NetworkClient
@@ -39,26 +34,15 @@ object NetworkModule {
         retrofitService
     )
 
-    @Singleton
-    @Provides
-    fun provideMovieLocalDataStore(
-        movieDao: MovieDao
-    ): MovieLocalDataSource = MovieLocalDataSourceImpl(
-        movieDao,
-    )
 
     @Singleton
     @Provides
     fun provideMovieDataStore(
-        movieLocalDataSource: MovieLocalDataSource,
         movieRemoteDataSource: MovieRemoteDataSource,
     ): MovieDataStore {
         return MovieDataStoreImpl(
-            movieLocalDataSource = movieLocalDataSource,
             movieRemoteDataSource = movieRemoteDataSource,
             movieApiToEntityMapper = MovieApiToEntityMapper(),
-            movieDbToEntityMapper = MovieDbToEntityMapper(),
-            movieEntityToDbMapper = MovieEntityToDbMapper(),
         )
     }
 
