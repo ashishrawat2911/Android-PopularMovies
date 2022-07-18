@@ -2,6 +2,7 @@ package com.example.android_popularmovies.presentation.movie.adaptor
 
 import androidx.recyclerview.widget.DiffUtil
 import com.example.android_popularmovies.presentation.movie.state.MovieStateData
+
 class MovieDiffCallback(
     private val oldMovies: List<MovieStateData>,
     private val newNewMovies: List<MovieStateData>

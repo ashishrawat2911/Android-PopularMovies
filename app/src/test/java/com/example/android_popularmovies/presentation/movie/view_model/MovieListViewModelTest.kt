@@ -5,7 +5,6 @@ import com.example.android_popularmovies.data.NetworkResult
 import com.example.android_popularmovies.domain.mapper.MovieDomainToStateMapper
 import com.example.android_popularmovies.domain.mapper.MovieStateToDomainMapper
 import com.example.android_popularmovies.domain.model.MovieDomainModel
-import com.example.android_popularmovies.domain.repository.MovieRepository
 import com.example.android_popularmovies.domain.usecase.FilterMoviesUseCase
 import com.example.android_popularmovies.domain.usecase.GetMoviesUseCase
 import com.example.android_popularmovies.presentation.movie.state.MovieListState
@@ -45,9 +44,6 @@ class MovieListViewModelTest {
     )
 
     @Mock
-    lateinit var movieRepository: MovieRepository
-
-    @Mock
     private lateinit var getMoviesUseCase: GetMoviesUseCase
 
     @Mock
@@ -85,7 +81,7 @@ class MovieListViewModelTest {
         Assert.assertEquals(
             movieListViewModel.uiState.value,
             MovieListState.Success(listOf())
-        );
+        )
     }
 
     @Test
@@ -97,7 +93,7 @@ class MovieListViewModelTest {
         Assert.assertEquals(
             movieListViewModel.uiState.value,
             MovieListState.Success(listOfMovies.map { movieDomainToStateMapper.map(it) })
-        );
+        )
     }
 
     private suspend fun stubFetchMovies(movies: List<MovieDomainModel>) {

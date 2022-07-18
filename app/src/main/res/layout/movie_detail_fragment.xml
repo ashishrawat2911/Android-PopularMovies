@@ -5,66 +5,67 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".presentation.movie.view.MovieDetailFragment">
+
     <ProgressBar
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyle"
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:visibility="visible"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.619" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.619" />
 
-        <ImageView
-            android:id="@+id/movie_photo"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/movie_item_image_height"
-            android:layout_centerHorizontal="true"
-            android:contentDescription="@string/movie_image"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+    <ImageView
+        android:id="@+id/movie_photo"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/movie_item_image_height"
+        android:layout_centerHorizontal="true"
+        android:contentDescription="@string/movie_image"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/movie_title"
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/margin_top"
-            android:layout_below="@+id/movie_photo"
-            android:layout_margin="5dp"
-            android:layout_marginTop="4dp"
-            android:textSize="@dimen/movie_item_title_size"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.035"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/movie_photo"
-            tools:text="@string/title" />
+    <TextView
+        android:id="@+id/movie_title"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/margin_top"
+        android:layout_below="@+id/movie_photo"
+        android:layout_margin="5dp"
+        android:layout_marginTop="4dp"
+        android:textSize="@dimen/movie_item_title_size"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.035"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/movie_photo"
+        tools:text="@string/title" />
 
-        <TextView
-            android:id="@+id/movie_overview"
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:layout_below="@+id/movie_title"
-            android:layout_marginTop="@dimen/margin_top"
-            android:ellipsize="marquee"
-            app:layout_constraintEnd_toEndOf="@+id/movie_title"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/movie_title"
-            app:layout_constraintTop_toBottomOf="@+id/movie_title"
-            tools:text="@string/overview" />
+    <TextView
+        android:id="@+id/movie_overview"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_below="@+id/movie_title"
+        android:layout_marginTop="@dimen/margin_top"
+        android:ellipsize="marquee"
+        app:layout_constraintEnd_toEndOf="@+id/movie_title"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/movie_title"
+        app:layout_constraintTop_toBottomOf="@+id/movie_title"
+        tools:text="@string/overview" />
 
-        <TextView
-            android:id="@+id/movie_rating"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/movie_overview"
-            android:layout_marginTop="8dp"
-            android:textSize="@dimen/movie_item_rating_size"
-            app:layout_constraintEnd_toEndOf="@+id/movie_overview"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/movie_overview"
-            app:layout_constraintTop_toBottomOf="@+id/movie_overview"
-            tools:text="@string/rating" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    <TextView
+        android:id="@+id/movie_rating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/movie_overview"
+        android:layout_marginTop="8dp"
+        android:textSize="@dimen/movie_item_rating_size"
+        app:layout_constraintEnd_toEndOf="@+id/movie_overview"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/movie_overview"
+        app:layout_constraintTop_toBottomOf="@+id/movie_overview"
+        tools:text="@string/rating" />
+</androidx.constraintlayout.widget.ConstraintLayout>
 

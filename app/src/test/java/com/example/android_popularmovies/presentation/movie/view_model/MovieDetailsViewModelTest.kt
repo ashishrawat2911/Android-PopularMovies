@@ -4,7 +4,6 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.example.android_popularmovies.data.NetworkResult
 import com.example.android_popularmovies.domain.mapper.MovieDomainToStateMapper
 import com.example.android_popularmovies.domain.model.MovieDomainModel
-import com.example.android_popularmovies.domain.repository.MovieRepository
 import com.example.android_popularmovies.domain.usecase.GetMovieDetailsUseCase
 import com.example.android_popularmovies.presentation.movie.state.MovieDetailState
 import com.example.android_popularmovies.utils.AppDispatchers
@@ -43,8 +42,6 @@ class MovieDetailsViewModelTest {
     )
 
 
-    @Mock
-    lateinit var movieRepository: MovieRepository
     @Mock
     private lateinit var getMovieDetailsUseCase: GetMovieDetailsUseCase
 

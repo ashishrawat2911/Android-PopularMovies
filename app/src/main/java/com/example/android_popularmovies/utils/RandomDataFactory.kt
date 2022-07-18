@@ -12,18 +12,6 @@ object RandomDataFactory {
         return Random.nextInt()
     }
 
-    fun getRandomLong(): Long {
-        return Random.nextLong()
-    }
-
-    fun getRandomDouble(): Double {
-        return Random.nextDouble()
-    }
-
-    fun getRandomBoolean(): Boolean {
-        return Random.nextBoolean()
-    }
-
     fun getRandomFloat(): Float {
         return Random.nextFloat()
     }
