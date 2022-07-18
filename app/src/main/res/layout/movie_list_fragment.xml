@@ -12,7 +12,9 @@
         android:id="@+id/search_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/search_movies" />
+        android:hint="@string/search_movies"
+        android:importantForAutofill="no"
+        android:inputType="text" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

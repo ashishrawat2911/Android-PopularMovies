@@ -1,19 +1,27 @@
 package com.example.android_popularmovies.presentation.movie.view_model
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.example.android_popularmovies.domain.entity.MovieEntity
-import com.example.android_popularmovies.domain.mapper.MovieEntityToStateMapper
+import com.example.android_popularmovies.data.NetworkResult
+import com.example.android_popularmovies.domain.mapper.MovieDomainToStateMapper
+import com.example.android_popularmovies.domain.model.MovieDomainModel
 import com.example.android_popularmovies.domain.repository.MovieRepository
 import com.example.android_popularmovies.domain.usecase.GetMovieDetailsUseCase
 import com.example.android_popularmovies.presentation.movie.state.MovieDetailState
-import com.example.android_popularmovies.presentation.movie.view_model.impl.MovieDetailViewModelImpl
 import com.example.android_popularmovies.utils.AppDispatchers
-import com.example.android_popularmovies.utils.MockMovies
+import com.example.android_popularmovies.utils.MovieTestFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.test.*
-import org.junit.*
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
+import org.junit.After
+import org.junit.Assert
+import org.junit.Before
+import org.junit.Rule
+import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.Mockito.`when`
@@ -40,15 +48,15 @@ class MovieDetailsViewModelTest {
     @Mock
     private lateinit var getMovieDetailsUseCase: GetMovieDetailsUseCase
 
-    private lateinit var movieDetailViewModel: MovieDetailViewModelImpl
+    private lateinit var movieDetailViewModel: MovieDetailViewModel
 
-    private val movieEntityToStateMapper: MovieEntityToStateMapper = MovieEntityToStateMapper()
+    private val movieDomainToStateMapper: MovieDomainToStateMapper = MovieDomainToStateMapper()
 
     @Before
     fun setUp() {
         MockitoAnnotations.openMocks(this)
-        movieDetailViewModel = MovieDetailViewModelImpl(
-            getMovieDetailsUseCase, testDispatcher, movieEntityToStateMapper
+        movieDetailViewModel = MovieDetailViewModel(
+            getMovieDetailsUseCase, testDispatcher, movieDomainToStateMapper
         )
         Dispatchers.setMain(dispatcher)
     }
@@ -61,20 +69,20 @@ class MovieDetailsViewModelTest {
 
     @Test
     fun fetchMoviesDetails_returnsData() = runTest {
-        val movieDetail = MockMovies.generateMovieEntity()
+        val movieDetail = MovieTestFactory.generateMovieEntity()
         stubFetchMovies(movieDetail)
         movieDetailViewModel.getMovieDetails(0)
         advanceUntilIdle()
         val data = MovieDetailState.Success(
-            movieEntityToStateMapper.map(movieDetail)
+            movieDomainToStateMapper.map(movieDetail)
         )
-        Assert.assertEquals(movieDetailViewModel.detailState.value, data)
+        Assert.assertEquals(movieDetailViewModel.uiState.value, data)
     }
 
 
-    private suspend fun stubFetchMovies(movie: MovieEntity) {
+    private suspend fun stubFetchMovies(movie: MovieDomainModel) {
         `when`(getMovieDetailsUseCase(0))
-            .thenReturn(flow { emit(movie) })
+            .thenReturn(flow { emit(NetworkResult.Success(movie)) })
     }
 
 }

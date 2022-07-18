@@ -1,7 +1,6 @@
 package com.example.android_popularmovies.data.source.remote
 
 import com.example.android_popularmovies.BuildConfig
-import com.example.android_popularmovies.utils.Constants
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -10,13 +9,12 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 class NetworkClient {
-
     private val logging: HttpLoggingInterceptor = HttpLoggingInterceptor()
 
     fun getRetrofit(
     ): Retrofit {
         return Retrofit.Builder()
-            .baseUrl(Constants.apiBaseUrl)
+            .baseUrl(apiBaseUrl)
             .addConverterFactory(gsonConverterFactory())
             .client(httpClient())
             .build()
@@ -28,7 +26,7 @@ class NetworkClient {
         val interceptor = Interceptor { chain ->
             val url =
                 chain.request().url.newBuilder().addQueryParameter(
-                    Constants.apiKey,
+                    apiKey,
                     BuildConfig.movieApiKey
                 )
                     .build()
@@ -38,7 +36,7 @@ class NetworkClient {
         }
         return OkHttpClient.Builder().addInterceptor(interceptor)
             .addInterceptor(logging)
-            .connectTimeout(Constants.connectTimeout, TimeUnit.SECONDS)
+            .connectTimeout(connectTimeout, TimeUnit.SECONDS)
             .build()
     }
 
@@ -46,4 +44,11 @@ class NetworkClient {
     private fun gsonConverterFactory(): GsonConverterFactory {
         return GsonConverterFactory.create()
     }
+
+    companion object {
+        const val apiKey: String = "api_key"
+        const val connectTimeout: Long = 60
+        const val apiBaseUrl = "https://api.themoviedb.org/3/"
+    }
+
 }

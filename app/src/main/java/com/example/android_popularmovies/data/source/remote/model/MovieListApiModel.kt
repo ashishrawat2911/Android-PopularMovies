@@ -4,39 +4,39 @@ import com.google.gson.annotations.SerializedName
 
 data class MovieListApiModel(
     @SerializedName("page")
-    var page: Int,
+    val page: Int,
 
     @SerializedName("total_results")
-    var totalResults: Int,
+    val totalResults: Int,
 
     @SerializedName("total_pages")
-    var totalPages: Int,
+    val totalPages: Int,
 
     @SerializedName("results")
-    var results: List<MovieApiModel>,
+    val results: List<MovieApiModel>,
 )
 
 data class MovieApiModel(
     @SerializedName("id")
-    var id: Int,
+    val id: Int,
 
     @SerializedName("poster_path")
-    var posterPath: String,
+    val posterPath: String,
 
     @SerializedName("backdrop_path")
 
-    var backdropPath: String,
+    val backdropPath: String,
     @SerializedName("original_language")
 
-    var originalLanguage: String? = null,
+    val originalLanguage: String? = null,
 
     @SerializedName("title")
-    var title: String,
+    val title: String,
 
     @SerializedName("vote_average")
-    var voteAverage: Float,
+    val voteAverage: Float,
 
     @SerializedName("overview")
-    var overview: String,
+    val overview: String,
 )
 

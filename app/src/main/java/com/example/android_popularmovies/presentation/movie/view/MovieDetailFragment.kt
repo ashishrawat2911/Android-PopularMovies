@@ -16,19 +16,22 @@ import com.example.android_popularmovies.databinding.MovieDetailFragmentBinding
 import com.example.android_popularmovies.presentation.movie.state.MovieDetailState
 import com.example.android_popularmovies.presentation.movie.state.MovieStateData
 import com.example.android_popularmovies.presentation.movie.view_model.MovieDetailViewModel
-import com.example.android_popularmovies.presentation.movie.view_model.impl.MovieDetailViewModelImpl
-import com.example.android_popularmovies.utils.Constants
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
+
 @AndroidEntryPoint
 class MovieDetailFragment : Fragment() {
+    companion object {
+        const val movieImagePath: String = "https://image.tmdb.org/t/p/w500"
+    }
+
     private var _binding: MovieDetailFragmentBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: MovieDetailViewModel by viewModels<MovieDetailViewModelImpl>()
+    private val viewModel: MovieDetailViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -54,7 +57,7 @@ class MovieDetailFragment : Fragment() {
     }
 
     private fun handleErrorToast() {
-        viewLifecycleOwner.lifecycleScope.launch {
+        lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.detailErrorState.collectLatest {
                     Toast.makeText(
@@ -68,41 +71,45 @@ class MovieDetailFragment : Fragment() {
     }
 
     private fun handleUIResult() {
-        viewLifecycleOwner.lifecycleScope.launch {
+        lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.detailState.collectLatest {
+                viewModel.uiState.collectLatest {
+                    binding.progressBar.handleVisibility(it is MovieDetailState.Loading)
                     when (it) {
+                        is MovieDetailState.Error -> {
+                            Timber.e(it.error)
+                        }
+                        //TODO ask what to do?
                         is MovieDetailState.Loading -> {
-                            binding.progressBar.visibility = View.VISIBLE
+
                         }
                         is MovieDetailState.Success -> {
-                            binding.progressBar.visibility = View.GONE
                             updateMovieUI(it.movie)
-                        }
-                        is MovieDetailState.Error -> {
-                            binding.progressBar.visibility = View.GONE
-                            Timber.e(it.message)
                         }
                     }
                 }
-
             }
         }
     }
 
     private fun updateMovieUI(movie: MovieStateData) {
-        binding.movieTitle.text = movie.title
-        binding.movieOverview.text = movie.overview
-        binding.movieRating.text = movie.voteAverage.toString()
-        activity?.let { it1 ->
-            Glide.with(it1)
-                .load("${Constants.movieImagePath}${movie.posterPath}")
-                .into(binding.moviePhoto)
+        with(binding) {
+            movieTitle.text = movie.title
+            movieOverview.text = movie.overview
+            movieRating.text = movie.voteAverage.toString()
+            activity?.let { it1 ->
+                Glide.with(it1)
+                    .load("${movieImagePath}${movie.posterPath}")
+                    .into(moviePhoto)
+            }
+            movieOverview.text = movie.overview
         }
-        binding.movieOverview.text = movie.overview
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
 }
+
+

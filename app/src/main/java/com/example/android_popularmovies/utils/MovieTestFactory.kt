@@ -1,13 +1,12 @@
 package com.example.android_popularmovies.utils
 
-import com.example.android_popularmovies.data.mapper.MovieApiToEntityMapper
+import com.example.android_popularmovies.data.mapper.MovieApiToDomainMapper
 import com.example.android_popularmovies.data.source.remote.model.MovieApiModel
 import com.example.android_popularmovies.data.source.remote.model.MovieListApiModel
-import com.example.android_popularmovies.domain.entity.MovieEntity
+import com.example.android_popularmovies.domain.model.MovieDomainModel
 
-object MockMovies {
-
-    fun generateListOfMovies(size: Int): List<MovieApiModel> {
+object MovieTestFactory {
+    private fun generateListOfMovies(size: Int): List<MovieApiModel> {
         val listOfMovies = mutableListOf<MovieApiModel>()
         repeat(size) {
             listOfMovies.add(generateMovieApiModel())
@@ -41,13 +40,11 @@ object MockMovies {
         )
     }
 
-    fun generateMovieEntity(): MovieEntity {
-        return MovieApiToEntityMapper().map(generateMovieApiModel())
+    fun generateMovieEntity(): MovieDomainModel {
+        return MovieApiToDomainMapper().map(generateMovieApiModel())
     }
 
-    fun generateListOfMovieEntity(size: Int): List<MovieEntity> {
-        return generateListOfMovies(size).map { MovieApiToEntityMapper().map(it) }
-
-
+    fun generateListOfMovieEntity(size: Int): List<MovieDomainModel> {
+        return generateListOfMovies(size).map { MovieApiToDomainMapper().map(it) }
     }
 }
