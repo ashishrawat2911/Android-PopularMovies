@@ -99,7 +99,7 @@ class MovieDetailFragment : Fragment() {
             movieRating.text = movie.voteAverage.toString()
             activity?.let { it1 ->
                 Glide.with(it1)
-                    .load("${movieImagePath}${movie.posterPath}")
+                    .load("${movieImagePath}${movie.backdropPath}")
                     .into(moviePhoto)
             }
             movieOverview.text = movie.overview
