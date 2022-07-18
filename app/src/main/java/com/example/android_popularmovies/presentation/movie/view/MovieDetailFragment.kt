@@ -74,16 +74,16 @@ class MovieDetailFragment : Fragment() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collectLatest {
-                    binding.progressBar.handleVisibility(it is MovieDetailState.Loading)
                     when (it) {
                         is MovieDetailState.Error -> {
+                            binding.progressBar.hideVisibility()
                             Timber.e(it.error)
                         }
-                        //TODO ask what to do?
                         is MovieDetailState.Loading -> {
-
+                            binding.progressBar.showVisibility()
                         }
                         is MovieDetailState.Success -> {
+                            binding.progressBar.hideVisibility()
                             updateMovieUI(it.movie)
                         }
                     }
