@@ -3,8 +3,8 @@ package com.example.android_popularmovies.presentation.movie.view_model
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.android_popularmovies.data.NetworkResult
-import com.example.android_popularmovies.domain.mapper.MovieDomainToStateMapper
 import com.example.android_popularmovies.domain.usecase.GetMovieDetailsUseCase
+import com.example.android_popularmovies.presentation.movie.mapper.MovieDetailDomainToStateModel
 import com.example.android_popularmovies.presentation.movie.state.MovieDetailState
 import com.example.android_popularmovies.utils.AppDispatchers
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,7 +21,7 @@ import javax.inject.Inject
 class MovieDetailViewModel @Inject constructor(
     private val getMoviesUseCase: GetMovieDetailsUseCase,
     private val appDispatchers: AppDispatchers,
-    private val movieDomainToStateMapper: MovieDomainToStateMapper
+    private val movieDetailDomainToStateModel: MovieDetailDomainToStateModel
 ) : ViewModel() {
     val uiState: StateFlow<MovieDetailState>
         get() = _uiState
@@ -36,7 +36,7 @@ class MovieDetailViewModel @Inject constructor(
                 when (it) {
                     is NetworkResult.Success -> {
                         _uiState.value =
-                            MovieDetailState.Success(movieDomainToStateMapper.map(it.data))
+                            MovieDetailState.Success(movieDetailDomainToStateModel.map(it.data))
                     }
                     is NetworkResult.Error -> {
                         _detailErrorState.emit(it.error)

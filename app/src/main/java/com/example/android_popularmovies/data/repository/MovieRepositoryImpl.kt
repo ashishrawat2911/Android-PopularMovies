@@ -2,6 +2,7 @@ package com.example.android_popularmovies.data.repository
 
 import com.example.android_popularmovies.data.NetworkResult
 import com.example.android_popularmovies.data.source.remote.MovieDataService
+import com.example.android_popularmovies.domain.model.MovieDetailDomainModel
 import com.example.android_popularmovies.domain.model.MovieDomainModel
 import com.example.android_popularmovies.domain.repository.MovieRepository
 import com.example.android_popularmovies.utils.getMovieErrorMessage
@@ -19,7 +20,7 @@ class MovieRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getMovieDetails(movieId: Int): NetworkResult<MovieDomainModel> {
+    override suspend fun getMovieDetails(movieId: Int): NetworkResult<MovieDetailDomainModel> {
         return try {
             NetworkResult.Success(movieDataService.getMovieDetails(movieId))
         } catch (e: Exception) {

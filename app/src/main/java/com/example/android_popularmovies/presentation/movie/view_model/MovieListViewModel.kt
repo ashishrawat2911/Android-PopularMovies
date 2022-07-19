@@ -3,10 +3,10 @@ package com.example.android_popularmovies.presentation.movie.view_model
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.android_popularmovies.data.NetworkResult
-import com.example.android_popularmovies.domain.mapper.MovieDomainToStateMapper
-import com.example.android_popularmovies.domain.mapper.MovieStateToDomainMapper
 import com.example.android_popularmovies.domain.usecase.FilterMoviesUseCase
 import com.example.android_popularmovies.domain.usecase.GetMoviesUseCase
+import com.example.android_popularmovies.presentation.movie.mapper.MovieDomainToStateModel
+import com.example.android_popularmovies.presentation.movie.mapper.MovieStateToDomainModel
 import com.example.android_popularmovies.presentation.movie.state.MovieListState
 import com.example.android_popularmovies.presentation.movie.state.MovieStateData
 import com.example.android_popularmovies.utils.AppDispatchers
@@ -25,8 +25,8 @@ class MovieListViewModel @Inject constructor(
     private val getMoviesUseCase: GetMoviesUseCase,
     private val filterMoviesUseCase: FilterMoviesUseCase,
     private val appDispatchers: AppDispatchers,
-    private val movieDomainToStateMapper: MovieDomainToStateMapper,
-    private val movieStateToDomainMapper: MovieStateToDomainMapper
+    private val movieDomainToStateMapper: MovieDomainToStateModel,
+    private val movieStateToDomainModel: MovieStateToDomainModel
 ) : ViewModel() {
     val uiState: StateFlow<MovieListState>
         get() = _uiState
@@ -59,7 +59,7 @@ class MovieListViewModel @Inject constructor(
         val state = _uiState.value
         return if (state is MovieListState.Success) {
             filterMoviesUseCase(
-                state.movies.map { movieStateToDomainMapper.map(it) },
+                state.movies.map { movieStateToDomainModel.map(it) },
                 text
             ).map { movieDomainToStateMapper.map(it) }
         } else {
@@ -68,7 +68,7 @@ class MovieListViewModel @Inject constructor(
     }
 
     fun onDetailTap(id: Int) {
-        viewModelScope.launch {
+        viewModelScope.launch(appDispatchers.Main) {
             _onTapDetailState.emit(id)
         }
     }

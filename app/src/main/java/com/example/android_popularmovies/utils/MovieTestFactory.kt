@@ -1,8 +1,10 @@
 package com.example.android_popularmovies.utils
 
 import com.example.android_popularmovies.data.mapper.MovieApiToDomainMapper
+import com.example.android_popularmovies.data.mapper.MovieDetailApiToDomainMapper
 import com.example.android_popularmovies.data.source.remote.model.MovieApiModel
 import com.example.android_popularmovies.data.source.remote.model.MovieListApiModel
+import com.example.android_popularmovies.domain.model.MovieDetailDomainModel
 import com.example.android_popularmovies.domain.model.MovieDomainModel
 
 object MovieTestFactory {
@@ -40,8 +42,8 @@ object MovieTestFactory {
         )
     }
 
-    fun generateMovieEntity(): MovieDomainModel {
-        return MovieApiToDomainMapper().map(generateMovieApiModel())
+    fun generateMovieDetailEntity(): MovieDetailDomainModel {
+        return MovieDetailApiToDomainMapper().map(generateMovieApiModel())
     }
 
     fun generateListOfMovieEntity(size: Int): List<MovieDomainModel> {

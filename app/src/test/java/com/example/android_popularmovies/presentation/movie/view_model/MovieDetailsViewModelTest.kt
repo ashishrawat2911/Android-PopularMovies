@@ -2,9 +2,9 @@ package com.example.android_popularmovies.presentation.movie.view_model
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.example.android_popularmovies.data.NetworkResult
-import com.example.android_popularmovies.domain.mapper.MovieDomainToStateMapper
-import com.example.android_popularmovies.domain.model.MovieDomainModel
+import com.example.android_popularmovies.domain.model.MovieDetailDomainModel
 import com.example.android_popularmovies.domain.usecase.GetMovieDetailsUseCase
+import com.example.android_popularmovies.presentation.movie.mapper.MovieDetailDomainToStateModel
 import com.example.android_popularmovies.presentation.movie.state.MovieDetailState
 import com.example.android_popularmovies.utils.AppDispatchers
 import com.example.android_popularmovies.utils.MovieTestFactory
@@ -47,13 +47,13 @@ class MovieDetailsViewModelTest {
 
     private lateinit var movieDetailViewModel: MovieDetailViewModel
 
-    private val movieDomainToStateMapper: MovieDomainToStateMapper = MovieDomainToStateMapper()
+    private val movieDetailDomainToStateModel: MovieDetailDomainToStateModel = MovieDetailDomainToStateModel()
 
     @Before
     fun setUp() {
         MockitoAnnotations.openMocks(this)
         movieDetailViewModel = MovieDetailViewModel(
-            getMovieDetailsUseCase, testDispatcher, movieDomainToStateMapper
+            getMovieDetailsUseCase, testDispatcher, movieDetailDomainToStateModel
         )
         Dispatchers.setMain(dispatcher)
     }
@@ -66,18 +66,18 @@ class MovieDetailsViewModelTest {
 
     @Test
     fun fetchMoviesDetails_returnsData() = runTest {
-        val movieDetail = MovieTestFactory.generateMovieEntity()
+        val movieDetail = MovieTestFactory.generateMovieDetailEntity()
         stubFetchMovies(movieDetail)
         movieDetailViewModel.getMovieDetails(0)
         advanceUntilIdle()
         val data = MovieDetailState.Success(
-            movieDomainToStateMapper.map(movieDetail)
+            movieDetailDomainToStateModel.map(movieDetail)
         )
         Assert.assertEquals(movieDetailViewModel.uiState.value, data)
     }
 
 
-    private suspend fun stubFetchMovies(movie: MovieDomainModel) {
+    private suspend fun stubFetchMovies(movie: MovieDetailDomainModel) {
         `when`(getMovieDetailsUseCase(0))
             .thenReturn(flow { emit(NetworkResult.Success(movie)) })
     }

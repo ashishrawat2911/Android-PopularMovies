@@ -2,11 +2,11 @@ package com.example.android_popularmovies.presentation.movie.view_model
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.example.android_popularmovies.data.NetworkResult
-import com.example.android_popularmovies.domain.mapper.MovieDomainToStateMapper
-import com.example.android_popularmovies.domain.mapper.MovieStateToDomainMapper
 import com.example.android_popularmovies.domain.model.MovieDomainModel
 import com.example.android_popularmovies.domain.usecase.FilterMoviesUseCase
 import com.example.android_popularmovies.domain.usecase.GetMoviesUseCase
+import com.example.android_popularmovies.presentation.movie.mapper.MovieDomainToStateModel
+import com.example.android_popularmovies.presentation.movie.mapper.MovieStateToDomainModel
 import com.example.android_popularmovies.presentation.movie.state.MovieListState
 import com.example.android_popularmovies.utils.AppDispatchers
 import com.example.android_popularmovies.utils.MovieTestFactory
@@ -51,8 +51,8 @@ class MovieListViewModelTest {
 
     private lateinit var movieListViewModel: MovieListViewModel
 
-    private val movieDomainToStateMapper: MovieDomainToStateMapper = MovieDomainToStateMapper()
-    private val movieStateToDomainMapper: MovieStateToDomainMapper = MovieStateToDomainMapper()
+    private val movieDomainToStateMapper: MovieDomainToStateModel = MovieDomainToStateModel()
+    private val movieStateToDomainModel: MovieStateToDomainModel = MovieStateToDomainModel()
 
     @Before
     fun setUp() {
@@ -64,7 +64,7 @@ class MovieListViewModelTest {
                 filterMoviesUseCase,
                 testDispatcher,
                 movieDomainToStateMapper,
-                movieStateToDomainMapper
+                movieStateToDomainModel
             )
     }
 

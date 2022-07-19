@@ -21,13 +21,15 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val navHostFragment = supportFragmentManager
-            .findFragmentById(R.id.myNavHostFragment) as NavHostFragment
-        val navController = navHostFragment.navController
+        if(savedInstanceState==null){
+            val navHostFragment = supportFragmentManager
+                .findFragmentById(R.id.myNavHostFragment) as NavHostFragment
+            val navController = navHostFragment.navController
 
 
-        NavigationUI.setupActionBarWithNavController(this, navController)
-        appBarConfiguration = AppBarConfiguration(navController.graph)
+            NavigationUI.setupActionBarWithNavController(this, navController)
+            appBarConfiguration = AppBarConfiguration(navController.graph)
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {

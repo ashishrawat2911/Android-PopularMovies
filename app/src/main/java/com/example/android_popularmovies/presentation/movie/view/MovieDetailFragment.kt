@@ -14,7 +14,7 @@ import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.android_popularmovies.databinding.MovieDetailFragmentBinding
 import com.example.android_popularmovies.presentation.movie.state.MovieDetailState
-import com.example.android_popularmovies.presentation.movie.state.MovieStateData
+import com.example.android_popularmovies.presentation.movie.state.MovieDetailStateData
 import com.example.android_popularmovies.presentation.movie.view_model.MovieDetailViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -92,7 +92,7 @@ class MovieDetailFragment : Fragment() {
         }
     }
 
-    private fun updateMovieUI(movie: MovieStateData) {
+    private fun updateMovieUI(movie: MovieDetailStateData) {
         with(binding) {
             movieTitle.text = movie.title
             movieOverview.text = movie.overview

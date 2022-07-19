@@ -13,12 +13,12 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.android_popularmovies.R
 import com.example.android_popularmovies.databinding.MovieListFragmentBinding
 import com.example.android_popularmovies.presentation.movie.adaptor.MoviesAdapter
 import com.example.android_popularmovies.presentation.movie.state.MovieListState
 import com.example.android_popularmovies.presentation.movie.view_model.MovieListViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -58,16 +58,14 @@ class MovieListFragment : Fragment() {
     private fun handleOnDetailTap() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.onTapDetailState.collect {
+                viewModel.onTapDetailState.collectLatest {
                     val navController = binding.root.findNavController()
-                    if (navController.currentDestination?.id == R.id.movieListFragment) {
                         navController
                             .navigate(
                                 MovieListFragmentDirections.actionMovieListFragmentToMovieDetailFragment(
                                     it
                                 )
                             )
-                    }
                 }
             }
         }
