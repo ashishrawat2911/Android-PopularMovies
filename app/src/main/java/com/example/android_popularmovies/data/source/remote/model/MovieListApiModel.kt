@@ -26,9 +26,6 @@ data class MovieApiModel(
     @SerializedName("backdrop_path")
 
     val backdropPath: String,
-    @SerializedName("original_language")
-
-    val originalLanguage: String? = null,
 
     @SerializedName("title")
     val title: String,

@@ -6,5 +6,6 @@ import com.example.android_popularmovies.domain.model.MovieDomainModel
 
 interface MovieRepository {
     suspend fun getMovies(): NetworkResult<List<MovieDomainModel>>
+
     suspend fun getMovieDetails(movieId: Int): NetworkResult<MovieDetailDomainModel>
 }

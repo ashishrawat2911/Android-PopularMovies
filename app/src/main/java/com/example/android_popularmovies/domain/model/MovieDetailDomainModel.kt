@@ -1,10 +1,9 @@
 package com.example.android_popularmovies.domain.model
 
-data class MovieDomainModel(
+data class MovieDetailDomainModel(
     val id: Int,
-    val posterPath: String,
+    val backdropPath: String,
     val title: String,
     val voteAverage: Float,
     val overview: String,
 )
-

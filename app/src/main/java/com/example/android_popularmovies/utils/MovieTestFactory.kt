@@ -1,7 +1,7 @@
 package com.example.android_popularmovies.utils
 
-import com.example.android_popularmovies.data.mapper.MovieApiToDomainMapper
-import com.example.android_popularmovies.data.mapper.MovieDetailApiToDomainMapper
+import com.example.android_popularmovies.data.mapper.MovieApiToDomainModel
+import com.example.android_popularmovies.data.mapper.MovieDetailApiToDomainModel
 import com.example.android_popularmovies.data.source.remote.model.MovieApiModel
 import com.example.android_popularmovies.data.source.remote.model.MovieListApiModel
 import com.example.android_popularmovies.domain.model.MovieDetailDomainModel
@@ -43,10 +43,10 @@ object MovieTestFactory {
     }
 
     fun generateMovieDetailEntity(): MovieDetailDomainModel {
-        return MovieDetailApiToDomainMapper().map(generateMovieApiModel())
+        return MovieDetailApiToDomainModel().map(generateMovieApiModel())
     }
 
     fun generateListOfMovieEntity(size: Int): List<MovieDomainModel> {
-        return generateListOfMovies(size).map { MovieApiToDomainMapper().map(it) }
+        return generateListOfMovies(size).map { MovieApiToDomainModel().map(it) }
     }
 }
