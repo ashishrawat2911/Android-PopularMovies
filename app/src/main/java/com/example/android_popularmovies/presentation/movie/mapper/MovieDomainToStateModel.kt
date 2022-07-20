@@ -16,4 +16,3 @@ class MovieDomainToStateModel @Inject constructor() : Mapper<MovieDomainModel, M
         )
     }
 }
-

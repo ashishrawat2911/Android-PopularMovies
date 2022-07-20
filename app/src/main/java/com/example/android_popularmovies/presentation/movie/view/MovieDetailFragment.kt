@@ -94,15 +94,15 @@ class MovieDetailFragment : Fragment() {
 
     private fun updateMovieUI(movie: MovieDetailStateData) {
         with(binding) {
-            movieTitle.text = movie.title
-            movieOverview.text = movie.overview
-            movieRating.text = movie.voteAverage.toString()
+            movieTitle.text = movie.detailTitle
+            movieOverview.text = movie.detailOverview
+            movieRating.text = movie.detailVoteAverage.toString()
             activity?.let { it1 ->
                 Glide.with(it1)
-                    .load("${movieImagePath}${movie.backdropPath}")
+                    .load("${movieImagePath}${movie.detailBackdropPath}")
                     .into(moviePhoto)
             }
-            movieOverview.text = movie.overview
+            movieOverview.text = movie.detailOverview
         }
     }
 
@@ -111,5 +111,3 @@ class MovieDetailFragment : Fragment() {
         _binding = null
     }
 }
-
-

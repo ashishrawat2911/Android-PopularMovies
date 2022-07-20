@@ -1,28 +1,28 @@
 package com.example.android_popularmovies.utils
 
-import com.example.android_popularmovies.data.mapper.MovieApiToDomainModel
-import com.example.android_popularmovies.data.mapper.MovieDetailApiToDomainModel
-import com.example.android_popularmovies.data.source.remote.model.MovieApiModel
-import com.example.android_popularmovies.data.source.remote.model.MovieListApiModel
+import com.example.android_popularmovies.data.mapper.MovieResponseToDomainModel
+import com.example.android_popularmovies.data.mapper.MovieDetailResponseToDomainModel
+import com.example.android_popularmovies.data.model.MovieListResponseModel
+import com.example.android_popularmovies.data.model.MovieResponseModel
 import com.example.android_popularmovies.domain.model.MovieDetailDomainModel
 import com.example.android_popularmovies.domain.model.MovieDomainModel
 
 object MovieTestFactory {
-    private fun generateListOfMovies(size: Int): List<MovieApiModel> {
-        val listOfMovies = mutableListOf<MovieApiModel>()
+    private fun generateListOfMovies(size: Int): List<MovieResponseModel> {
+        val listOfMovies = mutableListOf<MovieResponseModel>()
         repeat(size) {
-            listOfMovies.add(generateMovieApiModel())
+            listOfMovies.add(generateMovieResponseModel())
         }
         return listOfMovies
     }
 
-    fun generateMovieListModel(size: Int): MovieListApiModel {
-        val listOfMovies = mutableListOf<MovieApiModel>()
+    fun generateMovieListModel(size: Int): MovieListResponseModel {
+        val listOfMovies = mutableListOf<MovieResponseModel>()
         repeat(size) {
-            listOfMovies.add(generateMovieApiModel())
+            listOfMovies.add(generateMovieResponseModel())
         }
 
-        return MovieListApiModel(
+        return MovieListResponseModel(
             results = listOfMovies,
             page = RandomDataFactory.getRandomInt(),
             totalResults = RandomDataFactory.getRandomInt(),
@@ -30,23 +30,22 @@ object MovieTestFactory {
         )
     }
 
-    fun generateMovieApiModel(): MovieApiModel {
-        return MovieApiModel(
+    fun generateMovieResponseModel(): MovieResponseModel {
+        return MovieResponseModel(
             id = RandomDataFactory.getRandomInt(),
             title = RandomDataFactory.getRandomString(),
             voteAverage = RandomDataFactory.getRandomFloat(),
             posterPath = RandomDataFactory.getRandomImage(),
             backdropPath = RandomDataFactory.getRandomImage(),
-            originalLanguage = RandomDataFactory.getRandomString(),
             overview = RandomDataFactory.getRandomString(),
         )
     }
 
     fun generateMovieDetailEntity(): MovieDetailDomainModel {
-        return MovieDetailApiToDomainModel().map(generateMovieApiModel())
+        return MovieDetailResponseToDomainModel().map(generateMovieResponseModel())
     }
 
     fun generateListOfMovieEntity(size: Int): List<MovieDomainModel> {
-        return generateListOfMovies(size).map { MovieApiToDomainModel().map(it) }
+        return generateListOfMovies(size).map { MovieResponseToDomainModel().map(it) }
     }
 }

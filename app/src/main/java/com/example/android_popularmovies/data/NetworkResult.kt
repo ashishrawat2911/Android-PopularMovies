@@ -5,5 +5,3 @@ sealed class NetworkResult<out T> {
 
     data class Error(val error: String) : NetworkResult<Nothing>()
 }
-
-

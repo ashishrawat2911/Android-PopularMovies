@@ -7,5 +7,3 @@ import kotlinx.coroutines.flow.Flow
 interface GetMoviesUseCase {
     suspend operator fun invoke(): Flow<NetworkResult<List<MovieDomainModel>>>
 }
-
-

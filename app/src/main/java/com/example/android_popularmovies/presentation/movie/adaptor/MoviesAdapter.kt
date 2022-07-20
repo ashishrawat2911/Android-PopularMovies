@@ -37,4 +37,3 @@ class MoviesAdapter(private val onItemTap: (id: Int) -> Unit) :
         this.movies.addAll(movies)
     }
 }
-

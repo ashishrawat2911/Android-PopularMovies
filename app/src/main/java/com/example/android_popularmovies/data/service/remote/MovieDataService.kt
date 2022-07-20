@@ -8,4 +8,3 @@ interface MovieDataService {
 
     suspend fun getMovieDetails(movieId: Int): MovieDetailDomainModel
 }
-

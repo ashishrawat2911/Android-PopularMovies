@@ -9,11 +9,10 @@ class MovieDetailDomainToStateModel @Inject constructor() :
     Mapper<MovieDetailDomainModel, MovieDetailStateData> {
     override fun map(type: MovieDetailDomainModel): MovieDetailStateData {
         return MovieDetailStateData(
-            id = type.id,
-            title = type.title,
-            voteAverage = type.voteAverage,
-            overview = type.overview,
-            backdropPath = type.backdropPath,
+            detailTitle = type.detailTitle,
+            detailVoteAverage = type.detailVoteAverage,
+            detailOverview = type.detailOverview,
+            detailBackdropPath = type.detailBackdropPath,
         )
     }
 }

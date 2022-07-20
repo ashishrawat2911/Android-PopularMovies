@@ -7,4 +7,3 @@ data class MovieDomainModel(
     val voteAverage: Float,
     val overview: String,
 )
-
