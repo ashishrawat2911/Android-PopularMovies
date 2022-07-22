@@ -32,14 +32,14 @@ class MovieDetailViewModel @Inject constructor(
 
     fun getMovieDetails(movieId: Int) {
         viewModelScope.launch(appDispatchers.IO) {
-            getMoviesUseCase(movieId).collectLatest {
-                when (it) {
+            getMoviesUseCase(movieId).collectLatest { movieResult ->
+                when (movieResult) {
                     is NetworkResult.Success -> {
                         _uiState.value =
-                            MovieDetailState.Success(movieDetailDomainToStateModel.map(it.data))
+                            MovieDetailState.Success(movieDetailDomainToStateModel.map(movieResult.data))
                     }
                     is NetworkResult.Error -> {
-                        _detailErrorState.emit(it.error)
+                        _detailErrorState.emit(movieResult.error)
                     }
                 }
             }

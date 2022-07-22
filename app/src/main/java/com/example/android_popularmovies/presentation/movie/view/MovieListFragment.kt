@@ -56,7 +56,7 @@ class MovieListFragment : Fragment() {
     }
 
     private fun handleOnDetailTap() {
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.onTapDetailState.collectLatest {
                     val navController = binding.root.findNavController()

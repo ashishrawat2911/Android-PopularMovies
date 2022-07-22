@@ -40,15 +40,19 @@ class MovieListViewModel @Inject constructor(
 
     fun fetchMoviesList() {
         viewModelScope.launch(appDispatchers.IO) {
-            getMoviesUseCase().collectLatest { it ->
-                when (it) {
+            getMoviesUseCase().collectLatest { movieResult ->
+                when (movieResult) {
                     is NetworkResult.Success -> {
                         _uiState.value =
-                            MovieListState.Success(it.data.map { movieDomainToStateMapper.map(it) })
+                            MovieListState.Success(movieResult.data.map { movie ->
+                                movieDomainToStateMapper.map(
+                                    movie
+                                )
+                            })
                     }
                     is NetworkResult.Error -> {
-                        Timber.e(it.error)
-                        _errorState.emit(it.error)
+                        Timber.e(movieResult.error)
+                        _errorState.emit(movieResult.error)
                     }
                 }
             }

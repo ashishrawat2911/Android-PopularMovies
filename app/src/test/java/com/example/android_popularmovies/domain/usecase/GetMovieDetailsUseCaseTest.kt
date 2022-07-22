@@ -22,7 +22,7 @@ class GetMovieDetailsUseCaseTest {
         runBlocking {
             val movieDetailsResponse = MovieTestFactory.generateMovieDetailEntity()
             stubMovieDetailsResponse(movieDetailsResponse)
-            assert(movieDetailsResponse.title == (repository.getMovieDetails(0) as NetworkResult.Success).data.title)
+            assert(movieDetailsResponse.detailTitle == (repository.getMovieDetails(0) as NetworkResult.Success).data.detailTitle)
         }
     }
 
