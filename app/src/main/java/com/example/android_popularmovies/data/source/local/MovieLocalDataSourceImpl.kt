@@ -2,17 +2,19 @@ package com.example.android_popularmovies.data.source.local
 
 import com.example.android_popularmovies.data.source.MovieLocalDataSource
 import com.example.android_popularmovies.data.source.local.model.MovieDbModel
+import javax.inject.Inject
 
-class MovieLocalDataSourceImpl(private val movieDao: MovieDao) : MovieLocalDataSource {
-    override fun getMovies(): List<MovieDbModel> {
+class MovieLocalDataSourceImpl @Inject constructor(private val movieDao: MovieDao) :
+    MovieLocalDataSource {
+    override suspend fun getMovies(): List<MovieDbModel> {
         return movieDao.getMovies()
     }
 
-    override fun setMoviesToCache(movies: List<MovieDbModel>) {
+    override suspend fun setMoviesToCache(movies: List<MovieDbModel>) {
         movieDao.addMovies(movies)
     }
 
-    override fun getMovie(movieId: Int): MovieDbModel {
+    override suspend fun getMovie(movieId: Int): MovieDbModel? {
         return movieDao.getMovie(movieId)
     }
 }

@@ -1,7 +1,6 @@
-package com.example.android_popularmovies.data.source.remote
+package com.example.android_popularmovies.utils
 
 import com.example.android_popularmovies.BuildConfig
-import com.example.android_popularmovies.utils.Constants
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor

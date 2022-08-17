@@ -1,4 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="horizontal_margin">10dp</dimen>
+    <dimen name="movie_item_image_height">200dp</dimen>
+    <dimen name="movie_item_title_size">15sp</dimen>
+    <dimen name="movie_item_overview_height">50dp</dimen>
+    <dimen name="margin_top">20dp</dimen>
+    <dimen name="margin_top_small">8dp</dimen>
+    <dimen name="movie_item_rating_size">15sp</dimen>
+    <dimen name="movie_card_margin">10dp</dimen>
+    <dimen name="movie_title_height">20dp</dimen>
+    <dimen name="movie_title_margin">5dp</dimen>
+    <dimen name="movie_title_margin_top">4dp</dimen>
+    <dimen name="splash_title_text_size">30sp</dimen>
 </resources>

@@ -3,6 +3,7 @@ package com.example.android_popularmovies.presentation.movie.view
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import com.example.android_popularmovies.R
@@ -19,9 +20,15 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        val navController = this.findNavController(R.id.myNavHostFragment)
-        NavigationUI.setupActionBarWithNavController(this, navController)
-        appBarConfiguration = AppBarConfiguration(navController.graph)
+
+        if(savedInstanceState==null){
+            val navHostFragment = supportFragmentManager
+                .findFragmentById(R.id.myNavHostFragment) as NavHostFragment
+            val navController = navHostFragment.navController
+
+            NavigationUI.setupActionBarWithNavController(this, navController)
+            appBarConfiguration = AppBarConfiguration(navController.graph)
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {

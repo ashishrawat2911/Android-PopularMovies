@@ -10,14 +10,14 @@ import com.example.android_popularmovies.data.source.local.model.MovieDbModel
 interface MovieDao {
 
     @Query("SELECT * FROM movies")
-    fun getMovies(): List<MovieDbModel>
+    suspend fun getMovies(): List<MovieDbModel>
 
     @Query("SELECT * FROM movies where id==:movieId")
-    fun getMovie(movieId: Int): MovieDbModel
+    suspend fun getMovie(movieId: Int): MovieDbModel?
 
     @Query("DELETE FROM movies")
-    fun clearMovies()
+    suspend fun clearMovies()
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun addMovies(movies: List<MovieDbModel>)
+    suspend fun addMovies(movies: List<MovieDbModel>)
 }

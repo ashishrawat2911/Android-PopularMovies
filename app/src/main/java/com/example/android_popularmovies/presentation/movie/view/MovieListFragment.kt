@@ -11,14 +11,12 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.android_popularmovies.databinding.MovieListFragmentBinding
 import com.example.android_popularmovies.presentation.movie.adaptor.MoviesAdapter
 import com.example.android_popularmovies.presentation.movie.state.MovieListState
-import com.example.android_popularmovies.presentation.movie.state.MovieStateData
 import com.example.android_popularmovies.presentation.movie.view_model.MovieListViewModel
-import com.example.android_popularmovies.presentation.movie.view_model.impl.MovieListViewModelImpl
-import com.example.android_popularmovies.utils.Constants
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -27,61 +25,104 @@ import timber.log.Timber
 
 @AndroidEntryPoint
 class MovieListFragment : Fragment() {
-    private val viewModel: MovieListViewModel by viewModels<MovieListViewModelImpl>()
+    private val viewModel: MovieListViewModel by viewModels()
     private var _binding: MovieListFragmentBinding? = null
     private val binding get() = _binding!!
+    private var moviesAdapter: MoviesAdapter = MoviesAdapter { id ->
+        viewModel.onDetailTap(id)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = MovieListFragmentBinding.inflate(inflater, container, false)
-        initialize()
         return binding.root
     }
 
-    private fun setUpSearch(adapter: MoviesAdapter) {
-        binding.searchBar.addTextChangedListener {
-            it?.let {
-                viewModel.filterMovies(it.toString())
-            }
-        }
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.filterState.collectLatest {
-                    Timber.e("filter ${it.size}")
-                    adapter.updateMovies(it);
-                }
-            }
-        }
-
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initialize()
     }
 
 
     private fun initialize() {
-        viewModel.fetchMoviesList()
+        setRecyclerView()
+        fetchMovies()
+        handleError()
         handleResult()
+        handleOnDetailTap()
+    }
+
+    private fun handleOnDetailTap() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.onTapDetailState.collectLatest { id ->
+                    val navController = binding.root.findNavController()
+                    navController
+                        .navigate(
+                            MovieListFragmentDirections.actionMovieListFragmentToMovieDetailFragment(
+                                id
+                            )
+                        )
+                }
+            }
+        }
+    }
+
+    private fun setRecyclerView() {
+        binding.recyclerView.apply {
+            setHasFixedSize(true)
+            layoutManager = GridLayoutManager(activity, movieGridSpanCount)
+            adapter = moviesAdapter
+        }
+        setUpSearch(moviesAdapter)
+    }
+
+    private fun fetchMovies() {
+        viewModel.fetchMoviesList()
+    }
+
+    private fun setUpSearch(adapter: MoviesAdapter) {
+        binding.searchBar.addTextChangedListener { editable ->
+            editable?.run {
+                adapter.updateMovies(viewModel.filterMovies(toString()))
+            }
+        }
+    }
+
+    private fun handleError() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.errorState.collect { message ->
+                    Toast.makeText(
+                        activity,
+                        message,
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
+        }
     }
 
     private fun handleResult() {
-        viewLifecycleOwner.lifecycleScope.launch {
+        lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.movieState.collect {
-                    when (it) {
+                viewModel.uiState.collect { state ->
+                    when (state) {
                         is MovieListState.Error -> {
-                            binding.progressBar.visibility = View.GONE
-                            Toast.makeText(
-                                activity,
-                                it.message,
-                                Toast.LENGTH_LONG
-                            ).show()
+                            binding.progressBar.hideVisibility()
+                            Timber.e(state.error)
                         }
                         MovieListState.Loading -> {
-                            binding.progressBar.visibility = View.VISIBLE
+                            binding.progressBar.showVisibility()
                         }
                         is MovieListState.Success -> {
-                            binding.progressBar.visibility = View.GONE
-                            setRecyclerView(it.movies)
+                            binding.progressBar.hideVisibility()
+                            binding.recyclerView.showVisibility()
+                            viewModel.fetchApi(state.movies)
+                            moviesAdapter.updateMovies(state.movies)
                         }
                     }
                 }
@@ -90,18 +131,12 @@ class MovieListFragment : Fragment() {
     }
 
 
-    private fun setRecyclerView(list: List<MovieStateData>) {
-        binding.recyclerView.apply {
-            setHasFixedSize(true)
-            layoutManager = GridLayoutManager(activity, Constants.movieGridSpanCount)
-            val moviesAdapter = MoviesAdapter(list)
-            adapter = moviesAdapter
-            setUpSearch(moviesAdapter)
-        }
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    companion object {
+        const val movieGridSpanCount: Int = 2
     }
 }

@@ -1,6 +1,6 @@
-package com.example.android_popularmovies.presentation.movie.state
+package com.example.android_popularmovies.domain.model
 
-data class MovieStateData(
+data class MovieDomainModel(
     val id: Int,
     val posterPath: String,
     val title: String,

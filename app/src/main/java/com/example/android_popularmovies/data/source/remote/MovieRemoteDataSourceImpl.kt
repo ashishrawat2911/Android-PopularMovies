@@ -1,17 +1,17 @@
 package com.example.android_popularmovies.data.source.remote
 
-import com.example.android_popularmovies.data.source.remote.MovieApiService
-import com.example.android_popularmovies.data.source.remote.model.MovieApiModel
+import com.example.android_popularmovies.data.model.MovieResponseModel
 import com.example.android_popularmovies.data.source.MovieRemoteDataSource
+import javax.inject.Inject
 
-class MovieRemoteDataSourceImpl(
+class MovieRemoteDataSourceImpl @Inject constructor(
     private val service: MovieApiService,
 ) : MovieRemoteDataSource {
-    override suspend fun getMovies(): List<MovieApiModel> {
+    override suspend fun getMovies(): List<MovieResponseModel> {
         return service.popularMovies().results
     }
 
-    override suspend fun getMovieDetails(movieId: Int): MovieApiModel {
+    override suspend fun getMovieDetails(movieId: Int): MovieResponseModel {
         return service.movieDetails(movieId)
     }
 }

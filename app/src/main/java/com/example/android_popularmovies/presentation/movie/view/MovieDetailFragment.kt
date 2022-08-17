@@ -14,21 +14,21 @@ import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.android_popularmovies.databinding.MovieDetailFragmentBinding
 import com.example.android_popularmovies.presentation.movie.state.MovieDetailState
-import com.example.android_popularmovies.presentation.movie.state.MovieStateData
+import com.example.android_popularmovies.presentation.movie.state.MovieDetailStateData
 import com.example.android_popularmovies.presentation.movie.view_model.MovieDetailViewModel
-import com.example.android_popularmovies.presentation.movie.view_model.impl.MovieDetailViewModelImpl
-import com.example.android_popularmovies.utils.Constants
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
+
 @AndroidEntryPoint
 class MovieDetailFragment : Fragment() {
+
     private var _binding: MovieDetailFragmentBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: MovieDetailViewModel by viewModels<MovieDetailViewModelImpl>()
+    private val viewModel: MovieDetailViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,13 +40,11 @@ class MovieDetailFragment : Fragment() {
         return binding.root
     }
 
-
     private fun initialize() {
         setUpViewModel()
         handleUIResult()
         handleErrorToast()
     }
-
 
     private fun setUpViewModel() {
         val args: MovieDetailFragmentArgs by navArgs()
@@ -54,7 +52,7 @@ class MovieDetailFragment : Fragment() {
     }
 
     private fun handleErrorToast() {
-        viewLifecycleOwner.lifecycleScope.launch {
+        lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.detailErrorState.collectLatest {
                     Toast.makeText(
@@ -68,39 +66,40 @@ class MovieDetailFragment : Fragment() {
     }
 
     private fun handleUIResult() {
-        viewLifecycleOwner.lifecycleScope.launch {
+        lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.detailState.collectLatest {
-                    when (it) {
+                viewModel.uiState.collectLatest { state ->
+                    when (state) {
+                        is MovieDetailState.Error -> {
+                            binding.progressBar.hideVisibility()
+                            Timber.e(state.error)
+                        }
                         is MovieDetailState.Loading -> {
-                            binding.progressBar.visibility = View.VISIBLE
+                            binding.progressBar.showVisibility()
                         }
                         is MovieDetailState.Success -> {
-                            binding.progressBar.visibility = View.GONE
-                            updateMovieUI(it.movie)
-                        }
-                        is MovieDetailState.Error -> {
-                            binding.progressBar.visibility = View.GONE
-                            Timber.e(it.message)
+                            binding.movieDetailsView.showVisibility()
+                            binding.progressBar.hideVisibility()
+                            updateMovieUI(state.movie)
                         }
                     }
                 }
-
             }
         }
     }
 
-    private fun updateMovieUI(movie: MovieStateData) {
-        binding.movieTitle.text = movie.title
-        binding.movieOverview.text = movie.overview
-        binding.movieRating.text = movie.voteAverage.toString()
-        activity?.let { it1 ->
-            Glide.with(it1)
-                .load("${Constants.movieImagePath}${movie.posterPath}")
-                .into(binding.moviePhoto)
+    private fun updateMovieUI(movie: MovieDetailStateData) {
+        with(binding) {
+            movieTitle.text = movie.detailTitle
+            movieOverview.text = movie.detailOverview
+            movieRating.text = movie.detailVoteAverage.toString()
+            Glide.with(requireActivity())
+                .load(movie.detailBackdropPath)
+                .into(moviePhoto)
+            movieOverview.text = movie.detailOverview
         }
-        binding.movieOverview.text = movie.overview
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

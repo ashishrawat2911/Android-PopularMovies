@@ -2,8 +2,6 @@ package com.example.android_popularmovies
 
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
-import com.example.android_popularmovies.data.mapper.MovieApiToEntityMapper
-import com.example.android_popularmovies.data.mapper.MovieEntityToDbMapper
 import com.example.android_popularmovies.data.source.local.MovieDatabase
 import com.example.android_popularmovies.utils.MockMovies
 import kotlinx.coroutines.runBlocking

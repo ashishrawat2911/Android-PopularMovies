@@ -3,10 +3,10 @@ package com.example.android_popularmovies.data.source
 import com.example.android_popularmovies.data.source.local.model.MovieDbModel
 
 interface MovieLocalDataSource {
-    fun getMovies(): List<MovieDbModel>
+   suspend fun getMovies(): List<MovieDbModel>
 
-    fun setMoviesToCache(movies: List<MovieDbModel>)
+   suspend fun setMoviesToCache(movies: List<MovieDbModel>)
 
-    fun getMovie(movieId: Int): MovieDbModel
+    suspend fun getMovie(movieId: Int): MovieDbModel?
 }
 

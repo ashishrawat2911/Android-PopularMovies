@@ -1,57 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
     tools:context=".presentation.movie.view.MovieDetailFragment">
+
     <ProgressBar
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyle"
         android:layout_width="80dp"
+        android:layout_gravity="center"
         android:layout_height="80dp"
-        android:visibility="visible"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.619" />
+        android:visibility="visible" />
 
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/movie_details_view"
+        android:layout_width="match_parent"
+        android:visibility="gone"
+        android:orientation="vertical"
+        android:paddingHorizontal="@dimen/horizontal_margin"
+        android:layout_height="match_parent">
         <ImageView
             android:id="@+id/movie_photo"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="@dimen/movie_item_image_height"
             android:layout_centerHorizontal="true"
-            android:contentDescription="@string/movie_image"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:contentDescription="@string/movie_image" />
 
         <TextView
             android:id="@+id/movie_title"
             android:layout_width="wrap_content"
-            android:layout_height="20dp"
+            android:layout_height="@dimen/margin_top"
             android:layout_below="@+id/movie_photo"
             android:layout_margin="5dp"
             android:layout_marginTop="4dp"
-            android:textSize="15sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.035"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/movie_photo"
+            android:textSize="@dimen/movie_item_title_size"
             tools:text="@string/title" />
 
         <TextView
             android:id="@+id/movie_overview"
             android:layout_width="wrap_content"
-            android:layout_height="50dp"
+            android:layout_height="@dimen/movie_item_overview_height"
             android:layout_below="@+id/movie_title"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="@dimen/margin_top"
             android:ellipsize="marquee"
-            app:layout_constraintEnd_toEndOf="@+id/movie_title"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/movie_title"
-            app:layout_constraintTop_toBottomOf="@+id/movie_title"
             tools:text="@string/overview" />
 
         <TextView
@@ -60,11 +54,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/movie_overview"
             android:layout_marginTop="8dp"
-            android:textSize="15sp"
-            app:layout_constraintEnd_toEndOf="@+id/movie_overview"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/movie_overview"
-            app:layout_constraintTop_toBottomOf="@+id/movie_overview"
+            android:textSize="@dimen/movie_item_rating_size"
             tools:text="@string/rating" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</androidx.appcompat.widget.LinearLayoutCompat>
 
