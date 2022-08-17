@@ -2,6 +2,7 @@ package com.example.android_popularmovies.data.source.remote
 
 import com.example.android_popularmovies.data.model.MovieResponseModel
 import com.example.android_popularmovies.data.source.MovieRemoteDataSource
+import com.example.android_popularmovies.data.source.remote.service.MovieApiService
 import javax.inject.Inject
 
 class MovieRemoteDataSourceImpl @Inject constructor(

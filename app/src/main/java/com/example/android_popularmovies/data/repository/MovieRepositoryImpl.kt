@@ -1,10 +1,10 @@
 package com.example.android_popularmovies.data.repository
 
 import com.example.android_popularmovies.data.store.impl.MovieDataStoreImpl
-import com.example.android_popularmovies.data.source.NetworkResult
 import com.example.android_popularmovies.domain.model.MovieDetailDomainModel
 import com.example.android_popularmovies.domain.model.MovieDomainModel
 import com.example.android_popularmovies.domain.repository.MovieRepository
+import com.example.android_popularmovies.utils.NetworkResult
 import com.example.android_popularmovies.utils.getMovieErrorMessage
 import javax.inject.Inject
 

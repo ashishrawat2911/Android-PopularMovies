@@ -1,4 +1,4 @@
-package com.example.android_popularmovies.data.source.remote
+package com.example.android_popularmovies.data.source.remote.service
 
 import com.example.android_popularmovies.data.model.MovieListResponseModel
 import com.example.android_popularmovies.data.model.MovieResponseModel

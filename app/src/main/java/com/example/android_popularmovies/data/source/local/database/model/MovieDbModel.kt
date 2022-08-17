@@ -1,4 +1,4 @@
-package com.example.android_popularmovies.data.source.local.model
+package com.example.android_popularmovies.data.source.local.database.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

@@ -1,7 +1,8 @@
 package com.example.android_popularmovies.data.source.local
 
 import com.example.android_popularmovies.data.source.MovieLocalDataSource
-import com.example.android_popularmovies.data.source.local.model.MovieDbModel
+import com.example.android_popularmovies.data.source.local.database.dao.MovieDao
+import com.example.android_popularmovies.data.source.local.database.model.MovieDbModel
 import javax.inject.Inject
 
 class MovieLocalDataSourceImpl @Inject constructor(private val movieDao: MovieDao) :

@@ -2,7 +2,7 @@ package com.example.android_popularmovies.presentation.movie.view_model
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.android_popularmovies.data.source.NetworkResult
+import com.example.android_popularmovies.utils.NetworkResult
 import com.example.android_popularmovies.domain.usecase.FilterMoviesUseCase
 import com.example.android_popularmovies.domain.usecase.GetMovieDetailsUseCase
 import com.example.android_popularmovies.domain.usecase.GetMoviesUseCase

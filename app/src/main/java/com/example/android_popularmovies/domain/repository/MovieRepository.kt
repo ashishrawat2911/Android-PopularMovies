@@ -1,6 +1,6 @@
 package com.example.android_popularmovies.domain.repository
 
-import com.example.android_popularmovies.data.source.NetworkResult
+import com.example.android_popularmovies.utils.NetworkResult
 import com.example.android_popularmovies.domain.model.MovieDetailDomainModel
 import com.example.android_popularmovies.domain.model.MovieDomainModel
 

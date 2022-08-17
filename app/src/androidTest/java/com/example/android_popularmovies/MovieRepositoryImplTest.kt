@@ -2,7 +2,7 @@ package com.example.android_popularmovies
 
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
-import com.example.android_popularmovies.data.source.local.MovieDatabase
+import com.example.android_popularmovies.data.source.local.database.db.MovieDatabase
 import com.example.android_popularmovies.utils.MockMovies
 import kotlinx.coroutines.runBlocking
 import org.junit.After

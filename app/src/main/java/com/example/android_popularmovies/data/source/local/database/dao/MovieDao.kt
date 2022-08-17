@@ -1,10 +1,10 @@
-package com.example.android_popularmovies.data.source.local
+package com.example.android_popularmovies.data.source.local.database.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.example.android_popularmovies.data.source.local.model.MovieDbModel
+import com.example.android_popularmovies.data.source.local.database.model.MovieDbModel
 
 @Dao
 interface MovieDao {

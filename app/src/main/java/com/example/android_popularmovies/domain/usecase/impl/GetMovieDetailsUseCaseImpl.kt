@@ -1,6 +1,6 @@
 package com.example.android_popularmovies.domain.usecase.impl
 
-import com.example.android_popularmovies.data.source.NetworkResult
+import com.example.android_popularmovies.utils.NetworkResult
 import com.example.android_popularmovies.domain.model.MovieDetailDomainModel
 import com.example.android_popularmovies.domain.repository.MovieRepository
 import com.example.android_popularmovies.domain.usecase.GetMovieDetailsUseCase
