@@ -121,7 +121,6 @@ class MovieListFragment : Fragment() {
                         is MovieListState.Success -> {
                             binding.progressBar.hideVisibility()
                             binding.recyclerView.showVisibility()
-                            viewModel.fetchApi(state.movies)
                             moviesAdapter.updateMovies(state.movies)
                         }
                     }

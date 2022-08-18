@@ -2,24 +2,20 @@ package com.example.android_popularmovies.presentation.movie.view_model
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.android_popularmovies.utils.NetworkResult
 import com.example.android_popularmovies.domain.usecase.FilterMoviesUseCase
-import com.example.android_popularmovies.domain.usecase.GetMovieDetailsUseCase
 import com.example.android_popularmovies.domain.usecase.GetMoviesUseCase
-import com.example.android_popularmovies.presentation.movie.mapper.MovieDetailDomainToStateModel
 import com.example.android_popularmovies.presentation.movie.mapper.MovieDomainToStateModel
 import com.example.android_popularmovies.presentation.movie.mapper.MovieStateToDomainModel
 import com.example.android_popularmovies.presentation.movie.state.MovieListState
 import com.example.android_popularmovies.presentation.movie.state.MovieStateData
 import com.example.android_popularmovies.utils.AppDispatchers
+import com.example.android_popularmovies.utils.NetworkResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -31,8 +27,6 @@ class MovieListViewModel @Inject constructor(
     private val appDispatchers: AppDispatchers,
     private val movieDomainToStateMapper: MovieDomainToStateModel,
     private val movieStateToDomainModel: MovieStateToDomainModel,
-    private val movieDetailDomainToStateModel: MovieDetailDomainToStateModel,
-    private val getMovieDetailsUseCase: GetMovieDetailsUseCase,
 ) : ViewModel() {
     val uiState: StateFlow<MovieListState>
         get() = _uiState
@@ -62,18 +56,6 @@ class MovieListViewModel @Inject constructor(
                         _errorState.emit(movieResult.error)
                     }
                 }
-            }
-        }
-    }
-
-    fun fetchApi(movies: List<MovieStateData>) {
-        viewModelScope.launch {
-            val res =
-                getMovieDetailsUseCase(movies[0].id).combine(getMovieDetailsUseCase(movies[0].id)) { one, two ->
-                    one
-                }
-            res.catch {  }.collectLatest {
-                Timber.d(it.toString());
             }
         }
     }
